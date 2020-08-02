@@ -14,30 +14,33 @@ fi
 
 # @todo Improve Tmux Session Algorithm
 # @body Optimize the algorithm so the session starts as fast as possible, and improve reliablity for edge cases like resuming session with multiple clients still connected.
-# Automatically use tmux in local sessions
-if [[ -z "${SSH_CLIENT}" ]]; then
-  # Check if current shell session is in a tmux process
-  if [[ -z "${TMUX}" ]]; then
-    # Create a new session if it does not exist
-    base_session="${USER}"
-    tmux has-session -t "${base_session}""-1" || tmux new-session -d -s "${base_session}""-1" \; set-window-option -g aggressive-resize
+# Ignore terminals started inside specific applications
+if [[ "${TERM_PROGRAM}" != "vscode" ]]; then
+  # Automatically use tmux in local sessions
+  if [[ -z "${SSH_CLIENT}" ]]; then
+    # Check if current shell session is in a tmux process
+    if [[ -z "${TMUX}" ]]; then
+      # Create a new session if it does not exist
+      base_session="${USER}"
+      tmux has-session -t "${base_session}""-1" || tmux new-session -d -s "${base_session}""-1" \; set-window-option -g aggressive-resize
 
-    # Check if clients are connected to session
-    client_cnt="$(tmux list-clients | wc -l)"
-    if [[ "${client_cnt}" -ge 1 ]]; then
-      # Find unused client id
-      count="1"
-      while [[ -n "$(tmux list-clients | grep "${base_session}""-""${count}")" ]]; do
-        count="$((count+1))"
-      done
-      session_name="${base_session}""-""${count}"
+      # Check if clients are connected to session
+      client_cnt="$(tmux list-clients | wc -l)"
+      if [[ "${client_cnt}" -ge 1 ]]; then
+        # Find unused client id
+        count="1"
+        while [[ -n "$(tmux list-clients | grep "${base_session}""-""${count}")" ]]; do
+          count="$((count+1))"
+        done
+        session_name="${base_session}""-""${count}"
 
-      # Attach to current session as new client
-      tmux new-session -d -t "${base_session}""-1" -s "${session_name}"
-      tmux -2 attach-session -t "${session_name}" \; set-option destroy-unattached \; set-window-option -g aggressive-resize \; new-window; exit
-    else
-      # Attach to pre-existing session as previous client
-      tmux -2 attach-session -t "${base_session}""-1" \; set-window-option -g aggressive-resize; exit
+        # Attach to current session as new client
+        tmux new-session -d -t "${base_session}""-1" -s "${session_name}"
+        tmux -2 attach-session -t "${session_name}" \; set-option destroy-unattached \; set-window-option -g aggressive-resize \; new-window; exit
+      else
+        # Attach to pre-existing session as previous client
+        tmux -2 attach-session -t "${base_session}""-1" \; set-window-option -g aggressive-resize; exit
+      fi
     fi
   fi
 fi
