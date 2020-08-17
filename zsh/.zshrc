@@ -75,7 +75,6 @@ plugins=(
   git-auto-fetch
   per-directory-history
   safe-paste
-  thefuck
   zsh-autopair
   zsh-z
   zsh-completions

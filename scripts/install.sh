@@ -17,6 +17,26 @@
 # @todo Improve Printed Text and Prompts
 # @body Clean up printed text with better separation of stages and description of what is happening. Better define what the prompts are actually asking.
 
+exit_script() {
+  # Declare local variables
+  local return_code
+
+  # Initialize local variables
+  return_code="1"
+
+  # Input parameter provided
+  if [[ -n "${1}" ]]; then
+    # Check against valid return codes
+    if [[ "${1}" -eq 0 || "${1}" -eq 1 ]]; then
+      # Overwrite return code
+      return_code="${1}"
+    fi
+  fi
+
+  # Exit script with return code
+  exit "${return_code}"
+}
+
 abort_script() {
   # Declare local variables
   local script_name
@@ -35,8 +55,8 @@ abort_script() {
     done
   fi
 
-  # Exit script with return code
-  exit 1
+  # Exit script with error
+  exit_script "1"
 }
 
 print_stage() {
@@ -198,12 +218,7 @@ headless_setup() {
   print_step "Installing headless applications"
   sudo apt install -y --no-install-recommends \
     vim zsh htop man curl sed nano gawk nmap tmux xclip \
-    ack openssh-server cron httpie iputils-ping file tree \
-    python3-dev python3-pip python3-setuptools thefuck
-
-  # Install Pip Applications
-  pip3 install setuptools --upgrade
-  pip3 install thefuck --upgrade
+    openssh-server cron file tree
 
   # Install Fd
   is_installed "fd" || "${HOME}/.dotfiles/scripts/install_fd.sh"
@@ -400,16 +415,6 @@ desktop_setup() {
     print_step "Skipped: exa"
   fi
 
-  # Install tldr
-  if ! is_installed "tldr"; then
-    cargo install tealdeer
-  else
-    print_step "Skipped: tldr"
-  fi
-
-  # Update tldr Cache
-  tldr --update
-
   # @todo File Manager Installation
   # @body Determine and automate a file manager (like Double Commander) installation.
 
@@ -471,9 +476,13 @@ final_setup() {
   #  rm -f "$(dirname "${0}")/$(basename "${0}")"
   #fi
 
-  print_step "Changing shell"
-  sudo usermod -s "$(which zsh)" "${USER}"
-  env zsh -l
+  if [[ -n "$(${SHELL} -c 'echo "${ZSH_VERSION}"')" ]]; then
+    print_step "Skipped: Changing shell to ZSH"
+  else
+    print_step "Changing shell to ZSH"
+    sudo usermod -s "$(which zsh)" "${USER}"
+    env zsh -l
+  fi
 }
 
 main() {
@@ -534,4 +543,4 @@ main() {
 
 main "${*}"
 
-exit 0
+exit_script "0"
