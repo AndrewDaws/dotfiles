@@ -129,9 +129,59 @@ check_connectivity() {
   else
     return 1
   fi
- }
+}
+
+checksum_file() {
+  # Declare local variables
+  local input_file
+  local computed_checksum
+
+  # Initialize local variables
+  input_file="${*}"
+  computed_checksum=""
+
+  # Check if input file variable is set
+  if [[ -z "${input_file}" ]]; then
+    # Error finding input file
+    abort_script "Checksum Error" "Input file not provided!"
+  fi
+
+  # Check if input file is not missing
+  if [[ ! -f "${input_file}" ]]; then
+    # Error missing input file
+    abort_script "Checksum Error" "Input file does not exist!"
+  fi
+
+  # Check if input file is not empty
+  if [[ ! -s "${input_file}" ]]; then
+    # Error empty input file
+    abort_script "Checksum Error" "Input file is empty!"
+  fi
+
+  # Calculate checksum
+  computed_checksum="$(cksum "${input_file}" | cut -d' ' -f1)"
+
+  # Return calculation result
+  echo "${computed_checksum}"
+}
 
 repo_setup() {
+  # Declare local variables
+  local current_script
+  local updated_script
+  local current_checksum
+  local updated_checksum
+  local updated_flag
+  local return_code
+
+  # Initialize local variables
+  current_script="$(realpath "${0}")"
+  updated_script="${HOME}/.dotfiles/scripts/install.sh"
+  current_checksum=""
+  updated_checksum=""
+  updated_flag="1"
+  return_code="1"
+
   print_stage "Preparing dotfiles repo"
 
   # Check internet connectivity
@@ -146,12 +196,30 @@ repo_setup() {
     abort_script "No connection to GitHub!"
   fi
 
-  print_step "Installing git"
-  is_installed "git" || sudo apt install -y --no-install-recommends git
+  if ! is_installed "git"; then
+    print_step "Installing git"
+    sudo apt install -y --no-install-recommends git
+  else
+    print_step "Skipped: Installing git"
+  fi
 
   if [[ -d "${HOME}/.dotfiles" ]]; then
+    # Compute this install script checksum
+    current_checksum="$(checksum_file "${current_script}")"
+
+    # Pull latest repo
     print_step "Updating dotfiles repo"
     git -C "${HOME}/.dotfiles" pull
+
+    # Compute new install script checksum
+    updated_checksum="$(checksum_file "${updated_script}")"
+
+    # Compare this and new install script checksums
+    if [[ "${current_script}" == "${updated_script}" ]]; then
+      if [[ "${current_checksum}" -eq "${updated_checksum}" ]]; then
+        updated_flag="0"
+      fi
+    fi
   else
     print_step "Cloning dotfiles repo"
     if ! git clone https://github.com/AndrewDaws/dotfiles.git "${HOME}/.dotfiles"; then
@@ -166,6 +234,25 @@ repo_setup() {
     fi
   else
     abort_script "File ${HOME}/.dotfiles/scripts/set_permissions.sh Does Not Exist!"
+  fi
+
+  # Check if install script was new or updated
+  if [[ "${updated_flag}" -ne 0 ]]; then
+    # Run new install script
+    print_step "Running updated install script"
+    "${HOME}/.dotfiles/scripts/install.sh"
+    return_code="${!}"
+
+    # Delete current install script if no error
+    if [[ "${return_code}" -eq 0 ]]; then
+      if [[ "${current_script}" != "${updated_script}" ]]; then
+        print_step "Deleting current install script"
+        rm -f "${current_script}"
+      fi
+    fi
+
+    # Repeat return code and exit
+    exit_script "${return_code}"
   fi
 }
 
