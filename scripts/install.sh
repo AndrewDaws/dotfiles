@@ -556,13 +556,6 @@ final_setup() {
 
   update_packages
 
-  # @todo Fix Self-Deletion
-  # @body Fix the logic to delete the install script if not executed from dotfiles path.
-  #if [[ "$(dirname "${0}")" != "${HOME}/.dotfiles/scripts" ]]; then
-  #  print_step "Deleting temporary install script"
-  #  rm -f "$(dirname "${0}")/$(basename "${0}")"
-  #fi
-
   if [[ -n "$(${SHELL} -c 'echo "${ZSH_VERSION}"')" ]]; then
     print_step "Skipped: Changing shell to ZSH"
   else
