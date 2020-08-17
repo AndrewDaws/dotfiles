@@ -29,5 +29,4 @@ else
   exit 1
 fi
 
-echo 'Done.'
 exit 0

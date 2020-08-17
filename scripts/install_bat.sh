@@ -11,4 +11,3 @@ curl -s https://api.github.com/repos/sharkdp/bat/releases/latest \
 | wget -i -
 sudo apt install "${PWD}"/bat_*_amd64.deb
 rm -f "${PWD}"/bat_*_amd64.deb
-echo 'Done.'

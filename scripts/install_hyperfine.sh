@@ -11,4 +11,3 @@ curl -s https://api.github.com/repos/sharkdp/hyperfine/releases/latest \
 | wget -i -
 sudo apt install "${PWD}"/hyperfine_*_amd64.deb
 rm -f "${PWD}"/hyperfine_*_amd64.deb
-echo 'Done.'

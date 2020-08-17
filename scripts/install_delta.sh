@@ -11,4 +11,3 @@ curl -s https://api.github.com/repos/dandavison/delta/releases/latest \
 | wget -i -
 sudo apt install "${PWD}"/git-delta_*_amd64.deb
 rm -f "${PWD}"/git-delta_*_amd64.deb
-echo 'Done.'

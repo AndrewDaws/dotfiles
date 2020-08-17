@@ -11,4 +11,3 @@ curl -s https://api.github.com/repos/alacritty/alacritty/releases/latest \
 | wget -i -
 sudo apt install "${PWD}"/Alacritty-*_amd64.deb
 rm -f "${PWD}"/Alacritty-*_amd64.deb
-echo 'Done.'

@@ -12,4 +12,3 @@ mkdir -p "${HOME}/.local/share/fonts/NerdFonts"
 unzip -o "${PWD}/AnonymousPro.zip" -d "${HOME}/.local/share/fonts/NerdFonts"
 rm -f "${PWD}/AnonymousPro.zip"
 sudo fc-cache -f -v
-echo 'Done.'

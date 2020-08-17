@@ -59,6 +59,5 @@ else
   echo "  File ${HOME}/.git-crypt/dotfiles.key Does Not Exist!"
   exit 1
 fi
-echo "Done."
 
 exit 0

@@ -9,4 +9,3 @@ rm -f "${PWD}/steam.deb"
 wget https://steamcdn-a.akamaihd.net/client/installer/steam.deb
 sudo apt install "${PWD}/steam.deb"
 rm -f "${PWD}/steam.deb"
-echo 'Done.'

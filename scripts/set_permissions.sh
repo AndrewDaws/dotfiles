@@ -204,6 +204,4 @@ if [[ "${argument_flag}" == "false" || "${zsh_mode}" == "enabled" ]]; then
   fi
 fi
 
-echo 'Done.'
-
 exit 0

@@ -132,8 +132,6 @@ if [[ "${argument_flag}" == "false" || "${headless_mode}" == "enabled" ]]; then
     echo "  File ${DOTFILES_VIM_PATH}/.vimrc Does Not Exist!"
     exit 1
   fi
-
-  echo 'Done.'
 fi
 
 # Desktop applications links
@@ -179,8 +177,6 @@ if [[ "${desktop_mode}" == "enabled" ]]; then
       exit 1
     fi
   fi
-
-  echo 'Done.'
 fi
 
 exit 0

@@ -12,4 +12,3 @@ mkdir -p "${HOME}/.local/share/fonts/NerdFonts"
 unzip -o "${PWD}/Monoid.zip" -d "${HOME}/.local/share/fonts/NerdFonts"
 rm -f "${PWD}/Monoid.zip"
 sudo fc-cache -f -v
-echo 'Done.'

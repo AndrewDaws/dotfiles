@@ -12,4 +12,3 @@ mkdir -p "${HOME}/.local/share/fonts/NerdFonts"
 unzip -o "${PWD}/Hack.zip" -d "${HOME}/.local/share/fonts/NerdFonts"
 rm -f "${PWD}/Hack.zip"
 sudo fc-cache -f -v
-echo 'Done.'

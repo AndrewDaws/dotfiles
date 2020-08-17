@@ -11,4 +11,3 @@ curl -s https://api.github.com/repos/BurntSushi/ripgrep/releases/latest \
 | wget -i -
 sudo apt install "${PWD}"/ripgrep_*_amd64.deb
 rm -f "${PWD}"/ripgrep_*_amd64.deb
-echo 'Done.'
