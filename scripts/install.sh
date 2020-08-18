@@ -227,17 +227,11 @@ repo_setup() {
     fi
   fi
 
-  # Set file permissions
-  if [[ -f "${HOME}/.dotfiles/scripts/set_permissions.sh" ]]; then
-    if ! "${HOME}/.dotfiles/scripts/set_permissions.sh"; then
-      abort_script "Script ${HOME}/.dotfiles/scripts/set_permissions.sh Failed!"
-    fi
-  else
-    abort_script "File ${HOME}/.dotfiles/scripts/set_permissions.sh Does Not Exist!"
-  fi
-
   # Check if install script was new or updated
   if [[ "${updated_flag}" -ne 0 ]]; then
+    # Ensure new install script can execute
+    chmod +x "${HOME}/.dotfiles/scripts/install.sh"
+
     # Run new install script
     print_step "Running updated install script"
     "${HOME}/.dotfiles/scripts/install.sh"
@@ -253,6 +247,15 @@ repo_setup() {
 
     # Repeat return code and exit
     exit_script "${return_code}"
+  fi
+
+  # Set file permissions
+  if [[ -f "${HOME}/.dotfiles/scripts/set_permissions.sh" ]]; then
+    if ! "${HOME}/.dotfiles/scripts/set_permissions.sh"; then
+      abort_script "Script ${HOME}/.dotfiles/scripts/set_permissions.sh Failed!"
+    fi
+  else
+    abort_script "File ${HOME}/.dotfiles/scripts/set_permissions.sh Does Not Exist!"
   fi
 }
 
