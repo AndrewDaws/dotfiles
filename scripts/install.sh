@@ -286,6 +286,28 @@ initial_setup() {
 }
 
 headless_setup() {
+  # Declare local variables
+  local package_list
+
+  # Initialize local variables
+  package_list=( \
+    man-db \
+    sed \
+    gawk \
+    file \
+    tree \
+    openssh-server \
+    cron \
+    zsh \
+    tmux \
+    curl \
+    vim \
+    nano \
+    nmap \
+    htop \
+    xclip \
+  )
+
   print_stage "Headless applications setup"
 
   # Check internet connectivity
@@ -300,12 +322,19 @@ headless_setup() {
     abort_script "No connection to GitHub!"
   fi
 
-  #print_step "Adding repositories"
-
-  print_step "Installing headless applications"
-  sudo apt install -y --no-install-recommends \
-    vim zsh htop man curl sed nano gawk nmap tmux xclip \
-    openssh-server cron file tree
+  # print_step "Adding repositories"
+  
+  # Install packages
+  for listIndex in "${package_list[@]}"; do
+    # Check if package already installed
+    if ! dpkg-query -W -f='${Status}' "${listIndex}" 2> /dev/null \
+      | grep -c "ok installed" &> /dev/null; then
+      print_step "Installing ${listIndex}"
+      sudo apt install -y --no-install-recommends "${listIndex}"
+    else
+      print_step "Skipped: Installing ${listIndex}"
+    fi
+  done
 
   # Install Fd
   is_installed "fd" || "${HOME}/.dotfiles/scripts/install_fd.sh"
@@ -455,6 +484,24 @@ headless_setup() {
 }
 
 desktop_setup() {
+  # Declare local variables
+  local package_list
+
+  # Initialize local variables
+  package_list=( \
+    libegl1-mesa-dev \
+    libssl-dev \
+    gcc \
+    g++ \
+    make \
+    cmake \
+    build-essential \
+    pkg-config \
+    snapd \
+    firefox \
+    meld \
+  )
+
   print_stage "Desktop applications setup"
 
   # Check internet connectivity
@@ -469,11 +516,19 @@ desktop_setup() {
     abort_script "No connection to GitHub!"
   fi
 
-  print_step "Installing desktop applications"
-  sudo apt install -y --no-install-recommends \
-    firefox libegl1-mesa-dev snapd make cmake \
-    gcc build-essential meld pkg-config \
-    libssl-dev
+  # print_step "Adding repositories"
+
+  # Install packages
+  for listIndex in "${package_list[@]}"; do
+    # Check if package already installed
+    if ! dpkg-query -W -f='${Status}' "${listIndex}" 2> /dev/null \
+      | grep -c "ok installed" &> /dev/null; then
+      print_step "Installing ${listIndex}"
+      sudo apt install -y --no-install-recommends "${listIndex}"
+    else
+      print_step "Skipped: Installing ${listIndex}"
+    fi
+  done
 
   # Install Alacritty
   is_installed "alacritty" || "${HOME}/.dotfiles/scripts/install_alacritty.sh"
@@ -497,9 +552,10 @@ desktop_setup() {
   # Install Cargo Applications
   # Install Exa
   if ! is_installed "exa"; then
+    print_step "Installing exa"
     cargo install exa
   else
-    print_step "Skipped: exa"
+    print_step "Skipped: Installing exa"
   fi
 
   # @todo File Manager Installation
