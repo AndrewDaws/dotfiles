@@ -496,10 +496,14 @@ desktop_setup() {
     make \
     cmake \
     build-essential \
-    pkg-config \
     snapd \
     firefox \
     meld \
+    pkg-config \
+    libfreetype6-dev \
+    libfontconfig1-dev \
+    libxcb-xfixes0-dev \
+    python3 \
   )
 
   print_stage "Desktop applications setup"
@@ -530,9 +534,6 @@ desktop_setup() {
     fi
   done
 
-  # Install Alacritty
-  is_installed "alacritty" || "${HOME}/.dotfiles/scripts/install_alacritty.sh"
-
   # Install Bat
   is_installed "bat" || "${HOME}/.dotfiles/scripts/install_bat.sh"
 
@@ -550,6 +551,32 @@ desktop_setup() {
   # @todo Improve Cargo Package Updating
   # @body Find a way to only update cargo packages if outdated, rather than full reinstall.
   # Install Cargo Applications
+
+  # Install Alacritty
+  if ! is_installed "alacritty"; then
+    print_step "Installing alacritty"
+    cargo install alacritty
+
+    # Create desktop entry
+    wget https://raw.githubusercontent.com/alacritty/alacritty/master/extra/linux/Alacritty.desktop
+    sudo cp "${PWD}/Alacritty.desktop" "/usr/local/bin/Alacritty.desktop"
+    rm -f "${PWD}/Alacritty.desktop"
+
+    wget https://raw.githubusercontent.com/alacritty/alacritty/master/extra/logo/alacritty-term.svg
+    sudo cp "${PWD}/alacritty-term.svg" "/usr/share/pixmaps/Alacritty.svg"
+    rm -f "${PWD}/alacritty-term.svg"
+
+    sudo desktop-file-install "/usr/local/bin/Alacritty.desktop"
+    sudo update-desktop-database
+
+    # Set as default terminal (Ctrl + Alt + T)
+    if is_installed "gsettings"; then
+      gsettings set org.gnome.desktop.default-applications.terminal exec 'alacritty'
+    fi
+  else
+    print_step "Skipped: Installing alacritty"
+  fi
+
   # Install Exa
   if ! is_installed "exa"; then
     print_step "Installing exa"
