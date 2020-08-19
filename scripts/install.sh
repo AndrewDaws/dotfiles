@@ -37,6 +37,69 @@ exit_script() {
   exit "${return_code}"
 }
 
+has_sudoers() {
+  # Declare local variables
+  local script_name
+
+  # Initialize local variables
+  script_name="$(basename "${0}")"
+
+  # Check for the existence of the temporary sudoers file
+  if [[ -d "/etc/sudoers.d" ]]; then
+    if [[ ! -f "/etc/sudoers.d/${USER}-${script_name}" || ! -s "/etc/sudoers.d/${USER}-${script_name}" ]]; then
+      return 1
+    else
+      return 0
+    fi
+  else
+    return 1
+  fi
+}
+
+add_sudoers() {
+  # Declare local variables
+  local script_name
+
+  # Initialize local variables
+  script_name="$(basename "${0}")"
+
+  # Create temporary sudoers file
+  echo "$USER $(hostname) = NOPASSWD: $(which tee) $(which apt-get) $(which apt) $(which cp) $(which usermod) $(which chmod) $(which desktop-file-install) $(which update-desktop-database)"  \
+    | sudo tee "/etc/sudoers.d/${USER}-${script_name}" > /dev/null
+  if [[ "${?}" -ne 0 ]]; then
+    return 1
+  fi
+}
+
+remove_sudoers() {
+  # Declare local variables
+  local script_name
+
+  # Initialize local variables
+  script_name="$(basename "${0}")"
+
+  # Remove temporary sudoers file
+  sudo "$(which rm)" "/etc/sudoers.d/${USER}-${script_name}"
+  if [[ "${?}" -ne 0 ]]; then
+    return 1
+  fi
+
+  # Invalidate cached user credentials
+  sudo -k
+  if [[ "${?}" -ne 0 ]]; then
+    return 1
+  fi
+}
+
+is_root() {
+  # Check if current user is root
+  if [[ "${EUID}" -eq 0 ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
 abort_script() {
   # Declare local variables
   local script_name
@@ -53,6 +116,15 @@ abort_script() {
     for error_msg in "${@}"; do
       echo "  ${error_msg}"
     done
+  fi
+
+  # Removing temporary sudoers file if it exists and not root
+  if ! is_root; then
+    if has_sudoers; then
+      remove_sudoers \
+        || echo "Failed to remove sudo permissions on script abort!" \
+        || echo "Please delete file /etc/sudoers.d/${USER}-${script_name}"
+    fi
   fi
 
   # Exit script with error
@@ -656,30 +728,35 @@ main() {
   local argument_flag
   local headless_mode
   local desktop_mode
+  local script_name
 
   # Initialize local variables
   argument_flag="false"
   headless_mode="disabled"
   desktop_mode="disabled"
+  script_name="$(basename "${0}")"
 
   if [[ -n "${*}" ]]; then
     # Process arguments
     for argument in "${@}"; do
       argument_flag="true"
       if [[ "${argument}" == "-?" || "${argument}" == "--help" ]]; then
-        abort_script "Usage:" "  $(basename "${0}") [options]" "  -?, --help      show list of command-line options" "" "OPTIONS" "  -h, --headless  force enable headless mode" "  -d, --desktop   force enable desktop mode"
+        abort_script "Usage:" "  ${script_name} [options]" "  -?, --help      show list of command-line options" "" "OPTIONS" "  -h, --headless  force enable headless mode" "  -d, --desktop   force enable desktop mode"
       elif [[ "${argument}" == "-h" || "${argument}" == "--headless" ]]; then
         headless_mode="enabled"
       elif [[ "${argument}" == "-d" || "${argument}" == "--desktop" ]]; then
         desktop_mode="enabled"
       else
-        abort_script "Invalid Argument!" "" "Usage:" "  $(basename "${0}") [options]" "  -?, --help      show list of command-line options"
+        abort_script "Invalid Argument!" "" "Usage:" "  ${script_name} [options]" "  -?, --help      show list of command-line options"
       fi
     done
   fi
 
-  # @todo Single Sudo Prompt
-  # @body Automate sudo password prompt so it is only asked for once.
+  # Single sudo password prompt at the beginning of the script
+  if ! is_root; then
+    add_sudoers \
+      || abort_script "Failed to add sudo permissions!"
+  fi
 
   repo_setup
 
@@ -705,6 +782,14 @@ main() {
   fi
 
   final_setup
+
+  # Cleanup single sudo password at the end of the script
+  if ! is_root; then
+    if has_sudoers; then
+      remove_sudoers \
+        || abort_script "Failed to remove sudo permissions!"
+    fi
+  fi
 }
 
 main "${*}"
