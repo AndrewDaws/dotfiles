@@ -182,25 +182,71 @@ is_installed() {
 
 check_connectivity() {
   # Declare local variables
-  local test_ip
+  local test_address
   local test_count
+  local test_timeout
+  local return_code
 
   # Initialize local variables
-  test_count="1"
   if [[ -n "${1}" ]]; then
-    test_ip="${1}"
+    test_address="${1}"
   else
-    test_ip="8.8.8.8"
+    test_address="8.8.8.8"
+  fi
+  test_count="1"
+  test_timeout="5"
+  return_code="-1"
+
+  # Test connectivity with ping
+  # Check if ping is installed
+  if is_installed ping; then
+    if ping \
+      -c "${test_count}" \
+      "${test_address}" \
+      &> /dev/null; then
+      return_code="0"
+    else
+      return_code="1"
+    fi
   fi
 
-  is_installed "ping" || sudo apt install -y --no-install-recommends iputils-ping
-
-  # Test connectivity
-  if ping -c "${test_count}" "${test_ip}" &> /dev/null; then
-    return 0
-  else
-    return 1
+  # Test connectivity with wget if not previously successful
+  if [[ "${return_code}" -ne 0 ]]; then
+    # Check if wget is installed
+    if is_installed wget; then
+      if wget \
+        --quiet \
+        --timeout="${test_timeout}" \
+        --tries="${test_count}" \
+        --spider \
+        "${test_address}" \
+        &> /dev/null; then
+        return_code="0"
+      else
+        return_code="1"
+      fi
+    fi
   fi
+
+  # Test connectivity with curl if not previously successful
+  if [[ "${return_code}" -ne 0 ]]; then
+    # Check if curl is installed
+    if is_installed curl; then
+      if curl \
+        --silent \
+        --connect-timeout "${test_timeout}" \
+        --max-time "${test_timeout}" \
+        "${test_address}" \
+        &> /dev/null; then
+        return_code="0"
+      else
+        return_code="1"
+      fi
+    fi
+  fi
+
+  # Return 0 if connected, 1 if not connected, or -1 if no tools installed
+  return "${return_code}"
 }
 
 checksum_file() {
@@ -255,12 +301,6 @@ repo_setup() {
   return_code="1"
 
   print_stage "Preparing dotfiles repo"
-
-  # Check internet connectivity
-  if ! check_connectivity; then
-    # Error checking internet connectivity
-    abort_script "No internet connection!"
-  fi
 
   # Check if GitHub domain is valid and accessible
   if ! check_connectivity "github.com"; then
@@ -384,12 +424,6 @@ headless_setup() {
   )
 
   print_stage "Headless applications setup"
-
-  # Check internet connectivity
-  if ! check_connectivity; then
-    # Error checking internet connectivity
-    abort_script "No internet connection!"
-  fi
 
   # Check if GitHub domain is valid and accessible
   if ! check_connectivity "github.com"; then
@@ -582,12 +616,6 @@ desktop_setup() {
   )
 
   print_stage "Desktop applications setup"
-
-  # Check internet connectivity
-  if ! check_connectivity; then
-    # Error checking internet connectivity
-    abort_script "No internet connection!"
-  fi
 
   # Check if GitHub domain is valid and accessible
   if ! check_connectivity "github.com"; then
