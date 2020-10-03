@@ -664,6 +664,10 @@ desktop_setup() {
     # Create desktop entry
     wget https://raw.githubusercontent.com/alacritty/alacritty/master/extra/linux/Alacritty.desktop
     sudo cp "${PWD}/Alacritty.desktop" "/usr/local/bin/Alacritty.desktop"
+    sudo cp u=rwx "/usr/local/bin/Alacritty.desktop"
+    mkdir -p "${HOME}/.local/share/applications"
+    cp "${PWD}/Alacritty.desktop" "${HOME}/.local/share/applications/Alacritty.desktop"
+    cp u=rwx "${HOME}/.local/share/applications/Alacritty.desktop"
     rm -f "${PWD}/Alacritty.desktop"
 
     wget https://raw.githubusercontent.com/alacritty/alacritty/master/extra/logo/alacritty-term.svg
