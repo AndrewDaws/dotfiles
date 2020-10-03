@@ -421,6 +421,7 @@ headless_setup() {
     nmap \
     htop \
     xclip \
+    apt-utils \
   )
 
   print_stage "Headless applications setup"
