@@ -138,6 +138,63 @@ fi
 if [[ "${desktop_mode}" == "enabled" ]]; then
   echo "=> Linking Desktop Applications"
 
+  if [[ -f "${DOTFILES_GNOME_PATH}/gtk.css" ]]; then
+    if [[ "$(readlink -f "${HOME}/.config/gtk-3.0/gtk.css")" == "${DOTFILES_GNOME_PATH}/gtk.css" ]]; then
+      echo "Skipped: ${HOME}/.config/gtk-3.0/gtk.css"
+    else
+      if [[ -f "${HOME}/.config/gtk-3.0/gtk.css" ]]; then
+        rm -f "${HOME}/.config/gtk-3.0/gtk.css"
+      elif [[ ! -d "${HOME}/.config/gtk-3.0" ]]; then
+        mkdir -p "${HOME}/.config/gtk-3.0"
+        chmod 775 "${HOME}/.config/gtk-3.0"
+      fi
+      ln -s "${DOTFILES_GNOME_PATH}/gtk.css" "${HOME}/.config/gtk-3.0/gtk.css"
+      echo "Linked: ${HOME}/.config/gtk-3.0/gtk.css -> ${DOTFILES_GNOME_PATH}/gtk.css"
+    fi
+  else
+    echo "Aborting ${script_name}"
+    echo "  File ${DOTFILES_GNOME_PATH}/gtk.css Does Not Exist!"
+    exit 1
+  fi
+
+  if [[ -f "${DOTFILES_GNOME_PATH}/settings.ini" ]]; then
+    if [[ "$(readlink -f "${HOME}/.config/gtk-3.0/settings.ini")" == "${DOTFILES_GNOME_PATH}/settings.ini" ]]; then
+      echo "Skipped: ${HOME}/.config/gtk-3.0/settings.ini"
+    else
+      if [[ -f "${HOME}/.config/gtk-3.0/settings.ini" ]]; then
+        rm -f "${HOME}/.config/gtk-3.0/settings.ini"
+      elif [[ ! -d "${HOME}/.config/gtk-3.0" ]]; then
+        mkdir -p "${HOME}/.config/gtk-3.0"
+        chmod 775 "${HOME}/.config/gtk-3.0"
+      fi
+      ln -s "${DOTFILES_GNOME_PATH}/settings.ini" "${HOME}/.config/gtk-3.0/settings.ini"
+      echo "Linked: ${HOME}/.config/gtk-3.0/settings.ini -> ${DOTFILES_GNOME_PATH}/settings.ini"
+    fi
+  else
+    echo "Aborting ${script_name}"
+    echo "  File ${DOTFILES_GNOME_PATH}/settings.ini Does Not Exist!"
+    exit 1
+  fi
+
+  if [[ -f "${DOTFILES_GNOME_PATH}/settings.ini" ]]; then
+    if [[ "$(readlink -f "${HOME}/.config/gtk-4.0/settings.ini")" == "${DOTFILES_GNOME_PATH}/settings.ini" ]]; then
+      echo "Skipped: ${HOME}/.config/gtk-4.0/settings.ini"
+    else
+      if [[ -f "${HOME}/.config/gtk-4.0/settings.ini" ]]; then
+        rm -f "${HOME}/.config/gtk-4.0/settings.ini"
+      elif [[ ! -d "${HOME}/.config/gtk-4.0" ]]; then
+        mkdir -p "${HOME}/.config/gtk-4.0"
+        chmod 775 "${HOME}/.config/gtk-4.0"
+      fi
+      ln -s "${DOTFILES_GNOME_PATH}/settings.ini" "${HOME}/.config/gtk-4.0/settings.ini"
+      echo "Linked: ${HOME}/.config/gtk-4.0/settings.ini -> ${DOTFILES_GNOME_PATH}/settings.ini"
+    fi
+  else
+    echo "Aborting ${script_name}"
+    echo "  File ${DOTFILES_GNOME_PATH}/settings.ini Does Not Exist!"
+    exit 1
+  fi
+
   if [[ -d "${HOME}/.local/share/fonts/OperatorMono" ]]; then
     if [[ -f "${DOTFILES_ALACRITTY_PATH}/alacritty-operatormono.yml" ]]; then
       if [[ "$(readlink -f "${HOME}/.config/alacritty/alacritty.yml")" == "${DOTFILES_ALACRITTY_PATH}/alacritty-operatormono.yml" ]]; then

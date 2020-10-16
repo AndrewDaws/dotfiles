@@ -7,6 +7,7 @@ alacritty_mode="disabled"
 alias_mode="disabled"
 fonts_mode="disabled"
 git_mode="disabled"
+gnome_mode="disabled"
 projects_mode="disabled"
 scripts_mode="disabled"
 term_mode="disabled"
@@ -28,6 +29,7 @@ do
     echo "  -a, --alias        force enable alias mode"
     echo "      --fonts        force enable fonts mode"
     echo "  -g, --git          force git alias mode"
+    echo "      --gnome        force gnome alias mode"
     echo "  -p, --projects     force enable projects mode"
     echo "  -s, --scripts      force enable scripts mode"
     echo "      --term         force enable term mode"
@@ -43,6 +45,8 @@ do
     fonts_mode="enabled"
   elif [[ "${argument}" == "-g" || "${argument}" == "--git" ]]; then
     git_mode="enabled"
+  elif [[ "${argument}" == "--gnome" ]]; then
+    gnome_mode="enabled"
   elif [[ "${argument}" == "-p" || "${argument}" == "--projects" ]]; then
     projects_mode="enabled"
   elif [[ "${argument}" == "-s" || "${argument}" == "--scripts" ]]; then
@@ -128,6 +132,18 @@ if [[ "${argument_flag}" == "false" || "${git_mode}" == "enabled" ]]; then
   else
     echo "Aborting ${script_name}"
     echo "  Directory ${DOTFILES_GIT_PATH} Does Not Exist!"
+    exit 1
+  fi
+fi
+
+# Gnome
+if [[ "${argument_flag}" == "false" || "${gnome_mode}" == "enabled" ]]; then
+  if [[ -d "${DOTFILES_GNOME_PATH}" ]]; then
+    find "${DOTFILES_GNOME_PATH}" -type f -exec chmod 664 {} \;
+    find "${DOTFILES_GNOME_PATH}" -type f -exec echo "Modified: {} = 664" \;
+  else
+    echo "Aborting ${script_name}"
+    echo "  Directory ${DOTFILES_GNOME_PATH} Does Not Exist!"
     exit 1
   fi
 fi
