@@ -606,7 +606,6 @@ desktop_setup() {
     make \
     cmake \
     build-essential \
-    snapd \
     firefox \
     meld \
     pkg-config \
