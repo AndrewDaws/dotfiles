@@ -2,6 +2,7 @@
 alias dpkg_install="sudo dpkg -i"
 alias dpkg_uninstall="sudo dpkg -r"
 alias dpkg_purge="sudo dpkg --purge"
+alias dpkg_clean="sudo dpkg --purge `COLUMNS=300 dpkg -l "*" | egrep "^rc" | cut -d\  -f3`"
 
 dpkg_list() {
     if [[ -n "${1}" ]]; then
