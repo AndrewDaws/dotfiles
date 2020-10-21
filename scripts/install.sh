@@ -646,9 +646,20 @@ desktop_setup() {
   # Install Rustup
   if ! is_installed "rustup"; then
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-    source "${HOME}/.cargo/env"
   else
     rustup update
+  fi
+
+  # Rust environment handling
+  if [[ -f "${HOME}/.cargo/env" ]]; then
+    source "${HOME}/.cargo/env"
+
+    # Add cargo tools to path if not already in the path
+    if [[ "${PATH}" != *"${HOME}/.cargo/bin"* ]]; then
+      if [[ -d "${HOME}/.cargo/bin" ]]; then
+        export PATH="${HOME}/.cargo/bin:${PATH}"
+      fi
+    fi
   fi
 
   # @todo Improve Cargo Package Updating
