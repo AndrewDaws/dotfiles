@@ -406,6 +406,7 @@ headless_setup() {
 
   # Initialize local variables
   package_list=( \
+    coreutils \
     man-db \
     sed \
     gawk \
@@ -736,10 +737,18 @@ desktop_setup() {
   fi
   
   # Install term environment
-  if [[ -f "${HOME}/.terminfo/x/xterm-256color-italic" ]]; then
+  if [[ -f "/usr/share/terminfo/x/xterm-256color-italic" && -f "${HOME}/.terminfo/x/xterm-256color-italic" ]]; then
     print_step "Skipped: ${DOTFILES_TERM_PATH}/xterm-256color-italic.terminfo"
   else
-    tic "${DOTFILES_TERM_PATH}/xterm-256color-italic.terminfo"
+    if [[ ! -f "/usr/share/terminfo/x/xterm-256color-italic" ]]; then
+      sudo cp "${DOTFILES_TERM_PATH}/xterm-256color-italic.terminfo" "/usr/share/terminfo/x/xterm-256color-italic"
+      sudo tic "${DOTFILES_TERM_PATH}/xterm-256color-italic.terminfo"
+    fi
+
+    if [[ ! -f "${HOME}/.terminfo/x/xterm-256color-italic" ]]; then
+      tic "${DOTFILES_TERM_PATH}/xterm-256color-italic.terminfo"
+    fi
+
     print_step "Installed ${DOTFILES_TERM_PATH}/xterm-256color-italic.terminfo"
   fi
 
