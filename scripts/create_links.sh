@@ -214,6 +214,25 @@ if [[ "${desktop_mode}" == "enabled" ]]; then
       echo "  File ${DOTFILES_ALACRITTY_PATH}/alacritty-operatormono.yml Does Not Exist!"
       exit 1
     fi
+  elif [[ -d "${HOME}/.local/share/fonts/JetBrains" ]]; then
+    if [[ -f "${DOTFILES_ALACRITTY_PATH}/alacritty-jetbrainsmono.yml" ]]; then
+      if [[ "$(readlink -f "${HOME}/.config/alacritty/alacritty.yml")" == "${DOTFILES_ALACRITTY_PATH}/alacritty-jetbrainsmono.yml" ]]; then
+        echo "Skipped: ${HOME}/.config/alacritty/alacritty.yml"
+      else
+        if [[ -f "${HOME}/.config/alacritty/alacritty.yml" ]]; then
+          rm -f "${HOME}/.config/alacritty/alacritty.yml"
+        elif [[ ! -d "${HOME}/.config/alacritty" ]]; then
+          mkdir -p "${HOME}/.config/alacritty"
+          chmod 700 "${HOME}/.config/alacritty"
+        fi
+        ln -s "${DOTFILES_ALACRITTY_PATH}/alacritty-jetbrainsmono.yml" "${HOME}/.config/alacritty/alacritty.yml"
+        echo "Linked: ${HOME}/.config/alacritty/alacritty.yml -> ${DOTFILES_ALACRITTY_PATH}/alacritty-jetbrainsmono.yml"
+      fi
+    else
+      echo "Aborting ${script_name}"
+      echo "  File ${DOTFILES_ALACRITTY_PATH}/alacritty-jetbrainsmono.yml Does Not Exist!"
+      exit 1
+    fi
   else
     if [[ -f "${DOTFILES_ALACRITTY_PATH}/alacritty-firacode.yml" ]]; then
       if [[ "$(readlink -f "${HOME}/.config/alacritty/alacritty.yml")" == "${DOTFILES_ALACRITTY_PATH}/alacritty-firacode.yml" ]]; then
