@@ -500,11 +500,11 @@ main() {
     done
   fi
 
+  # Check repo for updates before proceeding
+  repo_update
+
   # Configure single password prompt at the beginning of the script
   get_sudo
-
-  # Core script execution
-  repo_update
 
   # Determine system type if no arguments given
   if [[ "${argument_flag}" == "false" ]]; then

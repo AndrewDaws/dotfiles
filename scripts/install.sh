@@ -21,12 +21,14 @@ repo_setup() {
   local input_arguments
   local current_script
   local updated_script
+  local full_script
   local return_code
 
   # Initialize local variables
   input_arguments="${*}"
   current_script="$(realpath "${0}")"
   updated_script="${HOME}/.dotfiles/scripts/install.sh"
+  full_script="${HOME}/.dotfiles/scripts/install_full.sh"
   return_code="1"
 
   echo "------------------------------------------------------------------------"
@@ -86,6 +88,7 @@ repo_setup() {
 
   # Ensure new install script can execute
   chmod +x "${updated_script}"
+  chmod +x "${full_script}"
 
   # Run new install script
   echo "=> Running updated install script"
@@ -107,6 +110,7 @@ repo_setup() {
 full_install() {
   # Declare local variables
   local input_arguments
+  local install_script
   local return_code
 
   # Initialize local variables
