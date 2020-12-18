@@ -8,6 +8,7 @@ alias_mode="disabled"
 fonts_mode="disabled"
 git_mode="disabled"
 gnome_mode="disabled"
+hardware_mode="disabled"
 projects_mode="disabled"
 scripts_mode="disabled"
 term_mode="disabled"
@@ -28,8 +29,9 @@ do
     echo "      --alacritty    force enable alacritty mode"
     echo "  -a, --alias        force enable alias mode"
     echo "      --fonts        force enable fonts mode"
-    echo "  -g, --git          force git alias mode"
-    echo "      --gnome        force gnome alias mode"
+    echo "  -g, --git          force enable git mode"
+    echo "      --gnome        force enable gnome mode"
+    echo "      --hardware     force enable hardware mode"
     echo "  -p, --projects     force enable projects mode"
     echo "  -s, --scripts      force enable scripts mode"
     echo "      --term         force enable term mode"
@@ -47,6 +49,8 @@ do
     git_mode="enabled"
   elif [[ "${argument}" == "--gnome" ]]; then
     gnome_mode="enabled"
+  elif [[ "${argument}" == "--hardware" ]]; then
+    hardware_mode="enabled"
   elif [[ "${argument}" == "-p" || "${argument}" == "--projects" ]]; then
     projects_mode="enabled"
   elif [[ "${argument}" == "-s" || "${argument}" == "--scripts" ]]; then
@@ -144,6 +148,18 @@ if [[ "${argument_flag}" == "false" || "${gnome_mode}" == "enabled" ]]; then
   else
     echo "Aborting ${script_name}"
     echo "  Directory ${DOTFILES_GNOME_PATH} Does Not Exist!"
+    exit 1
+  fi
+fi
+
+# Hardware
+if [[ "${argument_flag}" == "false" || "${hardware_mode}" == "enabled" ]]; then
+  if [[ -d "${DOTFILES_HARDWARE_PATH}" ]]; then
+    find "${DOTFILES_HARDWARE_PATH}" -type f -exec chmod 644 {} \;
+    find "${DOTFILES_HARDWARE_PATH}" -type f -exec echo "Modified: {} = 644" \;
+  else
+    echo "Aborting ${script_name}"
+    echo "  Directory ${DOTFILES_HARDWARE_PATH} Does Not Exist!"
     exit 1
   fi
 fi
