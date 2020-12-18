@@ -37,56 +37,118 @@ exit_script() {
   exit "${return_code}"
 }
 
-has_sudoers() {
+script_filename() {
   # Declare local variables
-  local script_name
+  local output_filename
 
   # Initialize local variables
-  script_name="$(basename "${0}")"
+  output_filename="$(basename "${0}")"
 
-  # Check for the existence of the temporary sudoers file
-  if [[ -d "/etc/sudoers.d" ]]; then
-    if [[ ! -f "/etc/sudoers.d/${USER}-${script_name}" || ! -s "/etc/sudoers.d/${USER}-${script_name}" ]]; then
-      return 1
-    else
-      return 0
-    fi
+  # Return script filename
+  echo "${output_filename}"
+}
+
+variable_set() {
+  # Declare local variables
+  local input_variable
+
+  # Initialize local variables
+  input_variable="${1}"
+
+  # Returns 0 if variable is set or error if it is not
+  if [[ -n "${input_variable}" ]]; then
+    return 0
   else
     return 1
   fi
 }
 
-add_sudoers() {
+variable_unset() {
   # Declare local variables
-  local script_name
+  local input_variable
 
   # Initialize local variables
-  script_name="$(basename "${0}")"
+  input_variable="${*}"
 
-  # Create temporary sudoers file
-  echo "$USER $(hostname) = NOPASSWD: $(which tee) $(which apt-get) $(which apt) $(which cp) $(which usermod) $(which chmod) $(which desktop-file-install) $(which update-desktop-database)"  \
-    | sudo tee "/etc/sudoers.d/${USER}-${script_name}" > /dev/null
-  if [[ "${?}" -ne 0 ]]; then
+  # Returns 0 if variable is unset or error if it is not
+  if [[ -z "${input_variable}" ]]; then
+    return 0
+  else
     return 1
   fi
 }
 
-remove_sudoers() {
+file_exists() {
   # Declare local variables
-  local script_name
+  local input_file
 
   # Initialize local variables
-  script_name="$(basename "${0}")"
+  input_file="${*}"
 
-  # Remove temporary sudoers file
-  sudo "$(which rm)" "/etc/sudoers.d/${USER}-${script_name}"
-  if [[ "${?}" -ne 0 ]]; then
+  # Returns 0 if file exists or error if it does not
+  if [[ -f "${input_file}" ]]; then
+    return 0
+  else
     return 1
   fi
+}
 
-  # Invalidate cached user credentials
-  sudo -k
-  if [[ "${?}" -ne 0 ]]; then
+file_full() {
+  # Declare local variables
+  local input_file
+
+  # Initialize local variables
+  input_file="${*}"
+
+  # Returns 0 if file is full or error if it is not
+  if [[ -s "${input_file}" ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+directory_exists() {
+  # Declare local variables
+  local input_directory
+
+  # Initialize local variables
+  input_directory="${*}"
+
+  # Returns 0 if directory exists or error if it does not
+  if [[ -d "${input_directory}" ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+path_exists() {
+  # Declare local variables
+  local input_path
+
+  # Initialize local variables
+  input_path="${*}"
+
+  # Returns 0 if path exists or error if it does not
+  if [[ -e "${input_path}" ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+is_installed() {
+  # Declare local variables
+  local input_application
+
+  # Initialize local variables
+  input_application="${1}"
+
+  # Returns 0 if application is installed or error if it is not
+  if which "${input_application}" | grep -o "${input_application}" > /dev/null; then
+    return 0
+  else
     return 1
   fi
 }
@@ -98,37 +160,6 @@ is_root() {
   else
     return 1
   fi
-}
-
-abort_script() {
-  # Declare local variables
-  local script_name
-
-  # Initialize local variables
-  script_name="$(basename "${0}")"
-
-  # Print error message
-  echo "Aborting ${script_name}"
-  
-  # Check for error messages
-  if [[ -n "${*}" ]]; then
-    # Treat each input parameter as a separate line
-    for error_msg in "${@}"; do
-      echo "  ${error_msg}"
-    done
-  fi
-
-  # Removing temporary sudoers file if it exists and not root
-  if ! is_root; then
-    if has_sudoers; then
-      remove_sudoers \
-        || echo "Failed to remove sudo permissions on script abort!" \
-        || echo "Please delete file /etc/sudoers.d/${USER}-${script_name}"
-    fi
-  fi
-
-  # Exit script with error
-  exit_script "1"
 }
 
 print_stage() {
@@ -171,13 +202,345 @@ print_step() {
   fi
 }
 
-is_installed() {
-  # Returns 0 if application is installed or error if it is not
-  if which "${1}" | grep -o "${1}" > /dev/null; then
-    return 0
+abort_script() {
+  # Declare local variables
+  local this_function
+  local calling_function
+
+  # Initialize local variables
+  this_function="${FUNCNAME[0]}"
+  calling_function="${FUNCNAME[1]}"
+
+  # Replace calling function name when helper function used
+  if [[ "${calling_function}" == "abort_*" ]]; then
+    calling_function="${FUNCNAME[2]}"
+  fi
+
+  # Print error message
+  echo ""
+  print_stage "Aborting execution of $(script_filename)"
+  echo "Error in function ${calling_function}:"
+  
+  # Check for error messages
+  if [[ -n "${*}" ]]; then
+    # Treat each input parameter as a separate line
+    for error_msg in "${@}"; do
+      echo "  ${error_msg}"
+    done
+  fi
+
+  # Removing temporary sudoers file if it exists and not root
+  if ! is_root; then
+    if has_sudoers; then
+      if ! remove_sudoers; then
+        echo "Error in function ${this_function}:"
+        echo "  Failed to remove sudo permissions on script abort!"
+        echo "  Please manually delete file"
+        echo "  $(sudoers_filepath)"
+      fi
+    fi
+  fi
+
+  # Exit script with error
+  exit_script "1"
+}
+
+abort_variable_set() {
+  # Declare local variables
+  local input_name
+  local input_variable
+
+  # Initialize local variables
+  input_name="${1}"
+  input_variable="${2}"
+
+  # Check if input variable is set
+  if ! variable_set "${input_variable}"; then
+    abort_script "Variable is not set!" "${input_name}"
+  fi
+}
+
+abort_variable_unset() {
+  # Declare local variables
+  local input_name
+  local input_variable
+
+  # Initialize local variables
+  input_name="${1}"
+  input_variable="${2}"
+
+  # Check if input variable is unset
+  if ! variable_unset "${input_variable}"; then
+    abort_script "Variable is not unset!" "${input_name}"
+  fi
+}
+
+abort_file_exists() {
+  # Declare local variables
+  local input_file
+
+  # Initialize local variables
+  input_file="${*}"
+
+  # Check if input file exists
+  if ! file_exists "${input_file}"; then
+    abort_script "File does not exist!" "${input_file}"
+  fi
+}
+
+abort_file_full() {
+  # Declare local variables
+  local input_file
+
+  # Initialize local variables
+  input_file="${*}"
+
+  # Check if input file is full
+  if ! file_full "${input_file}"; then
+    abort_script "File is empty!" "${input_file}"
+  fi
+}
+
+abort_directory_exists() {
+  # Declare local variables
+  local input_directory
+
+  # Initialize local variables
+  input_directory="${*}"
+
+  # Check if input directory exists
+  if ! directory_exists "${input_directory}"; then
+    abort_script "Directory does not exist!" "${input_directory}"
+  fi
+}
+
+abort_path_exists() {
+  # Declare local variables
+  local input_path
+
+  # Initialize local variables
+  input_path="${*}"
+
+  # Check if input path exists
+  if ! path_exists "${input_path}"; then
+    abort_script "Path does not exist!" "${input_path}"
+  fi
+}
+
+abort_is_installed() {
+  # Declare local variables
+  local input_application
+
+  # Initialize local variables
+  input_application="${*}"
+
+  # Check if input application is not installed
+  if ! is_installed "${input_application}"; then
+    abort_script "Application not installed!" "${input_application}"
+  fi
+}
+
+sudoers_filename() {
+  # Declare local variables
+  local output_filename
+
+  # Initialize local variables
+  output_filename="${USER}-$(script_filename)"
+
+  # Return sudoers filename
+  echo "${output_filename}"
+}
+
+sudoers_directory() {
+  # Declare local variables
+  local output_directory
+
+  # Initialize local variables
+  output_directory="/etc/sudoers.d"
+
+  # Return sudoers directory
+  echo "${output_directory}"
+}
+
+sudoers_filepath() {
+  # Declare local variables
+  local output_filepath
+
+  # Initialize local variables
+  output_filepath="$(sudoers_directory)/$(sudoers_filename)"
+
+  # Return sudoers filepath
+  echo "${output_filepath}"
+}
+
+has_sudoers() {
+  # Check for the existence of the temporary sudoers file
+  if directory_exists "$(sudoers_directory)"; then
+    if file_exists "$(sudoers_filepath)"; then
+      if file_full "$(sudoers_filepath)"; then
+        return 0
+      else
+        return 1
+      fi
+    else
+      return 1
+    fi
   else
     return 1
   fi
+}
+
+add_sudoers() {
+  # Create temporary sudoers file
+  echo "$USER $(hostname) = NOPASSWD: $(which tee) $(which apt-get) $(which apt) $(which cp) $(which usermod) $(which chmod) $(which desktop-file-install) $(which update-desktop-database) $(which systemd-hwdb)" \
+    | sudo tee "$(sudoers_filepath)" > /dev/null
+  if [[ "${?}" -ne 0 ]]; then
+    return 1
+  fi
+}
+
+remove_sudoers() {
+  # Remove temporary sudoers file
+  sudo "$(which rm)" "$(sudoers_filepath)"
+  if [[ "${?}" -ne 0 ]]; then
+    return 1
+  fi
+
+  # Invalidate cached user credentials
+  sudo -k
+  if [[ "${?}" -ne 0 ]]; then
+    return 1
+  fi
+}
+
+get_sudo() {
+  if ! is_root; then
+    if ! add_sudoers; then
+      abort_script "Failed to add sudo permissions!"
+    fi
+  fi
+}
+
+clear_sudo() {
+  if ! is_root; then
+    if has_sudoers; then
+      if ! remove_sudoers; then
+        abort_script "Failed to remove sudo permissions!"
+      fi
+    fi
+  fi
+}
+
+root_command() {
+  # Declare local variables
+  local input_command
+
+  # Initialize local variables
+  input_command="${*}"
+
+  # Check if input file variable is set
+  if [[ -z "${input_command}" ]]; then
+    # Error finding input file
+    abort_script "Variable not set!" "input_command"
+  fi
+
+  # Copy input file as as root
+  if is_root; then
+    ${input_command}
+    if [[ "${?}" -ne 0 ]]; then
+      return 1
+    fi
+  else
+    sudo ${input_command}
+    if [[ "${?}" -ne 0 ]]; then
+      return 1
+    fi
+  fi
+}
+
+root_copy() {
+  # Declare local variables
+  local input_file
+  local output_file
+
+  # Initialize local variables
+  input_file="${1}"
+  output_file="${2}"
+
+  # Check if input file variable is set
+  abort_variable_set "input_file" "${input_file}"
+
+  # Check if input file is not missing
+  abort_file_exists "${input_file}"
+
+  # Check if output file variable is set
+  abort_variable_set "output_file" "${output_file}"
+
+  # Copy input file as as root
+  if is_root; then
+    cp -f "${input_file}" "${output_file}"
+    if [[ "${?}" -ne 0 ]]; then
+      return 1
+    fi
+  else
+    sudo cp -f "${input_file}" "${output_file}"
+    if [[ "${?}" -ne 0 ]]; then
+      return 1
+    fi
+  fi
+}
+
+root_owner() {
+  # Declare local variables
+  local input_path
+
+  # Initialize local variables
+  input_path="${*}"
+
+  # Check if input path variable is set
+  abort_variable_set "input_path" "${input_path}"
+
+  # Check if input path is not missing
+  abort_path_exists "${input_path}"
+
+  # Set input path owner to root
+  if is_root; then
+    chown root:root "${input_path}"
+    if [[ "${?}" -ne 0 ]]; then
+      return 1
+    fi
+  
+  else
+    sudo chown root:root "${input_path}"
+    if [[ "${?}" -ne 0 ]]; then
+      return 1
+    fi
+  fi
+}
+
+checksum_file() {
+  # Declare local variables
+  local input_file
+  local computed_checksum
+
+  # Initialize local variables
+  input_file="${*}"
+  computed_checksum=""
+
+  # Check if input file variable is set
+  abort_variable_set "input_file" "${input_file}"
+
+  # Check if input file is not missing
+  abort_file_exists "${input_file}"
+
+  # Check if input file is not empty
+  abort_file_full "${input_file}"
+
+  # Calculate checksum
+  computed_checksum="$(cksum "${input_file}" | cut -d' ' -f1)"
+
+  # Return calculation result
+  echo "${computed_checksum}"
 }
 
 check_connectivity() {
@@ -249,40 +612,6 @@ check_connectivity() {
   return "${return_code}"
 }
 
-checksum_file() {
-  # Declare local variables
-  local input_file
-  local computed_checksum
-
-  # Initialize local variables
-  input_file="${*}"
-  computed_checksum=""
-
-  # Check if input file variable is set
-  if [[ -z "${input_file}" ]]; then
-    # Error finding input file
-    abort_script "Checksum Error" "Input file not provided!"
-  fi
-
-  # Check if input file is not missing
-  if [[ ! -f "${input_file}" ]]; then
-    # Error missing input file
-    abort_script "Checksum Error" "Input file does not exist!"
-  fi
-
-  # Check if input file is not empty
-  if [[ ! -s "${input_file}" ]]; then
-    # Error empty input file
-    abort_script "Checksum Error" "Input file is empty!"
-  fi
-
-  # Calculate checksum
-  computed_checksum="$(cksum "${input_file}" | cut -d' ' -f1)"
-
-  # Return calculation result
-  echo "${computed_checksum}"
-}
-
 repo_setup() {
   # Declare local variables
   local current_script
@@ -315,7 +644,7 @@ repo_setup() {
     print_step "Skipped: Installing git"
   fi
 
-  if [[ -d "${HOME}/.dotfiles" ]]; then
+  if directory_exists "${HOME}/.dotfiles"; then
     # Compute this install script checksum
     current_checksum="$(checksum_file "${current_script}")"
 
@@ -362,12 +691,9 @@ repo_setup() {
   fi
 
   # Set file permissions
-  if [[ -f "${HOME}/.dotfiles/scripts/set_permissions.sh" ]]; then
-    if ! "${HOME}/.dotfiles/scripts/set_permissions.sh"; then
-      abort_script "Script ${HOME}/.dotfiles/scripts/set_permissions.sh Failed!"
-    fi
-  else
-    abort_script "File ${HOME}/.dotfiles/scripts/set_permissions.sh Does Not Exist!"
+  abort_file_exists "${HOME}/.dotfiles/scripts/set_permissions.sh"
+  if ! "${HOME}/.dotfiles/scripts/set_permissions.sh"; then
+    abort_script "Script ${HOME}/.dotfiles/scripts/set_permissions.sh Failed!"
   fi
 }
 
@@ -451,7 +777,7 @@ headless_setup() {
   is_installed "fd" || "${HOME}/.dotfiles/scripts/install_fd.sh"
 
   # Install Tmux Plugin Manager
-  if [[ -d "${HOME}/.tmux/plugins/tpm" ]]; then
+  if directory_exists "${HOME}/.tmux/plugins/tpm"; then
     print_step "Updating Tmux Plugin Manager repo"
     git -C "${HOME}/.tmux/plugins/tpm" pull
   else
@@ -461,7 +787,7 @@ headless_setup() {
   fi
 
   # Install Fzf
-  if [[ -d "${HOME}/.fzf" ]]; then
+  if directory_exists "${HOME}/.fzf"; then
     print_step "Updating fzf repo"
     git -C "${HOME}/.fzf" pull
   else
@@ -472,7 +798,7 @@ headless_setup() {
 
   print_step "Installing headless shell"
   # Install Oh-My-Zsh Framework
-  if [[ -d "${HOME}/.oh-my-zsh" ]]; then
+  if directory_exists "${HOME}/.oh-my-zsh"; then
     print_step "Updating Oh-My-Zsh repo"
     git -C "${HOME}/.oh-my-zsh" pull
   else
@@ -481,7 +807,7 @@ headless_setup() {
   fi
 
   # Install Oh-My-Zsh Theme
-  if [[ -d "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/themes/powerlevel10k" ]]; then
+  if directory_exists "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/themes/powerlevel10k"; then
     print_step "Updating Powerlevel10k repo"
     git -C "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/themes/powerlevel10k" pull
   else
@@ -490,7 +816,7 @@ headless_setup() {
   fi
 
   # Install Oh-My-Zsh Plugins
-  if [[ -d "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/autoupdate" ]]; then
+  if directory_exists "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/autoupdate"; then
     print_step "Updating autoupdate repo"
     git -C "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/autoupdate" pull
   else
@@ -498,7 +824,7 @@ headless_setup() {
     git clone https://github.com/TamCore/autoupdate-oh-my-zsh-plugins.git "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/autoupdate"
   fi
 
-  if [[ -d "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting" ]]; then
+  if directory_exists "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting"; then
     print_step "Updating fast-syntax-highlighting repo"
     git -C "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting" pull
   else
@@ -506,7 +832,7 @@ headless_setup() {
     git clone https://github.com/zdharma/fast-syntax-highlighting.git "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting"
   fi
 
-  if [[ -d "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/forgit" ]]; then
+  if directory_exists "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/forgit"; then
     print_step "Updating forgit repo"
     git -C "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/forgit" pull
   else
@@ -514,7 +840,7 @@ headless_setup() {
     git clone https://github.com/wfxr/forgit.git "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/forgit"
   fi
 
-  if [[ -d "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/fzf-tab" ]]; then
+  if directory_exists "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/fzf-tab"; then
     print_step "Updating fzf-tab repo"
     git -C "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/fzf-tab" pull
   else
@@ -522,7 +848,7 @@ headless_setup() {
     git clone https://github.com/Aloxaf/fzf-tab.git "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/fzf-tab"
   fi
 
-  if [[ -d "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/fzf-z" ]]; then
+  if directory_exists "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/fzf-z"; then
     print_step "Updating fzf-z repo"
     git -C "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/fzf-z" pull
   else
@@ -530,7 +856,7 @@ headless_setup() {
     git clone https://github.com/andrewferrier/fzf-z.git "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/fzf-z"
   fi
 
-  if [[ -d "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/per-directory-history" ]]; then
+  if directory_exists "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/per-directory-history"; then
     print_step "Updating per-directory-history repo"
     git -C "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/per-directory-history" pull
   else
@@ -538,7 +864,7 @@ headless_setup() {
     git clone https://github.com/jimhester/per-directory-history.git "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/per-directory-history"
   fi
 
-  if [[ -d "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-autopair" ]]; then
+  if directory_exists "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-autopair"; then
     print_step "Updating zsh-autopair repo"
     git -C "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-autopair" pull
   else
@@ -546,7 +872,7 @@ headless_setup() {
     git clone https://github.com/hlissner/zsh-autopair.git "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-autopair"
   fi
 
-  if [[ -d "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-z" ]]; then
+  if directory_exists "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-z"; then
     print_step "Updating zsh-z repo"
     git -C "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-z" pull
   else
@@ -554,7 +880,7 @@ headless_setup() {
     git clone https://github.com/agkozak/zsh-z.git "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-z"
   fi
 
-  if [[ -d "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" ]]; then
+  if directory_exists "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"; then
     print_step "Updating zsh-autosuggestions repo"
     git -C "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" pull
   else
@@ -562,7 +888,7 @@ headless_setup() {
     git clone https://github.com/zsh-users/zsh-autosuggestions.git "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
   fi
 
-  if [[ -d "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-completions" ]]; then
+  if directory_exists "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-completions"; then
     print_step "Updating zsh-completions repo"
     git -C "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-completions" pull
   else
@@ -570,7 +896,7 @@ headless_setup() {
     git clone https://github.com/zsh-users/zsh-completions.git "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-completions"
   fi
 
-  if [[ -d "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-history-substring-search" ]]; then
+  if directory_exists "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-history-substring-search"; then
     print_step "Updating zsh-history-substring-search repo"
     git -C "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-history-substring-search" pull
   else
@@ -585,12 +911,9 @@ headless_setup() {
   rm -f "${HOME}/.zshrc.pre-oh-my-zsh"
 
   # Create links
-  if [[ -f "${HOME}/.dotfiles/scripts/create_links.sh" ]]; then
-    if ! "${HOME}/.dotfiles/scripts/create_links.sh" --headless; then
-      abort_script "Script ${HOME}/.dotfiles/scripts/create_links.sh Failed!"
-    fi
-  else
-    abort_script "File ${HOME}/.dotfiles/scripts/create_links.sh Does Not Exist!"
+  abort_file_exists "${HOME}/.dotfiles/scripts/create_links.sh"
+  if ! "${HOME}/.dotfiles/scripts/create_links.sh" --headless; then
+    abort_script "Script ${HOME}/.dotfiles/scripts/create_links.sh Failed!"
   fi
 }
 
@@ -652,12 +975,12 @@ desktop_setup() {
   fi
 
   # Rust environment handling
-  if [[ -f "${HOME}/.cargo/env" ]]; then
+  if file_exists "${HOME}/.cargo/env"; then
     source "${HOME}/.cargo/env"
 
     # Add cargo tools to path if not already in the path
     if [[ "${PATH}" != *"${HOME}/.cargo/bin"* ]]; then
-      if [[ -d "${HOME}/.cargo/bin" ]]; then
+      if directory_exists "${HOME}/.cargo/bin"; then
         export PATH="${HOME}/.cargo/bin:${PATH}"
       fi
     fi
@@ -674,7 +997,7 @@ desktop_setup() {
 
     # Create desktop entry
     wget https://raw.githubusercontent.com/alacritty/alacritty/master/extra/linux/Alacritty.desktop
-    sudo cp "${PWD}/Alacritty.desktop" "/usr/local/bin/Alacritty.desktop"
+    root_copy "${PWD}/Alacritty.desktop" "/usr/local/bin/Alacritty.desktop"
     sudo chmod u=rwx "/usr/local/bin/Alacritty.desktop"
     mkdir -p "${HOME}/.local/share/applications"
     cp "${PWD}/Alacritty.desktop" "${HOME}/.local/share/applications/Alacritty.desktop"
@@ -682,7 +1005,7 @@ desktop_setup() {
     rm -f "${PWD}/Alacritty.desktop"
 
     wget https://raw.githubusercontent.com/alacritty/alacritty/master/extra/logo/alacritty-term.svg
-    sudo cp "${PWD}/alacritty-term.svg" "/usr/share/pixmaps/Alacritty.svg"
+    root_copy "${PWD}/alacritty-term.svg" "/usr/share/pixmaps/Alacritty.svg"
     rm -f "${PWD}/alacritty-term.svg"
 
     sudo desktop-file-install "/usr/local/bin/Alacritty.desktop"
@@ -728,24 +1051,21 @@ desktop_setup() {
   print_step "Installing desktop configurations"
 
   # Create links
-  if [[ -f "${HOME}/.dotfiles/scripts/create_links.sh" ]]; then
-    if ! "${HOME}/.dotfiles/scripts/create_links.sh" --desktop; then
-      abort_script "Script ${HOME}/.dotfiles/scripts/create_links.sh Failed!"
-    fi
-  else
-    abort_script "File ${HOME}/.dotfiles/scripts/create_links.sh Does Not Exist!"
+  abort_file_exists "${HOME}/.dotfiles/scripts/create_links.sh"
+  if ! "${HOME}/.dotfiles/scripts/create_links.sh" --desktop; then
+    abort_script "Script ${HOME}/.dotfiles/scripts/create_links.sh Failed!"
   fi
   
   # Install term environment
-  if [[ -f "/usr/share/terminfo/x/xterm-256color-italic" && -f "${HOME}/.terminfo/x/xterm-256color-italic" ]]; then
+  if ! file_exists "/usr/share/terminfo/x/xterm-256color-italic" && ! file_exists "${HOME}/.terminfo/x/xterm-256color-italic"; then
     print_step "Skipped: ${DOTFILES_TERM_PATH}/xterm-256color-italic.terminfo"
   else
-    if [[ ! -f "/usr/share/terminfo/x/xterm-256color-italic" ]]; then
+    if ! file_exists "/usr/share/terminfo/x/xterm-256color-italic"; then
       sudo cp "${DOTFILES_TERM_PATH}/xterm-256color-italic.terminfo" "/usr/share/terminfo/x/xterm-256color-italic"
       sudo tic "${DOTFILES_TERM_PATH}/xterm-256color-italic.terminfo"
     fi
 
-    if [[ ! -f "${HOME}/.terminfo/x/xterm-256color-italic" ]]; then
+    if ! file_exists "${HOME}/.terminfo/x/xterm-256color-italic"; then
       tic "${DOTFILES_TERM_PATH}/xterm-256color-italic.terminfo"
     fi
 
@@ -754,7 +1074,7 @@ desktop_setup() {
 
   # Create Global Git Config
   # Temporary measure until gitconfig logic is fixed.
-  if [[ -f "${HOME}/.gitconfig" ]]; then
+  if file_exists "${HOME}/.gitconfig"; then
     print_step "Skipped: ${HOME}/.dotfiles/scripts/create_gitconfig.sh"
   else
     "${HOME}/.dotfiles/scripts/create_gitconfig.sh"
@@ -780,47 +1100,40 @@ main() {
   local argument_flag
   local headless_mode
   local desktop_mode
-  local script_name
 
   # Initialize local variables
   argument_flag="false"
   headless_mode="disabled"
   desktop_mode="disabled"
-  script_name="$(basename "${0}")"
 
   if [[ -n "${*}" ]]; then
     # Process arguments
     for argument in "${@}"; do
       argument_flag="true"
       if [[ "${argument}" == "-?" || "${argument}" == "--help" ]]; then
-        abort_script "Usage:" "  ${script_name} [options]" "  -?, --help      show list of command-line options" "" "OPTIONS" "  -h, --headless  force enable headless mode" "  -d, --desktop   force enable desktop mode"
+        abort_script "Usage:" "  $(script_filename) [options]" "  -?, --help      show list of command-line options" "" "OPTIONS" "  -h, --headless  force enable headless mode" "  -d, --desktop   force enable desktop mode"
       elif [[ "${argument}" == "-h" || "${argument}" == "--headless" ]]; then
         headless_mode="enabled"
       elif [[ "${argument}" == "-d" || "${argument}" == "--desktop" ]]; then
         desktop_mode="enabled"
       else
-        abort_script "Invalid Argument!" "" "Usage:" "  ${script_name} [options]" "  -?, --help      show list of command-line options"
+        abort_script "Invalid Argument!" "" "Usage:" "  $(script_filename) [options]" "  -?, --help      show list of command-line options"
       fi
     done
   fi
 
-  # Single sudo password prompt at the beginning of the script
-  if ! is_root; then
-    add_sudoers \
-      || abort_script "Failed to add sudo permissions!"
-  fi
+  # Configure single password prompt at the beginning of the script
+  get_sudo
 
+  # Core script execution
   repo_setup
 
   # Determine system type if no arguments given
   if [[ "${argument_flag}" == "false" ]]; then
-    if [[ -f "${HOME}/.dotfiles/scripts/is_desktop.sh" ]]; then
-      "${HOME}/.dotfiles/scripts/is_desktop.sh" > /dev/null \
-        && desktop_mode="enabled" \
-        || headless_mode="enabled"
-    else
-      abort_script "File ${HOME}/.dotfiles/scripts/is_desktop.sh Does Not Exist!"
-    fi
+    abort_file_exists "${HOME}/.dotfiles/scripts/is_desktop.sh"
+    "${HOME}/.dotfiles/scripts/is_desktop.sh" > /dev/null \
+      && desktop_mode="enabled" \
+      || headless_mode="enabled"
   fi
 
   initial_setup
@@ -835,13 +1148,8 @@ main() {
 
   final_setup
 
-  # Cleanup single sudo password at the end of the script
-  if ! is_root; then
-    if has_sudoers; then
-      remove_sudoers \
-        || abort_script "Failed to remove sudo permissions!"
-    fi
-  fi
+  # Cleanup single password prompt at the end of the script
+  clear_sudo
 }
 
 main "${*}"
