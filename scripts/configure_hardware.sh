@@ -189,11 +189,9 @@ print_step() {
 
 abort_script() {
   # Declare local variables
-  local this_function
   local calling_function
 
   # Initialize local variables
-  this_function="${FUNCNAME[0]}"
   calling_function="${FUNCNAME[1]}"
 
   # Replace calling function name when helper function used
@@ -212,18 +210,6 @@ abort_script() {
     for error_msg in "${@}"; do
       echo "  ${error_msg}"
     done
-  fi
-
-  # Removing temporary sudoers file if it exists and not root
-  if ! is_root; then
-    if has_sudoers; then
-      if ! remove_sudoers; then
-        echo "Error in function ${this_function}:"
-        echo "  Failed to remove sudo permissions on script abort!"
-        echo "  Please manually delete file"
-        echo "  $(sudoers_filepath)"
-      fi
-    fi
   fi
 
   # Exit script with error
@@ -410,7 +396,7 @@ clear_sudo() {
   if ! is_root; then
     if has_sudoers; then
       if ! remove_sudoers; then
-        abort_script "Failed to remove sudo permissions!"
+        abort_script "Failed to remove sudo permissions!" "Please manually delete file" "$(sudoers_filepath)"
       fi
     fi
   fi
