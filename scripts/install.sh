@@ -110,7 +110,6 @@ repo_setup() {
 full_install() {
   # Declare local variables
   local input_arguments
-  local install_script
   local return_code
 
   # Initialize local variables
