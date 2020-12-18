@@ -464,7 +464,9 @@ final_setup() {
 
   if [[ -n "$(${SHELL} -c 'echo "${ZSH_VERSION}"')" ]]; then
     print_step "Skipped: Changing shell to ZSH, reloading"
-    exec zsh
+    source "${HOME}/.zshrc"
+    source "${HOME}/.p10k.zsh"
+    source "${HOME}/.tmux.conf"
   else
     print_step "Changing shell to ZSH"
     sudo usermod -s "$(which zsh)" "${USER}"
