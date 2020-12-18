@@ -463,7 +463,8 @@ final_setup() {
   update_packages
 
   if [[ -n "$(${SHELL} -c 'echo "${ZSH_VERSION}"')" ]]; then
-    print_step "Skipped: Changing shell to ZSH"
+    print_step "Skipped: Changing shell to ZSH, reloading"
+    exec zsh
   else
     print_step "Changing shell to ZSH"
     sudo usermod -s "$(which zsh)" "${USER}"
