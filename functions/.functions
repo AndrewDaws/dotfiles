@@ -498,7 +498,7 @@ add_sudoers() {
     new_sudoers="${USER} $(hostname) = NOPASSWD:${path_list}"
 
     # Check if existing temporary sudoers file
-    if [[ -f "$(sudoers_filepath)" ]]; then
+    if has_sudoers; then
       # Get existing temporary sudoers file content
       existing_sudoers="$(cat "$(sudoers_filepath)")"
       if [[ "${existing_sudoers}" == "${new_sudoers}" ]]; then
@@ -514,7 +514,9 @@ add_sudoers() {
         # Create new temporary sudoers file
         echo "${new_sudoers}" \
           | sudo tee "$(sudoers_filepath)" > /dev/null
-        if [[ "${?}" -ne 0 ]]; then
+        if [[ "${?}" -eq 0 ]]; then
+          return 0
+        else
           return 1
         fi
       fi
@@ -522,7 +524,9 @@ add_sudoers() {
       # Create temporary sudoers file
       echo "${new_sudoers}" \
         | sudo tee "$(sudoers_filepath)" > /dev/null
-      if [[ "${?}" -ne 0 ]]; then
+      if [[ "${?}" -eq 0 ]]; then
+        return 0
+      else
         return 1
       fi
     fi
@@ -532,16 +536,23 @@ add_sudoers() {
 }
 
 remove_sudoers() {
-  # Remove temporary sudoers file
-  sudo "$(which rm)" "$(sudoers_filepath)"
-  if [[ "${?}" -ne 0 ]]; then
-    return 1
-  fi
+  # Check if existing temporary sudoers file
+  if ! has_sudoers; then
+    return 0
+  else
+    # Remove temporary sudoers file
+    sudo "$(which rm)" "$(sudoers_filepath)"
+    if [[ "${?}" -ne 0 ]]; then
+      return 1
+    fi
 
-  # Invalidate cached user credentials
-  sudo -k
-  if [[ "${?}" -ne 0 ]]; then
-    return 1
+    # Invalidate cached user credentials
+    sudo -k
+    if [[ "${?}" -eq 0 ]]; then
+      return 0
+    else
+      return 1
+    fi
   fi
 }
 
@@ -555,10 +566,10 @@ get_sudo() {
 
 clear_sudo() {
   if ! is_root; then
-    if has_sudoers; then
-      if ! remove_sudoers; then
-        abort_script "Failed to remove sudo permissions!" "Please manually delete file" "$(sudoers_filepath)"
-      fi
+    if ! remove_sudoers; then
+      abort_script "Failed to remove sudo permissions!" \
+        "Please manually delete file" \
+        "$(sudoers_filepath)"
     fi
   fi
 }
