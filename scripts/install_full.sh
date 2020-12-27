@@ -484,6 +484,12 @@ main() {
   headless_mode="disabled"
   desktop_mode="disabled"
 
+  # Configure single password prompt at the beginning of the script
+  get_sudo
+
+  # Check repo for updates before proceeding
+  repo_update
+
   if [[ -n "${input_arguments}" ]]; then
     # Process arguments
     for argument in "${@}"; do
@@ -499,12 +505,6 @@ main() {
       fi
     done
   fi
-
-  # Check repo for updates before proceeding
-  repo_update
-
-  # Configure single password prompt at the beginning of the script
-  get_sudo
 
   # Determine system type if no arguments given
   if [[ "${argument_flag}" == "false" ]]; then

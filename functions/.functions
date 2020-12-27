@@ -455,10 +455,78 @@ has_sudoers() {
 }
 
 add_sudoers() {
-  # Create temporary sudoers file
-  echo "$USER $(hostname) = NOPASSWD: $(which tee) $(which apt-get) $(which apt) $(which cp) $(which usermod) $(which chmod) $(which desktop-file-install) $(which update-desktop-database) $(which systemd-hwdb)" \
-    | sudo tee "$(sudoers_filepath)" > /dev/null
-  if [[ "${?}" -ne 0 ]]; then
+  # Declare local variables
+  local application_list
+  local found_application
+  local path_list
+  local new_sudoers
+  local existing_sudoers
+
+  # Initialize local variables
+  application_list=( \
+    cp \
+    mv \
+    chmod \
+    usermod \
+    tee \
+    apt \
+    apt-get \
+    desktop-file-install \
+    update-desktop-database \
+    systemd-hwdb \
+  )
+  found_application=""
+  path_list=""
+  new_sudoers=""
+  existing_sudoers=""
+
+  # Check that at least one application was provided
+  if [[ -n "${application_list[0]}" ]]; then
+    # Loop through all applications in the list
+    for current_application in "${application_list[@]}"; do
+      # Find path to current application
+      found_application="$(which "${current_application}")"
+      # Check that application was found
+      if [[ "${found_application}" != "" ]]; then
+        # Append to path list
+        path_list="${path_list} ${found_application}"
+      else
+        return 1
+      fi
+    done
+
+    new_sudoers="${USER} $(hostname) = NOPASSWD:${path_list}"
+
+    # Check if existing temporary sudoers file
+    if [[ -f "$(sudoers_filepath)" ]]; then
+      # Get existing temporary sudoers file content
+      existing_sudoers="$(cat "$(sudoers_filepath)")"
+      if [[ "${existing_sudoers}" == "${new_sudoers}" ]]; then
+        # Existing temporary sudoers file matches
+        return 0
+      else
+        # Remove temporary sudoers file
+        sudo rm -f "$(sudoers_filepath)"
+        if [[ "${?}" -ne 0 ]]; then
+          return 1
+        fi
+
+        # Create new temporary sudoers file
+        echo "${new_sudoers}" \
+          | sudo tee "$(sudoers_filepath)" > /dev/null
+        if [[ "${?}" -ne 0 ]]; then
+          return 1
+        fi
+      fi
+    else
+      # Create temporary sudoers file
+      echo "${new_sudoers}" \
+        | sudo tee "$(sudoers_filepath)" > /dev/null
+      if [[ "${?}" -ne 0 ]]; then
+        return 1
+      fi
+    fi
+  else
     return 1
   fi
 }
