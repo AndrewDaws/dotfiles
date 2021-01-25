@@ -14,6 +14,8 @@ hwdb_install() {
   local hwdb_checksum
   local hwdb_application
   local hwdb_command
+  local udevadm_application
+  local udevadm_command
 
   # Initialize local variables
   input_file="${*}"
@@ -24,6 +26,8 @@ hwdb_install() {
   hwdb_checksum=""
   hwdb_application="systemd-hwdb"
   hwdb_command="${hwdb_application} update"
+  udevadm_application="udevadm"
+  udevadm_command="${udevadm_application} hwdb --update"
 
   # Check if input file variable is set
   abort_variable_set "input_file" "${input_file}"
@@ -36,6 +40,9 @@ hwdb_install() {
 
   # Check if hwdb directory is not missing
   abort_directory_exists "${hwdb_directory}"
+
+  # Check for udevadm
+  abort_is_installed "${udevadm_application}"
 
   input_filename="$(basename "${input_file}")"
   input_checksum="$(checksum_file "${input_file}")"
@@ -59,6 +66,10 @@ hwdb_install() {
 
     if ! root_command "${hwdb_command}"; then
       abort_script "Failed to execute command!" "${hwdb_command}"
+    fi
+
+    if ! root_command "${udevadm_command}"; then
+      abort_script "Failed to execute command!" "${udevadm_command}"
     fi
   else
     print_step "Skipped: Installing hardware configuration ${input_filename}"
