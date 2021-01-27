@@ -17,8 +17,7 @@ vim_mode="disabled"
 zsh_mode="disabled"
 
 # Process arguments
-for argument in "${@}"
-do
+for argument in "${@}"; do
   argument_flag="true"
   if [[ "${argument}" == "-?" || "${argument}" == "--help" ]]; then
     echo "Usage:"
@@ -74,8 +73,6 @@ do
   fi
 done
 
-
-
 # Save dotfiles directories to environment variable if not already set
 if [[ -z "${DOTFILES_PATH}" ]]; then
   if [[ -f "${HOME}/.dotfiles/zsh/.paths.zsh" ]]; then
@@ -86,8 +83,6 @@ if [[ -z "${DOTFILES_PATH}" ]]; then
     exit 1
   fi
 fi
-
-
 
 # Begin setting file permissions
 echo '=> Setting Permissions'

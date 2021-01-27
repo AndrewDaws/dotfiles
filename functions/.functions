@@ -133,7 +133,7 @@ is_installed() {
   input_application="${1}"
 
   # Returns 0 if application is installed or error if it is not
-  if which "${input_application}" | grep -o "${input_application}" > /dev/null; then
+  if which "${input_application}" | grep -o "${input_application}" >/dev/null; then
     return 0
   else
     return 1
@@ -172,7 +172,7 @@ check_connectivity() {
     if ping \
       -c "${test_count}" \
       "${test_address}" \
-      &> /dev/null; then
+      &>/dev/null; then
       return_code="0"
     else
       return_code="1"
@@ -189,7 +189,7 @@ check_connectivity() {
         --tries="${test_count}" \
         --spider \
         "${test_address}" \
-        &> /dev/null; then
+        &>/dev/null; then
         return_code="0"
       else
         return_code="1"
@@ -206,7 +206,7 @@ check_connectivity() {
         --connect-timeout "${test_timeout}" \
         --max-time "${test_timeout}" \
         "${test_address}" \
-        &> /dev/null; then
+        &>/dev/null; then
         return_code="0"
       else
         return_code="1"
@@ -249,7 +249,7 @@ print_step() {
     # Treat each input parameter as a separate line
     for message_line in "${@}"; do
       # Increment message counter
-      message_count="$((message_count+1))"
+      message_count="$((message_count + 1))"
 
       # Format based on message count
       if [[ "${message_count}" -eq 1 ]]; then
@@ -280,7 +280,7 @@ abort_script() {
   echo ""
   print_stage "Aborting execution of $(script_filename)"
   echo "Error in function ${calling_function}:"
-  
+
   # Check for error messages
   if [[ -n "${*}" ]]; then
     # Treat each input parameter as a separate line
@@ -463,17 +463,17 @@ add_sudoers() {
   local existing_sudoers
 
   # Initialize local variables
-  application_list=( \
-    cp \
-    mv \
-    chmod \
-    usermod \
-    tee \
-    apt \
-    apt-get \
-    desktop-file-install \
-    update-desktop-database \
-    systemd-hwdb \
+  application_list=(
+    cp
+    mv
+    chmod
+    usermod
+    tee
+    apt
+    apt-get
+    desktop-file-install
+    update-desktop-database
+    systemd-hwdb
   )
   found_application=""
   path_list=""
@@ -512,8 +512,8 @@ add_sudoers() {
         fi
 
         # Create new temporary sudoers file
-        echo "${new_sudoers}" \
-          | sudo tee "$(sudoers_filepath)" > /dev/null
+        echo "${new_sudoers}" |
+          sudo tee "$(sudoers_filepath)" >/dev/null
         if [[ "${?}" -eq 0 ]]; then
           return 0
         else
@@ -522,8 +522,8 @@ add_sudoers() {
       fi
     else
       # Create temporary sudoers file
-      echo "${new_sudoers}" \
-        | sudo tee "$(sudoers_filepath)" > /dev/null
+      echo "${new_sudoers}" |
+        sudo tee "$(sudoers_filepath)" >/dev/null
       if [[ "${?}" -eq 0 ]]; then
         return 0
       else
@@ -655,7 +655,7 @@ root_owner() {
     if [[ "${?}" -ne 0 ]]; then
       return 1
     fi
-  
+
   else
     sudo chown root:root "${input_path}"
     if [[ "${?}" -ne 0 ]]; then

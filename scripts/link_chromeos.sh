@@ -30,7 +30,7 @@ abort_script() {
 
   # Print error message
   echo "Aborting ${script_name}"
-  
+
   # Check for error messages
   if [[ -n "${*}" ]]; then
     # Treat each input parameter as a separate line

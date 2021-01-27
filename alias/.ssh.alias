@@ -51,7 +51,7 @@ ssh_gen() {
 }
 
 ssh_copy() {
-    # Declare local variables
+  # Declare local variables
   local sshHost
   local sshUser
   local sshKey
@@ -94,7 +94,7 @@ ssh_config() {
         echo "  User ${sshUser}"
         echo "  IdentitiesOnly yes"
         echo "  IdentityFile ${HOME}/.ssh/${sshHost}-${sshUser}"
-      } >> "${HOME}/.ssh/config"
+      } >>"${HOME}/.ssh/config"
     fi
   else
     echo "Incorrect input parameters!"
@@ -128,7 +128,7 @@ ssh_perm() {
     echo "Modifed: ${HOME}/.ssh/config = 644"
   fi
 
-  if find "${HOME}/.ssh/"*.pub > /dev/null; then
+  if find "${HOME}/.ssh/"*.pub >/dev/null; then
     find "${HOME}/.ssh/"*.pub -type f -exec chmod 644 {} \;
     find "${HOME}/.ssh/"*.pub -type f -exec echo "Modified: {} = 644" \;
   fi

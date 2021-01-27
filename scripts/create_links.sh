@@ -7,8 +7,7 @@ headless_mode="disabled"
 desktop_mode="disabled"
 
 # Process arguments
-for argument in "${@}"
-do
+for argument in "${@}"; do
   argument_flag="true"
   if [[ "${argument}" == "-?" || "${argument}" == "--help" ]]; then
     echo "Usage:"
@@ -34,8 +33,6 @@ do
   fi
 done
 
-
-
 # Save dotfiles directories to environment variable if not already set
 if [[ -z "${DOTFILES_PATH}" ]]; then
   if [[ -f "${HOME}/.dotfiles/zsh/.paths.zsh" ]]; then
@@ -47,22 +44,18 @@ if [[ -z "${DOTFILES_PATH}" ]]; then
   fi
 fi
 
-
-
 # Determine system type if no arguments given
 if [[ "${argument_flag}" == "false" ]]; then
   if [[ -f "${DOTFILES_SCRIPTS_PATH}/is_desktop.sh" ]]; then
-    "${DOTFILES_SCRIPTS_PATH}/is_desktop.sh" > /dev/null \
-      && desktop_mode="enabled" \
-      || headless_mode="enabled"
+    "${DOTFILES_SCRIPTS_PATH}/is_desktop.sh" >/dev/null &&
+      desktop_mode="enabled" ||
+      headless_mode="enabled"
   else
     echo "Aborting ${script_name}"
     echo "  File ${DOTFILES_SCRIPTS_PATH}/is_desktop.sh Does Not Exist!"
     exit 1
   fi
 fi
-
-
 
 # Begin creating links
 # Headless applications links

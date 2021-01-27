@@ -113,24 +113,24 @@ headless_setup() {
   local package_list
 
   # Initialize local variables
-  package_list=( \
-    coreutils \
-    man-db \
-    sed \
-    gawk \
-    file \
-    tree \
-    openssh-server \
-    cron \
-    zsh \
-    tmux \
-    curl \
-    vim \
-    nano \
-    nmap \
-    htop \
-    xclip \
-    apt-utils \
+  package_list=(
+    coreutils
+    man-db
+    sed
+    gawk
+    file
+    tree
+    openssh-server
+    cron
+    zsh
+    tmux
+    curl
+    vim
+    nano
+    nmap
+    htop
+    xclip
+    apt-utils
   )
 
   print_stage "Headless applications setup"
@@ -139,12 +139,12 @@ headless_setup() {
   abort_check_connectivity "github.com"
 
   # print_step "Adding repositories"
-  
+
   # Install packages
   for listIndex in "${package_list[@]}"; do
     # Check if package already installed
-    if ! dpkg-query -W -f='${Status}' "${listIndex}" 2> /dev/null \
-      | grep -c "ok installed" &> /dev/null; then
+    if ! dpkg-query -W -f='${Status}' "${listIndex}" 2>/dev/null |
+      grep -c "ok installed" &>/dev/null; then
       print_step "Installing ${listIndex}"
       sudo apt install -y --no-install-recommends "${listIndex}"
     else
@@ -301,21 +301,21 @@ desktop_setup() {
   local package_list
 
   # Initialize local variables
-  package_list=( \
-    libegl1-mesa-dev \
-    libssl-dev \
-    gcc \
-    g++ \
-    make \
-    cmake \
-    build-essential \
-    firefox \
-    meld \
-    pkg-config \
-    libfreetype6-dev \
-    libfontconfig1-dev \
-    libxcb-xfixes0-dev \
-    python3 \
+  package_list=(
+    libegl1-mesa-dev
+    libssl-dev
+    gcc
+    g++
+    make
+    cmake
+    build-essential
+    firefox
+    meld
+    pkg-config
+    libfreetype6-dev
+    libfontconfig1-dev
+    libxcb-xfixes0-dev
+    python3
   )
 
   print_stage "Desktop applications setup"
@@ -328,8 +328,8 @@ desktop_setup() {
   # Install packages
   for listIndex in "${package_list[@]}"; do
     # Check if package already installed
-    if ! dpkg-query -W -f='${Status}' "${listIndex}" 2> /dev/null \
-      | grep -c "ok installed" &> /dev/null; then
+    if ! dpkg-query -W -f='${Status}' "${listIndex}" 2>/dev/null |
+      grep -c "ok installed" &>/dev/null; then
       print_step "Installing ${listIndex}"
       sudo apt install -y --no-install-recommends "${listIndex}"
     else
@@ -418,7 +418,7 @@ desktop_setup() {
   print_step "Installing desktop fonts"
 
   # Install FiraCode
-  if ! find "${HOME}/.local/share/fonts/NerdFonts/Fura Code"* > /dev/null; then
+  if ! find "${HOME}/.local/share/fonts/NerdFonts/Fura Code"* >/dev/null; then
     "${HOME}/.dotfiles/scripts/install_firacode.sh"
   else
     print_step "Skipped: ${HOME}/.dotfiles/scripts/install_firacode.sh"
@@ -431,7 +431,7 @@ desktop_setup() {
   if ! "${HOME}/.dotfiles/scripts/create_links.sh" --desktop; then
     abort_script "Script ${HOME}/.dotfiles/scripts/create_links.sh Failed!"
   fi
-  
+
   # Install term environment
   if ! file_exists "/usr/share/terminfo/x/xterm-256color-italic" && ! file_exists "${HOME}/.terminfo/x/xterm-256color-italic"; then
     print_step "Skipped: ${DOTFILES_TERM_PATH}/xterm-256color-italic.terminfo"
@@ -509,9 +509,9 @@ main() {
   # Determine system type if no arguments given
   if [[ "${argument_flag}" == "false" ]]; then
     abort_file_exists "${HOME}/.dotfiles/scripts/is_desktop.sh"
-    "${HOME}/.dotfiles/scripts/is_desktop.sh" > /dev/null \
-      && desktop_mode="enabled" \
-      || headless_mode="enabled"
+    "${HOME}/.dotfiles/scripts/is_desktop.sh" >/dev/null &&
+      desktop_mode="enabled" ||
+      headless_mode="enabled"
   fi
 
   initial_setup

@@ -13,8 +13,6 @@ if [[ -z "${DOTFILES_PATH}" ]]; then
   fi
 fi
 
-
-
 # Create the projects config file
 {
   echo "#!/bin/bash"
@@ -33,7 +31,7 @@ fi
   echo "# source ".someproject""
   echo "# source "/some/path/.otherproject""
   echo ""
-} > "${DOTFILES_PROJECTS_PATH}/.projects"
+} >"${DOTFILES_PROJECTS_PATH}/.projects"
 
 chmod 644 "${DOTFILES_PROJECTS_PATH}/.projects"
 

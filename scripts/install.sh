@@ -35,7 +35,7 @@ repo_setup() {
   echo "   Preparing dotfiles repo"
   echo "------------------------------------------------------------------------"
 
-  if ! which "ping" | grep -o "ping" > /dev/null; then
+  if ! which "ping" | grep -o "ping" >/dev/null; then
     echo ""
     echo "------------------------------------------------------------------------"
     echo "   Aborting execution of $(basename "${0}")"
@@ -50,7 +50,7 @@ repo_setup() {
   if ! ping \
     -c "1" \
     "github.com" \
-    &> /dev/null; then
+    &>/dev/null; then
     echo ""
     echo "------------------------------------------------------------------------"
     echo "   Aborting execution of $(basename "${0}")"
@@ -61,7 +61,7 @@ repo_setup() {
     exit 1
   fi
 
-  if ! which "git" | grep -o "git" > /dev/null; then
+  if ! which "git" | grep -o "git" >/dev/null; then
     echo ""
     echo "------------------------------------------------------------------------"
     echo "   Aborting execution of $(basename "${0}")"

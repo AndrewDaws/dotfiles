@@ -13,8 +13,6 @@ if [[ -z "${DOTFILES_PATH}" ]]; then
   fi
 fi
 
-
-
 # Install decryption application
 if [[ -f "${DOTFILES_SCRIPTS_PATH}/is_installed.sh" ]]; then
   if ! "${DOTFILES_SCRIPTS_PATH}/is_installed.sh" git-crypt; then
@@ -36,7 +34,10 @@ fi
 # Attempt to decrypt
 echo "=> Decrypting with key"
 if [[ -f "${HOME}/.git-crypt/dotfiles.key" ]]; then
-  if ! (cd "${DOTFILES_PATH}"; git-crypt unlock "${HOME}/.git-crypt/dotfiles.key"); then
+  if ! (
+    cd "${DOTFILES_PATH}"
+    git-crypt unlock "${HOME}/.git-crypt/dotfiles.key"
+  ); then
     echo "Aborting ${script_name}"
     echo "  Decrypting ${DOTFILES_PATH} Failed!"
     exit 1

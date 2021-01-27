@@ -8,8 +8,6 @@ fi
 ####################
 ####################
 
-
-
 ####################
 # Logins and Configs
 ####################
@@ -39,8 +37,6 @@ alias ktmux="pkill -f tmux"
 ####################
 ####################
 
-
-
 ####################
 # Dotfiles
 ####################
@@ -53,8 +49,6 @@ alias dotfiles_is_installed="${DOTFILES_SCRIPTS_PATH}/is_installed.sh"
 alias dotfiles_set_permissions="${DOTFILES_SCRIPTS_PATH}/set_permissions.sh"
 ####################
 ####################
-
-
 
 ####################
 # Common
@@ -235,8 +229,6 @@ alias font_refresh="sudo fc-cache -f -v"
 ####################
 ####################
 
-
-
 # @todo Distro Package Manager Aliases
 # @body Create package manager aliases for other distro (fedora, alpine, etc) package managers.
 ####################
@@ -255,8 +247,6 @@ alias font_refresh="sudo fc-cache -f -v"
 "${DOTFILES_PATH}/scripts/is_installed.sh" gem && [[ -f "${DOTFILES_ALIAS_PATH}/.gem.alias" ]] && source "${DOTFILES_ALIAS_PATH}/.gem.alias"
 ####################
 ####################
-
-
 
 ####################
 # Applications
