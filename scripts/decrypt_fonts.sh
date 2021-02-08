@@ -2,6 +2,15 @@
 # Decrypts and installs the encrypted fonts
 script_name="$(basename "${0}")"
 
+if [[ -f "${HOME}/.dotfiles/functions/.functions" ]]; then
+  # shellcheck disable=SC1090
+  # shellcheck disable=SC1091
+  source "${HOME}/.dotfiles/functions/.functions"
+else
+  echo "Could not find .functions file in dotfiles directory!"
+  exit "1"
+fi
+
 # Save dotfiles directories to environment variable if not already set
 if [[ -z "${DOTFILES_PATH}" ]]; then
   if [[ -f "${HOME}/.dotfiles/zsh/.paths.zsh" ]]; then
@@ -14,15 +23,9 @@ if [[ -z "${DOTFILES_PATH}" ]]; then
 fi
 
 # Install decryption application
-if [[ -f "${DOTFILES_SCRIPTS_PATH}/is_installed.sh" ]]; then
-  if ! "${DOTFILES_SCRIPTS_PATH}/is_installed.sh" git-crypt; then
-    sudo apt install -y --no-install-recommends \
-      git-crypt
-  fi
-else
-  echo "Aborting ${script_name}"
-  echo "  File ${DOTFILES_SCRIPTS_PATH}/is_installed.sh Does Not Exist!"
-  exit 1
+if ! is_installed git-crypt; then
+  sudo apt install -y --no-install-recommends \
+    git-crypt
 fi
 
 # Create key directory

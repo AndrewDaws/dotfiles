@@ -5,7 +5,14 @@
 # @todo Improve Printed Text and Prompts
 # @body Clean up printed text with better separation of stages and description of what is happening. Better define what the prompts are actually asking.
 
-source "${HOME}/.dotfiles/functions/.functions"
+if [[ -f "${HOME}/.dotfiles/functions/.functions" ]]; then
+  # shellcheck disable=SC1090
+  # shellcheck disable=SC1091
+  source "${HOME}/.dotfiles/functions/.functions"
+else
+  echo "Could not find .functions file in dotfiles directory!"
+  exit "1"
+fi
 
 repo_update() {
   # Declare local variables
@@ -490,7 +497,7 @@ main() {
   # Check repo for updates before proceeding
   repo_update
 
-  if [[ -n "${input_arguments}" ]]; then
+  if variable_set "${input_arguments}"; then
     # Process arguments
     for argument in "${@}"; do
       argument_flag="true"
@@ -508,10 +515,10 @@ main() {
 
   # Determine system type if no arguments given
   if [[ "${argument_flag}" == "false" ]]; then
-    abort_file_exists "${HOME}/.dotfiles/scripts/is_desktop.sh"
-    "${HOME}/.dotfiles/scripts/is_desktop.sh" >/dev/null &&
-      desktop_mode="enabled" ||
-      headless_mode="enabled"
+    if has_display; then
+      desktop_mode="enabled"
+    fi
+    headless_mode="enabled"
   fi
 
   initial_setup

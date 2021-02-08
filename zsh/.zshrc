@@ -12,6 +12,15 @@ if [[ -z "${DOTFILES_PATH}" ]]; then
   fi
 fi
 
+if [[ -f "${HOME}/.dotfiles/functions/.functions" ]]; then
+  # shellcheck disable=SC1090
+  # shellcheck disable=SC1091
+  source "${HOME}/.dotfiles/functions/.functions"
+else
+  echo "Could not find .functions file in dotfiles directory!"
+  exit "1"
+fi
+
 # @todo Improve Tmux Session Algorithm
 # @body Optimize the algorithm so the session starts as fast as possible, and improve reliablity for edge cases like resuming session with multiple clients still connected.
 # Ignore terminals started inside specific applications
@@ -107,10 +116,10 @@ setopt SHARE_HISTORY
 [[ -d "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/themes/powerlevel10k" ]] && [[ -f "${HOME}/.p10k.zsh" ]] && source "${HOME}/.p10k.zsh"
 
 # Bat Configuration
-"${DOTFILES_SCRIPTS_PATH}/is_installed.sh" bat && [[ -f "${DOTFILES_ZSH_PATH}/.bat.zsh" ]] && source "${DOTFILES_ZSH_PATH}/.bat.zsh"
+is_installed "bat" && [[ -f "${DOTFILES_ZSH_PATH}/.bat.zsh" ]] && source "${DOTFILES_ZSH_PATH}/.bat.zsh"
 
 # FZF Configuration
-"${DOTFILES_SCRIPTS_PATH}/is_installed.sh" fzf && [[ -f "${DOTFILES_ZSH_PATH}/.fzf.zsh" ]] && source "${DOTFILES_ZSH_PATH}/.fzf.zsh"
+is_installed "fzf" && [[ -f "${DOTFILES_ZSH_PATH}/.fzf.zsh" ]] && source "${DOTFILES_ZSH_PATH}/.fzf.zsh"
 
 # Forgit Configuration
 #[[ -f "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/forgit/forgit.plugin.zsh" ]] && [[ -f "${DOTFILES_ZSH_PATH}/.forgit.zsh" ]] && source "${DOTFILES_ZSH_PATH}/.forgit.zsh"

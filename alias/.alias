@@ -1,34 +1,33 @@
-####################
-# Variables
-####################
-# Save dotfiles alias directory to environment variable if not already set
-if [[ -z "$DOTFILES_ALIAS_PATH" ]]; then
-  export DOTFILES_ALIAS_PATH="$(dirname "$(readlink -f "${0}")")"
+if [[ -f "${HOME}/.dotfiles/functions/.functions" ]]; then
+  # shellcheck disable=SC1090
+  # shellcheck disable=SC1091
+  source "${HOME}/.dotfiles/functions/.functions"
+else
+  echo "Could not find .functions file in dotfiles directory!"
+  exit "1"
 fi
-####################
-####################
 
 ####################
 # Logins and Configs
 ####################
 alias src="exec ${SHELL}"
-alias cdd="cd "${DOTFILES_PATH}""
+alias cdd="cd "${HOME}/.dotfiles""
 
 # zshrc
 alias czsh=""${EDITOR}" "${HOME}/.zshrc""
 alias szsh="source "${HOME}/.zshrc""
 
 # alias
-alias cali=""${EDITOR}" "${DOTFILES_ALIAS_PATH}/alias""
-alias sali="source "${DOTFILES_ALIAS_PATH}/.alias""
+alias cali=""${EDITOR}" "${HOME}/.dotfiles/alias/alias""
+alias sali="source "${HOME}/.dotfiles/alias/.alias""
 
 # oh-my-zsh
 alias cozsh=""${EDITOR}" "${HOME}/.oh-my-zsh""
 alias sozsh="source "${HOME}/.oh-my-zsh""
 
 # powerlevel10k
-alias cp10k=""${EDITOR}" "${DOTFILES_ZSH_PATH}/.p10k.zsh""
-alias sp10k="source "${DOTFILES_ZSH_PATH}/.p10k.zsh""
+alias cp10k=""${EDITOR}" "${HOME}/.dotfiles/zsh/.p10k.zsh""
+alias sp10k="source "${HOME}/.dotfiles/zsh/.p10k.zsh""
 
 # tmux
 alias ctmux="${EDITOR} ${HOME}/.tmux.conf"
@@ -40,13 +39,11 @@ alias ktmux="pkill -f tmux"
 ####################
 # Dotfiles
 ####################
-alias dotfiles_create_gitconfig="${DOTFILES_SCRIPTS_PATH}/create_gitconfig.sh"
-alias dotfiles_create_links="${DOTFILES_SCRIPTS_PATH}/create_links.sh"
-alias dotfiles_decrypt_fonts="${DOTFILES_SCRIPTS_PATH}/decrypt_fonts.sh"
-alias dotfiles_install="${DOTFILES_SCRIPTS_PATH}/install.sh"
-alias dotfiles_is_desktop="${DOTFILES_SCRIPTS_PATH}/is_desktop.sh"
-alias dotfiles_is_installed="${DOTFILES_SCRIPTS_PATH}/is_installed.sh"
-alias dotfiles_set_permissions="${DOTFILES_SCRIPTS_PATH}/set_permissions.sh"
+alias dotfiles_create_gitconfig="${HOME}/.dotfiles/scripts/create_gitconfig.sh"
+alias dotfiles_create_links="${HOME}/.dotfiles/scripts/create_links.sh"
+alias dotfiles_decrypt_fonts="${HOME}/.dotfiles/scripts/decrypt_fonts.sh"
+alias dotfiles_install="${HOME}/.dotfiles/scripts/install.sh"
+alias dotfiles_set_permissions="${HOME}/.dotfiles/scripts/set_permissions.sh"
 ####################
 ####################
 
@@ -235,16 +232,16 @@ alias font_refresh="sudo fc-cache -f -v"
 # Package Managers
 ####################
 # apt
-"${DOTFILES_PATH}/scripts/is_installed.sh" apt && [[ -f "${DOTFILES_ALIAS_PATH}/.apt.alias" ]] && source "${DOTFILES_ALIAS_PATH}/.apt.alias"
+is_installed apt && file_exists "${HOME}/.dotfiles/alias/.apt.alias" && source "${HOME}/.dotfiles/alias/.apt.alias"
 
 # dpkg
-"${DOTFILES_PATH}/scripts/is_installed.sh" dpkg && [[ -f "${DOTFILES_ALIAS_PATH}/.dpkg.alias" ]] && source "${DOTFILES_ALIAS_PATH}/.dpkg.alias"
+is_installed dpkg && file_exists "${HOME}/.dotfiles/alias/.dpkg.alias" && source "${HOME}/.dotfiles/alias/.dpkg.alias"
 
 # pip
-"${DOTFILES_PATH}/scripts/is_installed.sh" pip3 && [[ -f "${DOTFILES_ALIAS_PATH}/.pip.alias" ]] && source "${DOTFILES_ALIAS_PATH}/.pip.alias"
+is_installed pip3 && file_exists "${HOME}/.dotfiles/alias/.pip.alias" && source "${HOME}/.dotfiles/alias/.pip.alias"
 
 # gem
-"${DOTFILES_PATH}/scripts/is_installed.sh" gem && [[ -f "${DOTFILES_ALIAS_PATH}/.gem.alias" ]] && source "${DOTFILES_ALIAS_PATH}/.gem.alias"
+is_installed gem && file_exists "${HOME}/.dotfiles/alias/.gem.alias" && source "${HOME}/.dotfiles/alias/.gem.alias"
 ####################
 ####################
 
@@ -252,33 +249,33 @@ alias font_refresh="sudo fc-cache -f -v"
 # Applications
 ####################
 # chrome
-"${DOTFILES_PATH}/scripts/is_installed.sh" google-chrome && [[ -f "${DOTFILES_ALIAS_PATH}/.chrome.alias" ]] && source "${DOTFILES_ALIAS_PATH}/.chrome.alias"
+is_installed google-chrome && file_exists "${HOME}/.dotfiles/alias/.chrome.alias" && source "${HOME}/.dotfiles/alias/.chrome.alias"
 
 # exa
-"${DOTFILES_PATH}/scripts/is_installed.sh" exa && [[ -f "${DOTFILES_ALIAS_PATH}/.exa.alias" ]] && source "${DOTFILES_ALIAS_PATH}/.exa.alias"
+is_installed exa && file_exists "${HOME}/.dotfiles/alias/.exa.alias" && source "${HOME}/.dotfiles/alias/.exa.alias"
 
 # git
-#"${DOTFILES_PATH}/scripts/is_installed.sh" git && [[ -f "${DOTFILES_ALIAS_PATH}/.git.alias" ]] && source "${DOTFILES_ALIAS_PATH}/.git.alias"
+#is_installed git && file_exists "${HOME}/.dotfiles/alias/.git.alias" && source "${HOME}/.dotfiles/alias/.git.alias"
 
 # httpie
-"${DOTFILES_PATH}/scripts/is_installed.sh" http && [[ -f "${DOTFILES_ALIAS_PATH}/.httpie.alias" ]] && source "${DOTFILES_ALIAS_PATH}/.httpie.alias"
+is_installed http && file_exists "${HOME}/.dotfiles/alias/.httpie.alias" && source "${HOME}/.dotfiles/alias/.httpie.alias"
 
 # hub
-#"${DOTFILES_PATH}/scripts/is_installed.sh" hub && [[ -f "${DOTFILES_ALIAS_PATH}/.hub.alias" ]] && source "${DOTFILES_ALIAS_PATH}/.hub.alias"
+#is_installed hub && file_exists "${HOME}/.dotfiles/alias/.hub.alias" && source "${HOME}/.dotfiles/alias/.hub.alias"
 
 # hyperfine
-"${DOTFILES_PATH}/scripts/is_installed.sh" hyperfine && [[ -f "${DOTFILES_ALIAS_PATH}/.hyperfine.alias" ]] && source "${DOTFILES_ALIAS_PATH}/.hyperfine.alias"
+is_installed hyperfine && file_exists "${HOME}/.dotfiles/alias/.hyperfine.alias" && source "${HOME}/.dotfiles/alias/.hyperfine.alias"
 
 # nmap
-"${DOTFILES_PATH}/scripts/is_installed.sh" nmap && [[ -f "${DOTFILES_ALIAS_PATH}/.nmap.alias" ]] && source "${DOTFILES_ALIAS_PATH}/.nmap.alias"
+is_installed nmap && file_exists "${HOME}/.dotfiles/alias/.nmap.alias" && source "${HOME}/.dotfiles/alias/.nmap.alias"
 
 # ssh
-"${DOTFILES_PATH}/scripts/is_installed.sh" ssh && [[ -f "${DOTFILES_ALIAS_PATH}/.ssh.alias" ]] && source "${DOTFILES_ALIAS_PATH}/.ssh.alias"
+is_installed ssh && file_exists "${HOME}/.dotfiles/alias/.ssh.alias" && source "${HOME}/.dotfiles/alias/.ssh.alias"
 
 # vim
-"${DOTFILES_PATH}/scripts/is_installed.sh" vim && [[ -f "${DOTFILES_ALIAS_PATH}/.vim.alias" ]] && source "${DOTFILES_ALIAS_PATH}/.vim.alias"
+is_installed vim && file_exists "${HOME}/.dotfiles/alias/.vim.alias" && source "${HOME}/.dotfiles/alias/.vim.alias"
 
 # vscode
-"${DOTFILES_PATH}/scripts/is_installed.sh" code && [[ -f "${DOTFILES_ALIAS_PATH}/.vscode.alias" ]] && source "${DOTFILES_ALIAS_PATH}/.vscode.alias"
+is_installed code && file_exists "${HOME}/.dotfiles/alias/.vscode.alias" && source "${HOME}/.dotfiles/alias/.vscode.alias"
 ####################
 ####################

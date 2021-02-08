@@ -125,6 +125,41 @@ path_exists() {
   fi
 }
 
+is_pipe() {
+  # Returns 0 if in a pipe or error if it is not
+  if [[ -t 1 ]]; then
+    return 1
+  else
+    return 0
+  fi
+}
+
+has_display() {
+  # Returns 0 if have a display or error if it does not
+  if [[ -n "${DISPLAY}" ]]; then
+    return 0
+  else
+    # Redundant check if determine DISPLAY variable is not enough
+    # if xhost &>/dev/null; then
+    #   return 1
+    # else
+    #   return 0
+    # fi
+    return 1
+  fi
+}
+
+is_ssh() {
+  # @todo Improve Desktop Client Logic
+  # @body Add more checks such as VNC, X-org, etc.
+  # Returns 0 if is ssh session or error if it is not
+  if [[ -n "${SSH_CLIENT}" ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
 is_installed() {
   # Declare local variables
   local input_application
@@ -277,7 +312,6 @@ abort_script() {
   fi
 
   # Print error message
-  echo ""
   print_stage "Aborting execution of $(script_filename)"
   echo "Error in function ${calling_function}:"
 
