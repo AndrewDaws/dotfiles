@@ -133,3 +133,7 @@ ssh_perm() {
     find "${HOME}/.ssh/"*.pub -type f -exec echo "Modified: {} = 644" \;
   fi
 }
+
+ssh_pass() {
+  ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no "${*}"
+}
