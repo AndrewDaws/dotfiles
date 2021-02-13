@@ -185,6 +185,36 @@ path_dne() {
   fi
 }
 
+command_success() {
+  # Declare local variables
+  local input_command
+
+  # Initialize local variables
+  input_command="${*}"
+
+  # Returns 0 if command succeeded or error if not
+  if ${input_command}; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+command_failed() {
+  # Declare local variables
+  local input_command
+
+  # Initialize local variables
+  input_command="${*}"
+
+  # Returns 0 if command failed or error if not
+  if ! ${input_command}; then
+    return 0
+  else
+    return 1
+  fi
+}
+
 is_pipe() {
   # Returns 0 if in a pipe or error if it is not
   if [[ -t 1 ]]; then
@@ -545,6 +575,32 @@ abort_path_dne() {
   # Check if input path does not exist
   if path_dne "${input_path}"; then
     abort_script "Path does not exist!" "${input_path}"
+  fi
+}
+
+abort_command_success() {
+  # Declare local variables
+  local input_command
+
+  # Initialize local variables
+  input_command="${*}"
+
+  # Check if input command success
+  if command_success "${input_command}"; then
+    abort_script "Command execution success!" "${input_command}"
+  fi
+}
+
+abort_command_failed() {
+  # Declare local variables
+  local input_command
+
+  # Initialize local variables
+  input_command="${*}"
+
+  # Check if input command failed
+  if command_failed "${input_command}"; then
+    abort_script "Command execution failure!" "${input_command}"
   fi
 }
 
