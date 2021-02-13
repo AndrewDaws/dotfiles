@@ -30,19 +30,19 @@ hwdb_install() {
   udevadm_command="${udevadm_application} hwdb --update"
 
   # Check if input file variable is set
-  abort_variable_set "input_file" "${input_file}"
+  abort_variable_unset "input_file" "${input_file}"
 
   # Check if input file is not missing
-  abort_file_exists "${input_file}"
+  abort_file_dne "${input_file}"
 
   # Check for systemd-hwdb
-  abort_is_installed "${hwdb_application}"
+  abort_not_installed "${hwdb_application}"
 
   # Check if hwdb directory is not missing
-  abort_directory_exists "${hwdb_directory}"
+  abort_directory_dne "${hwdb_directory}"
 
   # Check for udevadm
-  abort_is_installed "${udevadm_application}"
+  abort_not_installed "${udevadm_application}"
 
   input_filename="$(basename "${input_file}")"
   input_checksum="$(checksum_file "${input_file}")"

@@ -80,6 +80,21 @@ file_exists() {
   fi
 }
 
+file_dne() {
+  # Declare local variables
+  local input_file
+
+  # Initialize local variables
+  input_file="${*}"
+
+  # Returns 0 if file does not exist or error if it does
+  if [[ ! -f "${input_file}" ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
 file_full() {
   # Declare local variables
   local input_file
@@ -89,6 +104,21 @@ file_full() {
 
   # Returns 0 if file is full or error if it is not
   if [[ -s "${input_file}" ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+file_empty() {
+  # Declare local variables
+  local input_file
+
+  # Initialize local variables
+  input_file="${*}"
+
+  # Returns 0 if file is empty or error if it is not
+  if [[ ! -s "${input_file}" ]]; then
     return 0
   else
     return 1
@@ -110,6 +140,21 @@ directory_exists() {
   fi
 }
 
+directory_dne() {
+  # Declare local variables
+  local input_directory
+
+  # Initialize local variables
+  input_directory="${*}"
+
+  # Returns 0 if directory does not exist or error if it does
+  if [[ ! -d "${input_directory}" ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
 path_exists() {
   # Declare local variables
   local input_path
@@ -119,6 +164,21 @@ path_exists() {
 
   # Returns 0 if path exists or error if it does not
   if [[ -e "${input_path}" ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+path_dne() {
+  # Declare local variables
+  local input_path
+
+  # Initialize local variables
+  input_path="${*}"
+
+  # Returns 0 if path does not exist or error if it does
+  if [[ ! -e "${input_path}" ]]; then
     return 0
   else
     return 1
@@ -175,9 +235,33 @@ is_installed() {
   fi
 }
 
+not_installed() {
+  # Declare local variables
+  local input_application
+
+  # Initialize local variables
+  input_application="${1}"
+
+  # Returns 0 if application is not installed or error if it is
+  if ! which "${input_application}" | grep -o "${input_application}" >/dev/null; then
+    return 0
+  else
+    return 1
+  fi
+}
+
 is_root() {
   # Check if current user is root
   if [[ "${EUID}" -eq 0 ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+not_root() {
+  # Check if current user is root
+  if [[ "${EUID}" -ne 0 ]]; then
     return 0
   else
     return 1
@@ -304,12 +388,15 @@ abort_script() {
   local calling_function
 
   # Initialize local variables
-  calling_function="${FUNCNAME[1]}"
+  calling_function=""
 
-  # Replace calling function name when helper function used
-  if [[ "${calling_function}" == "abort_*" ]]; then
-    calling_function="${FUNCNAME[2]}"
-  fi
+  # Go through function caller trace to identify original function
+  for function_name in "${FUNCNAME[@]}"; do
+    if [[ "${function_name}" != "abort_"* ]]; then
+      calling_function="${function_name}"
+      break
+    fi
+  done
 
   # Print error message
   print_stage "Aborting execution of $(script_filename)"
@@ -337,8 +424,8 @@ abort_variable_set() {
   input_variable="${2}"
 
   # Check if input variable is set
-  if ! variable_set "${input_variable}"; then
-    abort_script "Variable is not set!" "${input_name}"
+  if variable_set "${input_variable}"; then
+    abort_script "Variable is set!" "${input_name}"
   fi
 }
 
@@ -352,8 +439,8 @@ abort_variable_unset() {
   input_variable="${2}"
 
   # Check if input variable is unset
-  if ! variable_unset "${input_variable}"; then
-    abort_script "Variable is not unset!" "${input_name}"
+  if variable_unset "${input_variable}"; then
+    abort_script "Variable is unset!" "${input_name}"
   fi
 }
 
@@ -365,7 +452,20 @@ abort_file_exists() {
   input_file="${*}"
 
   # Check if input file exists
-  if ! file_exists "${input_file}"; then
+  if file_exists "${input_file}"; then
+    abort_script "File exists!" "${input_file}"
+  fi
+}
+
+abort_file_dne() {
+  # Declare local variables
+  local input_file
+
+  # Initialize local variables
+  input_file="${*}"
+
+  # Check if input file does not exist
+  if file_dne "${input_file}"; then
     abort_script "File does not exist!" "${input_file}"
   fi
 }
@@ -378,7 +478,20 @@ abort_file_full() {
   input_file="${*}"
 
   # Check if input file is full
-  if ! file_full "${input_file}"; then
+  if file_full "${input_file}"; then
+    abort_script "File is full!" "${input_file}"
+  fi
+}
+
+abort_file_empty() {
+  # Declare local variables
+  local input_file
+
+  # Initialize local variables
+  input_file="${*}"
+
+  # Check if input file is empty
+  if file_empty "${input_file}"; then
     abort_script "File is empty!" "${input_file}"
   fi
 }
@@ -391,7 +504,20 @@ abort_directory_exists() {
   input_directory="${*}"
 
   # Check if input directory exists
-  if ! directory_exists "${input_directory}"; then
+  if directory_exists "${input_directory}"; then
+    abort_script "Directory exist!" "${input_directory}"
+  fi
+}
+
+abort_directory_dne() {
+  # Declare local variables
+  local input_directory
+
+  # Initialize local variables
+  input_directory="${*}"
+
+  # Check if input directory does not exist
+  if directory_dne "${input_directory}"; then
     abort_script "Directory does not exist!" "${input_directory}"
   fi
 }
@@ -404,7 +530,20 @@ abort_path_exists() {
   input_path="${*}"
 
   # Check if input path exists
-  if ! path_exists "${input_path}"; then
+  if path_exists "${input_path}"; then
+    abort_script "Path exists!" "${input_path}"
+  fi
+}
+
+abort_path_dne() {
+  # Declare local variables
+  local input_path
+
+  # Initialize local variables
+  input_path="${*}"
+
+  # Check if input path does not exist
+  if path_dne "${input_path}"; then
     abort_script "Path does not exist!" "${input_path}"
   fi
 }
@@ -416,8 +555,21 @@ abort_is_installed() {
   # Initialize local variables
   input_application="${1}"
 
+  # Check if input application is installed
+  if is_installed "${input_application}"; then
+    abort_script "Application is installed!" "${input_application}"
+  fi
+}
+
+abort_not_installed() {
+  # Declare local variables
+  local input_application
+
+  # Initialize local variables
+  input_application="${1}"
+
   # Check if input application is not installed
-  if ! is_installed "${input_application}"; then
+  if not_installed "${input_application}"; then
     abort_script "Application not installed!" "${input_application}"
   fi
 }
@@ -591,7 +743,7 @@ remove_sudoers() {
 }
 
 get_sudo() {
-  if ! is_root; then
+  if not_root; then
     if ! add_sudoers; then
       abort_script "Failed to add sudo permissions!"
     fi
@@ -599,7 +751,7 @@ get_sudo() {
 }
 
 clear_sudo() {
-  if ! is_root; then
+  if not_root; then
     if ! remove_sudoers; then
       abort_script "Failed to remove sudo permissions!" \
         "Please manually delete file" \
@@ -648,13 +800,13 @@ root_copy() {
   output_file="${2}"
 
   # Check if input file variable is set
-  abort_variable_set "input_file" "${input_file}"
+  abort_variable_unset "input_file" "${input_file}"
 
   # Check if input file is not missing
-  abort_file_exists "${input_file}"
+  abort_file_dne "${input_file}"
 
   # Check if output file variable is set
-  abort_variable_set "output_file" "${output_file}"
+  abort_variable_unset "output_file" "${output_file}"
 
   # Copy input file as as root
   if is_root; then
@@ -678,10 +830,10 @@ root_owner() {
   input_path="${*}"
 
   # Check if input path variable is set
-  abort_variable_set "input_path" "${input_path}"
+  abort_variable_unset "input_path" "${input_path}"
 
   # Check if input path is not missing
-  abort_path_exists "${input_path}"
+  abort_path_dne "${input_path}"
 
   # Set input path owner to root
   if is_root; then
@@ -711,13 +863,13 @@ checksum_file() {
   computed_checksum=""
 
   # Check if input file variable is set
-  abort_variable_set "input_file" "${input_file}"
+  abort_variable_unset "input_file" "${input_file}"
 
   # Check if input file is not missing
-  abort_file_exists "${input_file}"
+  abort_file_dne "${input_file}"
 
   # Check if input file is not empty
-  abort_file_full "${input_file}"
+  abort_file_empty "${input_file}"
 
   # Calculate checksum
   computed_checksum="$(cksum "${input_file}" | cut -d' ' -f1)"

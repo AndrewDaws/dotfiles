@@ -11,7 +11,7 @@ else
 fi
 
 link_headless() {
-  abort_file_exists "${HOME}/.dotfiles/zsh/.zshrc"
+  abort_file_dne "${HOME}/.dotfiles/zsh/.zshrc"
   if [[ "$(readlink -f "${HOME}/.zshrc")" == "${HOME}/.dotfiles/zsh/.zshrc" ]]; then
     print_step "Skipped: ${HOME}/.zshrc"
   else
@@ -22,7 +22,7 @@ link_headless() {
     print_step "Linked: ${HOME}/.zshrc -> ${HOME}/.dotfiles/zsh/.zshrc"
   fi
 
-  abort_file_exists "${HOME}/.dotfiles/zsh/.p10k.zsh"
+  abort_file_dne "${HOME}/.dotfiles/zsh/.p10k.zsh"
   if [[ "$(readlink -f "${HOME}/.p10k.zsh")" == "${HOME}/.dotfiles/zsh/.p10k.zsh" ]]; then
     print_step "Skipped: ${HOME}/.p10k.zsh"
   else
@@ -33,7 +33,7 @@ link_headless() {
     print_step "Linked: ${HOME}/.p10k.zsh -> ${HOME}/.dotfiles/zsh/.p10k.zsh"
   fi
 
-  abort_file_exists "${HOME}/.dotfiles/tmux/.tmux.conf"
+  abort_file_dne "${HOME}/.dotfiles/tmux/.tmux.conf"
   if [[ "$(readlink -f "${HOME}/.tmux.conf")" == "${HOME}/.dotfiles/tmux/.tmux.conf" ]]; then
     print_step "Skipped: ${HOME}/.tmux.conf"
   else
@@ -44,7 +44,7 @@ link_headless() {
     print_step "Linked: ${HOME}/.tmux.conf -> ${HOME}/.dotfiles/tmux/.tmux.conf"
   fi
 
-  abort_file_exists "${HOME}/.dotfiles/vim/.vimrc"
+  abort_file_dne "${HOME}/.dotfiles/vim/.vimrc"
   if [[ "$(readlink -f "${HOME}/.vimrc")" == "${HOME}/.dotfiles/vim/.vimrc" ]]; then
     print_step "Skipped: ${HOME}/.vimrc"
   else
@@ -57,13 +57,13 @@ link_headless() {
 }
 
 link_desktop() {
-  abort_file_exists "${HOME}/.dotfiles/gnome/gtk.css"
+  abort_file_dne "${HOME}/.dotfiles/gnome/gtk.css"
   if [[ "$(readlink -f "${HOME}/.config/gtk-3.0/gtk.css")" == "${HOME}/.dotfiles/gnome/gtk.css" ]]; then
     print_step "Skipped: ${HOME}/.config/gtk-3.0/gtk.css"
   else
     if file_exists "${HOME}/.config/gtk-3.0/gtk.css"; then
       rm -f "${HOME}/.config/gtk-3.0/gtk.css"
-    elif ! directory_exists "${HOME}/.config/gtk-3.0"; then
+    elif directory_dne "${HOME}/.config/gtk-3.0"; then
       mkdir -p "${HOME}/.config/gtk-3.0"
       chmod 775 "${HOME}/.config/gtk-3.0"
     fi
@@ -71,13 +71,13 @@ link_desktop() {
     print_step "Linked: ${HOME}/.config/gtk-3.0/gtk.css -> ${HOME}/.dotfiles/gnome/gtk.css"
   fi
 
-  abort_file_exists "${HOME}/.dotfiles/gnome/settings.ini"
+  abort_file_dne "${HOME}/.dotfiles/gnome/settings.ini"
   if [[ "$(readlink -f "${HOME}/.config/gtk-3.0/settings.ini")" == "${HOME}/.dotfiles/gnome/settings.ini" ]]; then
     print_step "Skipped: ${HOME}/.config/gtk-3.0/settings.ini"
   else
     if file_exists "${HOME}/.config/gtk-3.0/settings.ini"; then
       rm -f "${HOME}/.config/gtk-3.0/settings.ini"
-    elif ! directory_exists "${HOME}/.config/gtk-3.0"; then
+    elif directory_dne "${HOME}/.config/gtk-3.0"; then
       mkdir -p "${HOME}/.config/gtk-3.0"
       chmod 775 "${HOME}/.config/gtk-3.0"
     fi
@@ -85,13 +85,13 @@ link_desktop() {
     print_step "Linked: ${HOME}/.config/gtk-3.0/settings.ini -> ${HOME}/.dotfiles/gnome/settings.ini"
   fi
 
-  abort_file_exists "${HOME}/.dotfiles/gnome/settings.ini"
+  abort_file_dne "${HOME}/.dotfiles/gnome/settings.ini"
   if [[ "$(readlink -f "${HOME}/.config/gtk-4.0/settings.ini")" == "${HOME}/.dotfiles/gnome/settings.ini" ]]; then
     print_step "Skipped: ${HOME}/.config/gtk-4.0/settings.ini"
   else
     if file_exists "${HOME}/.config/gtk-4.0/settings.ini"; then
       rm -f "${HOME}/.config/gtk-4.0/settings.ini"
-    elif ! directory_exists "${HOME}/.config/gtk-4.0"; then
+    elif directory_dne "${HOME}/.config/gtk-4.0"; then
       mkdir -p "${HOME}/.config/gtk-4.0"
       chmod 775 "${HOME}/.config/gtk-4.0"
     fi
@@ -100,13 +100,13 @@ link_desktop() {
   fi
 
   if [[ -d "${HOME}/.local/share/fonts/OperatorMono" ]]; then
-    abort_file_exists "${HOME}/.dotfiles/alacritty/alacritty-operatormono.yml"
+    abort_file_dne "${HOME}/.dotfiles/alacritty/alacritty-operatormono.yml"
     if [[ "$(readlink -f "${HOME}/.config/alacritty/alacritty.yml")" == "${HOME}/.dotfiles/alacritty/alacritty-operatormono.yml" ]]; then
       print_step "Skipped: ${HOME}/.config/alacritty/alacritty.yml"
     else
       if file_exists "${HOME}/.config/alacritty/alacritty.yml"; then
         rm -f "${HOME}/.config/alacritty/alacritty.yml"
-      elif ! directory_exists "${HOME}/.config/alacritty"; then
+      elif directory_dne "${HOME}/.config/alacritty"; then
         mkdir -p "${HOME}/.config/alacritty"
         chmod 700 "${HOME}/.config/alacritty"
       fi
@@ -114,13 +114,13 @@ link_desktop() {
       print_step "Linked: ${HOME}/.config/alacritty/alacritty.yml -> ${HOME}/.dotfiles/alacritty/alacritty-operatormono.yml"
     fi
   elif [[ -d "${HOME}/.local/share/fonts/JetBrains" ]]; then
-    abort_file_exists "${HOME}/.dotfiles/alacritty/alacritty-jetbrainsmono.yml"
+    abort_file_dne "${HOME}/.dotfiles/alacritty/alacritty-jetbrainsmono.yml"
     if [[ "$(readlink -f "${HOME}/.config/alacritty/alacritty.yml")" == "${HOME}/.dotfiles/alacritty/alacritty-jetbrainsmono.yml" ]]; then
       print_step "Skipped: ${HOME}/.config/alacritty/alacritty.yml"
     else
       if file_exists "${HOME}/.config/alacritty/alacritty.yml"; then
         rm -f "${HOME}/.config/alacritty/alacritty.yml"
-      elif ! directory_exists "${HOME}/.config/alacritty"; then
+      elif directory_dne "${HOME}/.config/alacritty"; then
         mkdir -p "${HOME}/.config/alacritty"
         chmod 700 "${HOME}/.config/alacritty"
       fi
@@ -128,13 +128,13 @@ link_desktop() {
       print_step "Linked: ${HOME}/.config/alacritty/alacritty.yml -> ${HOME}/.dotfiles/alacritty/alacritty-jetbrainsmono.yml"
     fi
   else
-    abort_file_exists "${HOME}/.dotfiles/alacritty/alacritty-firacode.yml"
+    abort_file_dne "${HOME}/.dotfiles/alacritty/alacritty-firacode.yml"
     if [[ "$(readlink -f "${HOME}/.config/alacritty/alacritty.yml")" == "${HOME}/.dotfiles/alacritty/alacritty-firacode.yml" ]]; then
       print_step "Skipped: ${HOME}/.config/alacritty/alacritty.yml"
     else
       if file_exists "${HOME}/.config/alacritty/alacritty.yml"; then
         rm -f "${HOME}/.config/alacritty/alacritty.yml"
-      elif ! directory_exists "${HOME}/.config/alacritty"; then
+      elif directory_dne "${HOME}/.config/alacritty"; then
         mkdir -p "${HOME}/.config/alacritty"
         chmod 700 "${HOME}/.config/alacritty"
       fi

@@ -102,7 +102,7 @@ ssh_config() {
 }
 
 ssh_perm() {
-  if ! directory_exists "${HOME}/.ssh"; then
+  if directory_dne "${HOME}/.ssh"; then
     mkdir -p "${HOME}/.ssh"
     echo "Created: ${HOME}/.ssh"
   fi

@@ -23,7 +23,7 @@ if [[ -z "${DOTFILES_PATH}" ]]; then
 fi
 
 # Install decryption application
-if ! is_installed git-crypt; then
+if not_installed "git-crypt"; then
   sudo apt install -y --no-install-recommends \
     git-crypt
 fi

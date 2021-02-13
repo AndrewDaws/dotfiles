@@ -36,9 +36,9 @@ repo_update() {
   # Check if GitHub domain is valid and accessible
   abort_check_connectivity "github.com"
 
-  abort_is_installed "git"
+  abort_not_installed "git"
 
-  abort_directory_exists "${HOME}/.dotfiles"
+  abort_directory_dne "${HOME}/.dotfiles"
 
   # Compute this install script checksum
   current_checksum="$(checksum_file "${current_script}")"
@@ -80,7 +80,7 @@ repo_update() {
   fi
 
   # Set file permissions
-  abort_file_exists "${HOME}/.dotfiles/scripts/set_permissions.sh"
+  abort_file_dne "${HOME}/.dotfiles/scripts/set_permissions.sh"
   if ! "${HOME}/.dotfiles/scripts/set_permissions.sh"; then
     abort_script "Script ${HOME}/.dotfiles/scripts/set_permissions.sh Failed!"
   fi
@@ -297,7 +297,7 @@ headless_setup() {
   rm -f "${HOME}/.zshrc.pre-oh-my-zsh"
 
   # Create links
-  abort_file_exists "${HOME}/.dotfiles/scripts/create_links.sh"
+  abort_file_dne "${HOME}/.dotfiles/scripts/create_links.sh"
   if ! "${HOME}/.dotfiles/scripts/create_links.sh" --headless; then
     abort_script "Script ${HOME}/.dotfiles/scripts/create_links.sh Failed!"
   fi
@@ -350,8 +350,8 @@ desktop_setup() {
   # Install Delta
   is_installed "delta" || "${HOME}/.dotfiles/scripts/install_delta.sh"
 
-  # Install Rustup
-  if ! is_installed "rustup"; then
+  # Installis_installed Rustup
+  if not_installed "rustup"; then
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
   else
     rustup update
@@ -374,7 +374,7 @@ desktop_setup() {
   # Install Cargo Applications
 
   # Install Alacritty
-  if ! is_installed "alacritty"; then
+  if not_installed "alacritty"; then
     print_step "Installing alacritty"
     cargo install alacritty
 
@@ -403,7 +403,7 @@ desktop_setup() {
   fi
 
   # Install Exa
-  if ! is_installed "exa"; then
+  if not_installed "exa"; then
     print_step "Installing exa"
     cargo install exa
   else
@@ -434,21 +434,21 @@ desktop_setup() {
   print_step "Installing desktop configurations"
 
   # Create links
-  abort_file_exists "${HOME}/.dotfiles/scripts/create_links.sh"
+  abort_file_dne "${HOME}/.dotfiles/scripts/create_links.sh"
   if ! "${HOME}/.dotfiles/scripts/create_links.sh" --desktop; then
     abort_script "Script ${HOME}/.dotfiles/scripts/create_links.sh Failed!"
   fi
 
   # Install term environment
-  if ! file_exists "/usr/share/terminfo/x/xterm-256color-italic" && ! file_exists "${HOME}/.terminfo/x/xterm-256color-italic"; then
+  if file_dne "/usr/share/terminfo/x/xterm-256color-italic" && file_dne "${HOME}/.terminfo/x/xterm-256color-italic"; then
     print_step "Skipped: ${DOTFILES_TERM_PATH}/xterm-256color-italic.terminfo"
   else
-    if ! file_exists "/usr/share/terminfo/x/xterm-256color-italic"; then
+    if file_dne "/usr/share/terminfo/x/xterm-256color-italic"; then
       sudo cp "${DOTFILES_TERM_PATH}/xterm-256color-italic.terminfo" "/usr/share/terminfo/x/xterm-256color-italic"
       sudo tic "${DOTFILES_TERM_PATH}/xterm-256color-italic.terminfo"
     fi
 
-    if ! file_exists "${HOME}/.terminfo/x/xterm-256color-italic"; then
+    if file_dne "${HOME}/.terminfo/x/xterm-256color-italic"; then
       tic "${DOTFILES_TERM_PATH}/xterm-256color-italic.terminfo"
     fi
 
