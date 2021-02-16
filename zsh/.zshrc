@@ -74,11 +74,9 @@ HIST_STAMPS="yyyy-mm-dd"
 # @todo Fix Z Integration
 # @body Fix either the ZSH-Z or the original Z "frecently" application integration, since it currently does not jump to a path.
 plugins=(
-  autoupdate
   colored-man-pages
   extract
   fast-syntax-highlighting
-  forgit
   fzf
   fzf-tab
   git-auto-fetch
@@ -121,8 +119,8 @@ is_installed "bat" && [[ -f "${DOTFILES_ZSH_PATH}/.bat.zsh" ]] && source "${DOTF
 # FZF Configuration
 is_installed "fzf" && [[ -f "${DOTFILES_ZSH_PATH}/.fzf.zsh" ]] && source "${DOTFILES_ZSH_PATH}/.fzf.zsh"
 
-# Forgit Configuration
-#[[ -f "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/forgit/forgit.plugin.zsh" ]] && [[ -f "${DOTFILES_ZSH_PATH}/.forgit.zsh" ]] && source "${DOTFILES_ZSH_PATH}/.forgit.zsh"
+# FZF-Tab Configuration
+[[ -f "${HOME}/.dotfiles/zsh/.fzf-tab.zsh" ]] && source "${HOME}/.dotfiles/zsh/.fzf-tab.zsh"
 
 # Git Auto-Fetch Configuration
 GIT_AUTO_FETCH_INTERVAL="1200"

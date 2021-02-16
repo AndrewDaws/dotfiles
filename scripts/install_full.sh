@@ -202,14 +202,6 @@ headless_setup() {
   fi
 
   # Install Oh-My-Zsh Plugins
-  if directory_exists "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/autoupdate"; then
-    print_step "Updating autoupdate repo"
-    git -C "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/autoupdate" pull
-  else
-    print_step "Cloning autoupdate repo"
-    git clone https://github.com/TamCore/autoupdate-oh-my-zsh-plugins.git "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/autoupdate"
-  fi
-
   if directory_exists "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting"; then
     print_step "Updating fast-syntax-highlighting repo"
     git -C "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting" pull
@@ -218,28 +210,12 @@ headless_setup() {
     git clone https://github.com/zdharma/fast-syntax-highlighting.git "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting"
   fi
 
-  if directory_exists "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/forgit"; then
-    print_step "Updating forgit repo"
-    git -C "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/forgit" pull
-  else
-    print_step "Cloning forgit repo"
-    git clone https://github.com/wfxr/forgit.git "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/forgit"
-  fi
-
   if directory_exists "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/fzf-tab"; then
     print_step "Updating fzf-tab repo"
     git -C "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/fzf-tab" pull
   else
     print_step "Cloning fzf-tab repo"
     git clone https://github.com/Aloxaf/fzf-tab.git "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/fzf-tab"
-  fi
-
-  if directory_exists "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/fzf-z"; then
-    print_step "Updating fzf-z repo"
-    git -C "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/fzf-z" pull
-  else
-    print_step "Cloning fzf-z repo"
-    git clone https://github.com/andrewferrier/fzf-z.git "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/fzf-z"
   fi
 
   if directory_exists "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/per-directory-history"; then
@@ -346,9 +322,6 @@ desktop_setup() {
 
   # Install Bat
   is_installed "bat" || "${HOME}/.dotfiles/scripts/install_bat.sh"
-
-  # Install Delta
-  is_installed "delta" || "${HOME}/.dotfiles/scripts/install_delta.sh"
 
   # Installis_installed Rustup
   if not_installed "rustup"; then
