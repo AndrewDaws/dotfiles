@@ -1,3 +1,12 @@
+#!/bin/bash
+#
+# Bash script helper functions
+
+# Ensure this file is only sourced, not executed
+if [[ "${BASH_SOURCE[0]}" -ef "${0}" ]]; then
+  exit 1
+fi
+
 ########################################
 # Script
 ########################################
@@ -708,6 +717,8 @@ add_sudoers() {
   application_list=(
     cp
     mv
+    rm
+    mkdir
     chmod
     usermod
     tee
@@ -748,27 +759,26 @@ add_sudoers() {
         return 0
       else
         # Remove temporary sudoers file
-        sudo rm -f "$(sudoers_filepath)"
-        if [[ "${?}" -ne 0 ]]; then
+        if ! sudo rm -f "$(sudoers_filepath)"; then
           return 1
         fi
 
         # Create new temporary sudoers file
         echo "${new_sudoers}" |
+          if sudo tee "$(sudoers_filepath)" &>/dev/null; then
+            return 0
+          else
+            return 1
+          fi
+      fi
+    else
+      # Create temporary sudoers file
+      echo "${new_sudoers}" |
         if sudo tee "$(sudoers_filepath)" &>/dev/null; then
           return 0
         else
           return 1
         fi
-      fi
-    else
-      # Create temporary sudoers file
-      echo "${new_sudoers}" |
-      if sudo tee "$(sudoers_filepath)" &>/dev/null; then
-        return 0
-      else
-        return 1
-      fi
     fi
   else
     return 1
