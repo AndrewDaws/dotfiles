@@ -258,7 +258,7 @@ is_installed() {
   input_application="${1}"
 
   # Returns 0 if application is installed or error if it is not
-  if which "${input_application}" | grep -o "${input_application}" >/dev/null; then
+  if which "${input_application}" | grep -o "${input_application}" &>/dev/null; then
     return 0
   else
     return 1
@@ -273,7 +273,7 @@ not_installed() {
   input_application="${1}"
 
   # Returns 0 if application is not installed or error if it is
-  if ! which "${input_application}" | grep -o "${input_application}" >/dev/null; then
+  if ! which "${input_application}" | grep -o "${input_application}" &>/dev/null; then
     return 0
   else
     return 1
@@ -755,8 +755,7 @@ add_sudoers() {
 
         # Create new temporary sudoers file
         echo "${new_sudoers}" |
-          sudo tee "$(sudoers_filepath)" >/dev/null
-        if [[ "${?}" -eq 0 ]]; then
+        if sudo tee "$(sudoers_filepath)" &>/dev/null; then
           return 0
         else
           return 1
@@ -765,8 +764,7 @@ add_sudoers() {
     else
       # Create temporary sudoers file
       echo "${new_sudoers}" |
-        sudo tee "$(sudoers_filepath)" >/dev/null
-      if [[ "${?}" -eq 0 ]]; then
+      if sudo tee "$(sudoers_filepath)" &>/dev/null; then
         return 0
       else
         return 1
@@ -783,14 +781,12 @@ remove_sudoers() {
     return 0
   else
     # Remove temporary sudoers file
-    sudo "$(which rm)" "$(sudoers_filepath)"
-    if [[ "${?}" -ne 0 ]]; then
+    if ! sudo rm "$(sudoers_filepath)"; then
       return 1
     fi
 
     # Invalidate cached user credentials
-    sudo -k
-    if [[ "${?}" -eq 0 ]]; then
+    if sudo -k; then
       return 0
     else
       return 1
@@ -827,20 +823,16 @@ root_command() {
   input_command="${*}"
 
   # Check if input file variable is set
-  if [[ -z "${input_command}" ]]; then
-    # Error finding input file
-    abort_script "Variable not set!" "input_command"
-  fi
+  abort_variable_unset "input_command" "${input_command}"
 
   # Copy input file as as root
   if is_root; then
-    ${input_command}
-    if [[ "${?}" -ne 0 ]]; then
+    if ! ${input_command}; then
       return 1
     fi
   else
-    sudo ${input_command}
-    if [[ "${?}" -ne 0 ]]; then
+    # shellcheck disable=SC2086
+    if ! sudo ${input_command}; then
       return 1
     fi
   fi
@@ -866,13 +858,11 @@ root_copy() {
 
   # Copy input file as as root
   if is_root; then
-    cp -f "${input_file}" "${output_file}"
-    if [[ "${?}" -ne 0 ]]; then
+    if ! cp -f "${input_file}" "${output_file}"; then
       return 1
     fi
   else
-    sudo cp -f "${input_file}" "${output_file}"
-    if [[ "${?}" -ne 0 ]]; then
+    if ! sudo cp -f "${input_file}" "${output_file}"; then
       return 1
     fi
   fi
@@ -893,14 +883,12 @@ root_owner() {
 
   # Set input path owner to root
   if is_root; then
-    chown root:root "${input_path}"
-    if [[ "${?}" -ne 0 ]]; then
+    if ! chown root:root "${input_path}"; then
       return 1
     fi
 
   else
-    sudo chown root:root "${input_path}"
-    if [[ "${?}" -ne 0 ]]; then
+    if ! sudo chown root:root "${input_path}"; then
       return 1
     fi
   fi
