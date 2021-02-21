@@ -320,6 +320,13 @@ desktop_setup() {
     fi
   done
 
+  # Configure Firefox to default browser
+  if is_installed "firefox"; then
+    if is_installed "xdg-settings"; then
+      xdg-settings set default-web-browser firefox.desktop
+    fi
+  fi
+
   # Install Bat
   is_installed "bat" || "${HOME}/.dotfiles/scripts/install_bat.sh"
 
