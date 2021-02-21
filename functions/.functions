@@ -933,3 +933,55 @@ checksum_file() {
   # Return calculation result
   echo "${computed_checksum}"
 }
+
+########################################
+# Git
+########################################
+git_up-to-date() {
+  # Declare local variables
+  local input_path
+
+  # Initialize local variables
+  input_path="${*}"
+
+  abort_not_installed "git"
+  abort_variable_unset "input_path" "${input_path}"
+  abort_directory_dne "${input_path}"
+
+  git -C "${input_path}" fetch &>/dev/null
+
+  if [[ "$(git -C "${input_path}" rev-parse HEAD)" == "$(git -C "${input_path}" rev-parse "@{u}")" ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+git_update() {
+  # Declare local variables
+  local input_repo
+  local input_path
+  local input_name
+
+  # Initialize local variables
+  input_repo="${1}"
+  input_path="${2}"
+  input_name="${3}"
+
+  abort_variable_unset "input_repo" "${input_repo}"
+  abort_variable_unset "input_path" "${input_path}"
+  abort_variable_unset "input_name" "${input_name}"
+
+  if directory_exists "${input_path}"; then
+    if git_up-to-date "${input_path}"; then
+      print_step "Skipped: Updating ${input_name} repo"
+    else
+      print_step "Updating ${input_name} repo"
+      git -C "${input_path}" pull
+    fi
+  else
+    print_step "Cloning ${input_name} repo"
+    mkdir -p "${input_path}"
+    git clone "${input_repo}" "${input_path}"
+  fi
+}

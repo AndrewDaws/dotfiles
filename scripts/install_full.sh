@@ -35,9 +35,7 @@ repo_update() {
 
   # Check if GitHub domain is valid and accessible
   abort_check_connectivity "github.com"
-
   abort_not_installed "git"
-
   abort_directory_dne "${HOME}/.dotfiles"
 
   # Compute this install script checksum
@@ -160,111 +158,55 @@ headless_setup() {
   done
 
   # Install Fd
-  is_installed "fd" || "${HOME}/.dotfiles/scripts/install_fd.sh"
+  if not_installed "fd"; then
+    "${HOME}/.dotfiles/scripts/install_fd.sh"
+  else
+    print_step "Skipped: Installing fd"
+  fi
 
   # Install Tmux Plugin Manager
-  if directory_exists "${HOME}/.tmux/plugins/tpm"; then
-    print_step "Updating Tmux Plugin Manager repo"
-    git -C "${HOME}/.tmux/plugins/tpm" pull
-  else
-    print_step "Cloning Tmux Plugin Manager repo"
-    mkdir -p "${HOME}/.tmux/plugins/tpm"
-    git clone https://github.com/tmux-plugins/tpm "${HOME}/.tmux/plugins/tpm"
-  fi
+  git_update "https://github.com/tmux-plugins/tpm" "${HOME}/.tmux/plugins/tpm" "Tmux Plugin Manager"
 
   # Install Fzf
   if directory_exists "${HOME}/.fzf"; then
-    print_step "Updating fzf repo"
-    git -C "${HOME}/.fzf" pull
+    if git_up-to-date "${HOME}/.fzf"; then
+      print_step "Skipped: Updating fzf repo"
+    else
+      print_step "Updating fzf repo"
+      git -C "${HOME}/.fzf" pull
+      "${HOME}/.fzf/install" --bin
+    fi
   else
     print_step "Cloning fzf repo"
     git clone --depth 1 https://github.com/junegunn/fzf.git "${HOME}/.fzf"
+    "${HOME}/.fzf/install" --bin
   fi
-  "${HOME}/.fzf/install" --bin
 
-  print_step "Installing headless shell"
   # Install Oh-My-Zsh Framework
   if directory_exists "${HOME}/.oh-my-zsh"; then
-    print_step "Updating Oh-My-Zsh repo"
-    git -C "${HOME}/.oh-my-zsh" pull
+    if git_up-to-date "${HOME}/.oh-my-zsh"; then
+      print_step "Skipped: Updating Oh-My-Zsh repo"
+    else
+      print_step "Updating Oh-My-Zsh repo"
+      git -C "${HOME}/.oh-my-zsh" pull
+    fi
   else
     print_step "Installing Oh-My-Zsh"
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" "" --unattended
   fi
 
   # Install Oh-My-Zsh Theme
-  if directory_exists "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/themes/powerlevel10k"; then
-    print_step "Updating Powerlevel10k repo"
-    git -C "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/themes/powerlevel10k" pull
-  else
-    print_step "Cloning Powerlevel10k repo"
-    git clone https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/themes/powerlevel10k"
-  fi
+  git_update "https://github.com/romkatv/powerlevel10k.git" "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/themes/powerlevel10k" "powerlevel10k"
 
   # Install Oh-My-Zsh Plugins
-  if directory_exists "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting"; then
-    print_step "Updating fast-syntax-highlighting repo"
-    git -C "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting" pull
-  else
-    print_step "Cloning fast-syntax-highlighting repo"
-    git clone https://github.com/zdharma/fast-syntax-highlighting.git "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting"
-  fi
-
-  if directory_exists "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/fzf-tab"; then
-    print_step "Updating fzf-tab repo"
-    git -C "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/fzf-tab" pull
-  else
-    print_step "Cloning fzf-tab repo"
-    git clone https://github.com/Aloxaf/fzf-tab.git "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/fzf-tab"
-  fi
-
-  if directory_exists "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/per-directory-history"; then
-    print_step "Updating per-directory-history repo"
-    git -C "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/per-directory-history" pull
-  else
-    print_step "Cloning per-directory-history repo"
-    git clone https://github.com/jimhester/per-directory-history.git "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/per-directory-history"
-  fi
-
-  if directory_exists "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-autopair"; then
-    print_step "Updating zsh-autopair repo"
-    git -C "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-autopair" pull
-  else
-    print_step "Cloning zsh-autopair repo"
-    git clone https://github.com/hlissner/zsh-autopair.git "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-autopair"
-  fi
-
-  if directory_exists "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-z"; then
-    print_step "Updating zsh-z repo"
-    git -C "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-z" pull
-  else
-    print_step "Cloning zsh-z repo"
-    git clone https://github.com/agkozak/zsh-z.git "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-z"
-  fi
-
-  if directory_exists "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"; then
-    print_step "Updating zsh-autosuggestions repo"
-    git -C "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" pull
-  else
-    print_step "Cloning zsh-autosuggestions repo"
-    git clone https://github.com/zsh-users/zsh-autosuggestions.git "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
-  fi
-
-  if directory_exists "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-completions"; then
-    print_step "Updating zsh-completions repo"
-    git -C "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-completions" pull
-  else
-    print_step "Cloning zsh-completions repo"
-    git clone https://github.com/zsh-users/zsh-completions.git "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-completions"
-  fi
-
-  if directory_exists "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-history-substring-search"; then
-    print_step "Updating zsh-history-substring-search repo"
-    git -C "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-history-substring-search" pull
-  else
-    print_step "Cloning zsh-history-substring-search repo"
-    git clone https://github.com/zsh-users/zsh-history-substring-search.git "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-history-substring-search"
-  fi
+  git_update "https://github.com/zdharma/fast-syntax-highlighting.git" "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting" "fast-syntax-highlighting"
+  git_update "https://github.com/Aloxaf/fzf-tab.git" "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/fzf-tab" "fzf-tab"
+  git_update "https://github.com/jimhester/per-directory-history.git" "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/per-directory-history" "per-directory-history"
+  git_update "https://github.com/hlissner/zsh-autopair.git" "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-autopair" "zsh-autopair"
+  git_update "https://github.com/agkozak/zsh-z.git" "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-z" "zsh-z"
+  git_update "https://github.com/zsh-users/zsh-autosuggestions.git" "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" "zsh-autosuggestions"
+  git_update "https://github.com/zsh-users/zsh-completions.git" "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-completions" "zsh-completions"
+  git_update "https://github.com/zsh-users/zsh-history-substring-search.git" "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-history-substring-search" "zsh-history-substring-search"
 
   print_step "Installing headless application configurations"
   rm -f "${HOME}/.bash_history"
@@ -328,7 +270,11 @@ desktop_setup() {
   fi
 
   # Install Bat
-  is_installed "bat" || "${HOME}/.dotfiles/scripts/install_bat.sh"
+  if not_installed "bat"; then
+    "${HOME}/.dotfiles/scripts/install_bat.sh"
+  else
+    print_step "Skipped: Installing Bat"
+  fi
 
   # Installis_installed Rustup
   if not_installed "rustup"; then
