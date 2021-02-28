@@ -285,6 +285,8 @@ desktop_setup() {
 
   # Rust environment handling
   if file_exists "${HOME}/.cargo/env"; then
+    # shellcheck disable=SC1090
+    # shellcheck disable=SC1091
     source "${HOME}/.cargo/env"
 
     # Add cargo tools to path if not already in the path
