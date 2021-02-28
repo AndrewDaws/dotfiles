@@ -50,6 +50,9 @@ link_headless() {
   else
     if file_exists "${HOME}/.config/htop/htoprc"; then
       rm -f "${HOME}/.config/htop/htoprc"
+    elif directory_dne "${HOME}/.config/htop"; then
+      mkdir -p "${HOME}/.config/htop"
+      chmod 700 "${HOME}/.config/htop"
     fi
     print_step "Linking ${HOME}/.config/htop/htoprc -> ${HOME}/.dotfiles/htop/htoprc"
     ln -s "${HOME}/.dotfiles/htop/htoprc" "${HOME}/.config/htop/htoprc"
