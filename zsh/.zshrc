@@ -5,13 +5,6 @@ else
   export TERM="xterm-256color"
 fi
 
-# Save dotfiles directories to environment variable if not already set
-if [[ -z "${DOTFILES_PATH}" ]]; then
-  if [[ -f "${HOME}/.dotfiles/zsh/.paths.zsh" ]]; then
-    source "${HOME}/.dotfiles/zsh/.paths.zsh"
-  fi
-fi
-
 if [[ -f "${HOME}/.dotfiles/functions/.functions" ]]; then
   # shellcheck disable=SC1090
   # shellcheck disable=SC1091
@@ -88,7 +81,7 @@ plugins=(
   zsh-history-substring-search
   zsh-autosuggestions
 )
-source "$ZSH/oh-my-zsh.sh"
+source "${ZSH}/oh-my-zsh.sh"
 
 # Enable fuzzy auto-completions
 zstyle ':completion:*' matcher-list '' \
@@ -114,10 +107,10 @@ setopt SHARE_HISTORY
 [[ -d "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/themes/powerlevel10k" ]] && [[ -f "${HOME}/.p10k.zsh" ]] && source "${HOME}/.p10k.zsh"
 
 # Bat Configuration
-is_installed "bat" && [[ -f "${DOTFILES_ZSH_PATH}/.bat.zsh" ]] && source "${DOTFILES_ZSH_PATH}/.bat.zsh"
+is_installed "bat" && [[ -f "${HOME}/.dotfiles/zsh/.bat.zsh" ]] && source "${HOME}/.dotfiles/zsh/.bat.zsh"
 
 # FZF Configuration
-is_installed "fzf" && [[ -f "${DOTFILES_ZSH_PATH}/.fzf.zsh" ]] && source "${DOTFILES_ZSH_PATH}/.fzf.zsh"
+is_installed "fzf" && [[ -f "${HOME}/.dotfiles/zsh/.fzf.zsh" ]] && source "${HOME}/.dotfiles/zsh/.fzf.zsh"
 
 # FZF-Tab Configuration
 [[ -f "${HOME}/.dotfiles/zsh/.fzf-tab.zsh" ]] && source "${HOME}/.dotfiles/zsh/.fzf-tab.zsh"
@@ -141,14 +134,14 @@ ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history completion)
 ZSH_AUTOSUGGEST_USE_ASYNC="true"
 
 # User and Application Aliases
-[[ -f "${DOTFILES_ALIAS_PATH}/.alias" ]] && source "${DOTFILES_ALIAS_PATH}/.alias"
+[[ -f "${HOME}/.dotfiles/alias/.alias" ]] && source "${HOME}/.dotfiles/alias/.alias"
 
 # Project Configurations
-if [[ -f "${DOTFILES_PROJECTS_PATH}/.projects" ]]; then
-  source "${DOTFILES_PROJECTS_PATH}/.projects"
+if [[ -f "${HOME}/.dotfiles/projects/.projects" ]]; then
+  source "${HOME}/.dotfiles/projects/.projects"
 else
-  "${DOTFILES_SCRIPTS_PATH}/create_projects.sh"
-  source "${DOTFILES_PROJECTS_PATH}/.projects"
+  "${HOME}/.dotfiles/scripts/create_projects.sh"
+  source "${HOME}/.dotfiles/projects/.projects"
 fi
 
 # @todo Create Local Override Directory

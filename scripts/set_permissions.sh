@@ -77,172 +77,161 @@ for argument in "${@}"; do
   fi
 done
 
-# Save dotfiles directories to environment variable if not already set
-if [[ -z "${DOTFILES_PATH}" ]]; then
-  if [[ -f "${HOME}/.dotfiles/zsh/.paths.zsh" ]]; then
-    source "${HOME}/.dotfiles/zsh/.paths.zsh"
-  else
-    echo "Aborting ${script_name}"
-    echo "  File ${HOME}/.dotfiles/zsh/.paths.zsh Does Not Exist!"
-    exit 1
-  fi
-fi
-
 # Begin setting file permissions
 echo '=> Setting Permissions'
 
 # Alacritty
 if [[ "${argument_flag}" == "false" || "${alacritty_mode}" == "enabled" ]]; then
-  if [[ -d "${DOTFILES_ALACRITTY_PATH}" ]]; then
-    find "${DOTFILES_ALACRITTY_PATH}" -type f -exec chmod 640 {} \;
-    find "${DOTFILES_ALACRITTY_PATH}" -type f -exec echo "Modified: {} = 640" \;
+  if [[ -d "${HOME}/.dotfiles/alacritty" ]]; then
+    find "${HOME}/.dotfiles/alacritty" -type f -exec chmod 640 {} \;
+    find "${HOME}/.dotfiles/alacritty" -type f -exec echo "Modified: {} = 640" \;
   else
     echo "Aborting ${script_name}"
-    echo "  Directory ${DOTFILES_ALACRITTY_PATH} Does Not Exist!"
+    echo "  Directory ${HOME}/.dotfiles/alacritty Does Not Exist!"
     exit 1
   fi
 fi
 
 # Alias
 if [[ "${argument_flag}" == "false" || "${alias_mode}" == "enabled" ]]; then
-  if [[ -d "${DOTFILES_ALIAS_PATH}" ]]; then
-    find "${DOTFILES_ALIAS_PATH}" -type f -exec chmod 644 {} \;
-    find "${DOTFILES_ALIAS_PATH}" -type f -exec echo "Modified: {} = 644" \;
+  if [[ -d "${HOME}/.dotfiles/alias" ]]; then
+    find "${HOME}/.dotfiles/alias" -type f -exec chmod 644 {} \;
+    find "${HOME}/.dotfiles/alias" -type f -exec echo "Modified: {} = 644" \;
   else
     echo "Aborting ${script_name}"
-    echo "  Directory ${DOTFILES_ALIAS_PATH} Does Not Exist!"
+    echo "  Directory ${HOME}/.dotfiles/alias Does Not Exist!"
     exit 1
   fi
 fi
 
 # Fonts
 if [[ "${argument_flag}" == "false" || "${fonts_mode}" == "enabled" ]]; then
-  if [[ -d "${DOTFILES_FONTS_PATH}" ]]; then
-    find "${DOTFILES_FONTS_PATH}" -type f -exec chmod 644 {} \;
-    find "${DOTFILES_FONTS_PATH}" -type f -exec echo "Modified: {} = 644" \;
+  if [[ -d "${HOME}/.dotfiles/fonts" ]]; then
+    find "${HOME}/.dotfiles/fonts" -type f -exec chmod 644 {} \;
+    find "${HOME}/.dotfiles/fonts" -type f -exec echo "Modified: {} = 644" \;
   else
     echo "Aborting ${script_name}"
-    echo "  Directory ${DOTFILES_FONTS_PATH} Does Not Exist!"
+    echo "  Directory ${HOME}/.dotfiles/fonts Does Not Exist!"
     exit 1
   fi
 fi
 
 # Git
 if [[ "${argument_flag}" == "false" || "${git_mode}" == "enabled" ]]; then
-  if [[ -d "${DOTFILES_GIT_PATH}" ]]; then
-    find "${DOTFILES_GIT_PATH}" -type f -exec chmod 664 {} \;
-    find "${DOTFILES_GIT_PATH}" -type f -exec echo "Modified: {} = 664" \;
+  if [[ -d "${HOME}/.dotfiles/git" ]]; then
+    find "${HOME}/.dotfiles/git" -type f -exec chmod 664 {} \;
+    find "${HOME}/.dotfiles/git" -type f -exec echo "Modified: {} = 664" \;
   else
     echo "Aborting ${script_name}"
-    echo "  Directory ${DOTFILES_GIT_PATH} Does Not Exist!"
+    echo "  Directory ${HOME}/.dotfiles/git Does Not Exist!"
     exit 1
   fi
 fi
 
 # Gnome
 if [[ "${argument_flag}" == "false" || "${gnome_mode}" == "enabled" ]]; then
-  if [[ -d "${DOTFILES_GNOME_PATH}" ]]; then
-    find "${DOTFILES_GNOME_PATH}" -type f -exec chmod 664 {} \;
-    find "${DOTFILES_GNOME_PATH}" -type f -exec echo "Modified: {} = 664" \;
+  if [[ -d "${HOME}/.dotfiles/gnome" ]]; then
+    find "${HOME}/.dotfiles/gnome" -type f -exec chmod 664 {} \;
+    find "${HOME}/.dotfiles/gnome" -type f -exec echo "Modified: {} = 664" \;
   else
     echo "Aborting ${script_name}"
-    echo "  Directory ${DOTFILES_GNOME_PATH} Does Not Exist!"
+    echo "  Directory ${HOME}/.dotfiles/gnome Does Not Exist!"
     exit 1
   fi
 fi
 
 # Hardware
 if [[ "${argument_flag}" == "false" || "${hardware_mode}" == "enabled" ]]; then
-  if [[ -d "${DOTFILES_HARDWARE_PATH}" ]]; then
-    find "${DOTFILES_HARDWARE_PATH}" -type f -exec chmod 644 {} \;
-    find "${DOTFILES_HARDWARE_PATH}" -type f -exec echo "Modified: {} = 644" \;
+  if [[ -d "${HOME}/.dotfiles/hardware" ]]; then
+    find "${HOME}/.dotfiles/hardware" -type f -exec chmod 644 {} \;
+    find "${HOME}/.dotfiles/hardware" -type f -exec echo "Modified: {} = 644" \;
   else
     echo "Aborting ${script_name}"
-    echo "  Directory ${DOTFILES_HARDWARE_PATH} Does Not Exist!"
+    echo "  Directory ${HOME}/.dotfiles/hardware Does Not Exist!"
     exit 1
   fi
 fi
 
 # Htop
 if [[ "${argument_flag}" == "false" || "${htop_mode}" == "enabled" ]]; then
-  if [[ -d "${DOTFILES_HTOP_PATH}" ]]; then
-    find "${DOTFILES_HTOP_PATH}" -type f -exec chmod 664 {} \;
-    find "${DOTFILES_HTOP_PATH}" -type f -exec echo "Modified: {} = 664" \;
+  if [[ -d "${HOME}/.dotfiles/htop" ]]; then
+    find "${HOME}/.dotfiles/htop" -type f -exec chmod 664 {} \;
+    find "${HOME}/.dotfiles/htop" -type f -exec echo "Modified: {} = 664" \;
   else
     echo "Aborting ${script_name}"
-    echo "  Directory ${DOTFILES_HTOP_PATH} Does Not Exist!"
+    echo "  Directory ${HOME}/.dotfiles/htop Does Not Exist!"
     exit 1
   fi
 fi
 
 # Projects
 if [[ "${argument_flag}" == "false" || "${projects_mode}" == "enabled" ]]; then
-  if [[ -d "${DOTFILES_PROJECTS_PATH}" ]]; then
-    find "${DOTFILES_PROJECTS_PATH}" -type f -exec chmod 644 {} \;
-    find "${DOTFILES_PROJECTS_PATH}" -type f -exec echo "Modified: {} = 644" \;
+  if [[ -d "${HOME}/.dotfiles/projects" ]]; then
+    find "${HOME}/.dotfiles/projects" -type f -exec chmod 644 {} \;
+    find "${HOME}/.dotfiles/projects" -type f -exec echo "Modified: {} = 644" \;
   else
     echo "Aborting ${script_name}"
-    echo "  Directory ${DOTFILES_PROJECTS_PATH} Does Not Exist!"
+    echo "  Directory ${HOME}/.dotfiles/projects Does Not Exist!"
     exit 1
   fi
 fi
 
 # Scripts
 if [[ "${argument_flag}" == "false" || "${scripts_mode}" == "enabled" ]]; then
-  if [[ -d "${DOTFILES_SCRIPTS_PATH}" ]]; then
-    find "${DOTFILES_SCRIPTS_PATH}" -type f -exec chmod 755 {} \;
-    find "${DOTFILES_SCRIPTS_PATH}" -type f -exec echo "Modified: {} = 755" \;
+  if [[ -d "${HOME}/.dotfiles/scripts" ]]; then
+    find "${HOME}/.dotfiles/scripts" -type f -exec chmod 755 {} \;
+    find "${HOME}/.dotfiles/scripts" -type f -exec echo "Modified: {} = 755" \;
   else
     echo "Aborting ${script_name}"
-    echo "  Directory ${DOTFILES_SCRIPTS_PATH} Does Not Exist!"
+    echo "  Directory ${HOME}/.dotfiles/scripts Does Not Exist!"
     exit 1
   fi
 fi
 
 # Term
 if [[ "${argument_flag}" == "false" || "${term_mode}" == "enabled" ]]; then
-  if [[ -d "${DOTFILES_TERM_PATH}" ]]; then
-    find "${DOTFILES_TERM_PATH}" -type f -exec chmod 664 {} \;
-    find "${DOTFILES_TERM_PATH}" -type f -exec echo "Modified: {} = 664" \;
+  if [[ -d "${HOME}/.dotfiles/term" ]]; then
+    find "${HOME}/.dotfiles/term" -type f -exec chmod 664 {} \;
+    find "${HOME}/.dotfiles/term" -type f -exec echo "Modified: {} = 664" \;
   else
     echo "Aborting ${script_name}"
-    echo "  Directory ${DOTFILES_TERM_PATH} Does Not Exist!"
+    echo "  Directory ${HOME}/.dotfiles/term Does Not Exist!"
     exit 1
   fi
 fi
 
 # Tmux
 if [[ "${argument_flag}" == "false" || "${tmux_mode}" == "enabled" ]]; then
-  if [[ -d "${DOTFILES_TMUX_PATH}" ]]; then
-    find "${DOTFILES_TMUX_PATH}" -type f -exec chmod 644 {} \;
-    find "${DOTFILES_TMUX_PATH}" -type f -exec echo "Modified: {} = 644" \;
+  if [[ -d "${HOME}/.dotfiles/tmux" ]]; then
+    find "${HOME}/.dotfiles/tmux" -type f -exec chmod 644 {} \;
+    find "${HOME}/.dotfiles/tmux" -type f -exec echo "Modified: {} = 644" \;
   else
     echo "Aborting ${script_name}"
-    echo "  Directory ${DOTFILES_TMUX_PATH} Does Not Exist!"
+    echo "  Directory ${HOME}/.dotfiles/tmux Does Not Exist!"
     exit 1
   fi
 fi
 
 # Vim
 if [[ "${argument_flag}" == "false" || "${vim_mode}" == "enabled" ]]; then
-  if [[ -d "${DOTFILES_VIM_PATH}" ]]; then
-    find "${DOTFILES_VIM_PATH}" -type f -exec chmod 644 {} \;
-    find "${DOTFILES_VIM_PATH}" -type f -exec echo "Modified: {} = 644" \;
+  if [[ -d "${HOME}/.dotfiles/vim" ]]; then
+    find "${HOME}/.dotfiles/vim" -type f -exec chmod 644 {} \;
+    find "${HOME}/.dotfiles/vim" -type f -exec echo "Modified: {} = 644" \;
   else
     echo "Aborting ${script_name}"
-    echo "  Directory ${DOTFILES_VIM_PATH} Does Not Exist!"
+    echo "  Directory ${HOME}/.dotfiles/vim Does Not Exist!"
     exit 1
   fi
 fi
 
 # Zsh
 if [[ "${argument_flag}" == "false" || "${zsh_mode}" == "enabled" ]]; then
-  if [[ -d "${DOTFILES_ZSH_PATH}" ]]; then
-    find "${DOTFILES_ZSH_PATH}" -type f -exec chmod 644 {} \;
-    find "${DOTFILES_ZSH_PATH}" -type f -exec echo "Modified: {} = 644" \;
+  if [[ -d "${HOME}/.dotfiles/zsh" ]]; then
+    find "${HOME}/.dotfiles/zsh" -type f -exec chmod 644 {} \;
+    find "${HOME}/.dotfiles/zsh" -type f -exec echo "Modified: {} = 644" \;
   else
     echo "Aborting ${script_name}"
-    echo "  Directory ${DOTFILES_ZSH_PATH} Does Not Exist!"
+    echo "  Directory ${HOME}/.dotfiles/zsh Does Not Exist!"
     exit 1
   fi
 fi

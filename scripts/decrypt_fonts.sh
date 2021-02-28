@@ -11,17 +11,6 @@ else
   exit "1"
 fi
 
-# Save dotfiles directories to environment variable if not already set
-if [[ -z "${DOTFILES_PATH}" ]]; then
-  if [[ -f "${HOME}/.dotfiles/zsh/.paths.zsh" ]]; then
-    source "${HOME}/.dotfiles/zsh/.paths.zsh"
-  else
-    echo "Aborting ${HOME}/.dotfiles/zsh/.paths.zsh"
-    echo "  File ${HOME}/.dotfiles/zsh/.paths.zsh Does Not Exist!"
-    exit 1
-  fi
-fi
-
 # Install decryption application
 if not_installed "git-crypt"; then
   sudo apt install -y --no-install-recommends \
@@ -38,23 +27,23 @@ fi
 echo "=> Decrypting with key"
 if [[ -f "${HOME}/.git-crypt/dotfiles.key" ]]; then
   if ! (
-    cd "${DOTFILES_PATH}"
+    cd "${HOME}/.dotfiles"
     git-crypt unlock "${HOME}/.git-crypt/dotfiles.key"
   ); then
     echo "Aborting ${script_name}"
-    echo "  Decrypting ${DOTFILES_PATH} Failed!"
+    echo "  Decrypting ${HOME}/.dotfiles Failed!"
     exit 1
   else
     if [[ -d "${HOME}/.local/share/fonts/DankMono" ]]; then
-      echo "Skipped: ${DOTFILES_FONTS_PATH}/DankMono.tar"
+      echo "Skipped: ${HOME}/.dotfiles/fonts/DankMono.tar"
     else
-      tar -xvf "${DOTFILES_FONTS_PATH}/DankMono.tar" -C "${HOME}/.local/share/fonts"
+      tar -xvf "${HOME}/.dotfiles/fonts/DankMono.tar" -C "${HOME}/.local/share/fonts"
       sudo fc-cache -f -v
     fi
     if [[ -d "${HOME}/.local/share/fonts/OperatorMono" ]]; then
-      echo "Skipped: ${DOTFILES_FONTS_PATH}/OperatorMono.tar"
+      echo "Skipped: ${HOME}/.dotfiles/fonts/OperatorMono.tar"
     else
-      tar -xvf "${DOTFILES_FONTS_PATH}/OperatorMono.tar" -C "${HOME}/.local/share/fonts"
+      tar -xvf "${HOME}/.dotfiles/fonts/OperatorMono.tar" -C "${HOME}/.local/share/fonts"
       sudo fc-cache -f -v
     fi
   fi

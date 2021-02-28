@@ -369,18 +369,18 @@ desktop_setup() {
 
   # Install term environment
   if file_dne "/usr/share/terminfo/x/xterm-256color-italic" && file_dne "${HOME}/.terminfo/x/xterm-256color-italic"; then
-    print_step "Skipped: ${DOTFILES_TERM_PATH}/xterm-256color-italic.terminfo"
+    print_step "Skipped: ${HOME}/.dotfiles/term/xterm-256color-italic.terminfo"
   else
     if file_dne "/usr/share/terminfo/x/xterm-256color-italic"; then
-      sudo cp "${DOTFILES_TERM_PATH}/xterm-256color-italic.terminfo" "/usr/share/terminfo/x/xterm-256color-italic"
-      sudo tic "${DOTFILES_TERM_PATH}/xterm-256color-italic.terminfo"
+      sudo cp "${HOME}/.dotfiles/term/xterm-256color-italic.terminfo" "/usr/share/terminfo/x/xterm-256color-italic"
+      sudo tic "${HOME}/.dotfiles/term/xterm-256color-italic.terminfo"
     fi
 
     if file_dne "${HOME}/.terminfo/x/xterm-256color-italic"; then
-      tic "${DOTFILES_TERM_PATH}/xterm-256color-italic.terminfo"
+      tic "${HOME}/.dotfiles/term/xterm-256color-italic.terminfo"
     fi
 
-    print_step "Installed ${DOTFILES_TERM_PATH}/xterm-256color-italic.terminfo"
+    print_step "Installed ${HOME}/.dotfiles/term/xterm-256color-italic.terminfo"
   fi
 
   # Create Global Git Config

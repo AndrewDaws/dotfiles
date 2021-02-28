@@ -4,14 +4,14 @@
 # @body Preserve an existing .gitconfig and update with new settings.
 
 rm -f "${HOME}/.gitconfig"
-find "${DOTFILES_GIT_PATH}" -type f -exec chmod 664 {} \;
+find "${HOME}/.dotfiles/git" -type f -exec chmod 664 {} \;
 {
   echo "[include]"
-  echo "  path = ${DOTFILES_GIT_PATH}/.gitconfig_global"
+  echo "  path = ${HOME}/.dotfiles/git/.gitconfig_global"
   echo ""
   echo "[core]"
-  echo "  excludesfile = ${DOTFILES_GIT_PATH}/.gitignore_global"
-  echo "  attributesfile = ${DOTFILES_GIT_PATH}/.gitattributes_global"
+  echo "  excludesfile = ${HOME}/.dotfiles/git/.gitignore_global"
+  echo "  attributesfile = ${HOME}/.dotfiles/git/.gitattributes_global"
   echo ""
   echo "[user]"
 } >>"${HOME}/.gitconfig"
