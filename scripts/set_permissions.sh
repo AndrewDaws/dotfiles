@@ -9,6 +9,7 @@ fonts_mode="disabled"
 git_mode="disabled"
 gnome_mode="disabled"
 hardware_mode="disabled"
+htop_mode="disabled"
 projects_mode="disabled"
 scripts_mode="disabled"
 term_mode="disabled"
@@ -31,6 +32,7 @@ for argument in "${@}"; do
     echo "  -g, --git          force enable git mode"
     echo "      --gnome        force enable gnome mode"
     echo "      --hardware     force enable hardware mode"
+    echo "      --htop         force enable htop mode"
     echo "  -p, --projects     force enable projects mode"
     echo "  -s, --scripts      force enable scripts mode"
     echo "      --term         force enable term mode"
@@ -50,6 +52,8 @@ for argument in "${@}"; do
     gnome_mode="enabled"
   elif [[ "${argument}" == "--hardware" ]]; then
     hardware_mode="enabled"
+  elif [[ "${argument}" == "--htop" ]]; then
+    htop_mode="enabled"
   elif [[ "${argument}" == "-p" || "${argument}" == "--projects" ]]; then
     projects_mode="enabled"
   elif [[ "${argument}" == "-s" || "${argument}" == "--scripts" ]]; then
@@ -155,6 +159,18 @@ if [[ "${argument_flag}" == "false" || "${hardware_mode}" == "enabled" ]]; then
   else
     echo "Aborting ${script_name}"
     echo "  Directory ${DOTFILES_HARDWARE_PATH} Does Not Exist!"
+    exit 1
+  fi
+fi
+
+# Htop
+if [[ "${argument_flag}" == "false" || "${htop_mode}" == "enabled" ]]; then
+  if [[ -d "${DOTFILES_HTOP_PATH}" ]]; then
+    find "${DOTFILES_HTOP_PATH}" -type f -exec chmod 664 {} \;
+    find "${DOTFILES_HTOP_PATH}" -type f -exec echo "Modified: {} = 664" \;
+  else
+    echo "Aborting ${script_name}"
+    echo "  Directory ${DOTFILES_HTOP_PATH} Does Not Exist!"
     exit 1
   fi
 fi

@@ -44,6 +44,17 @@ link_headless() {
     ln -s "${HOME}/.dotfiles/tmux/.tmux.conf" "${HOME}/.tmux.conf"
   fi
 
+  abort_file_dne "${HOME}/.dotfiles/htop/htoprc"
+  if [[ "$(readlink -f "${HOME}/.config/htop/htoprc")" == "${HOME}/.dotfiles/htop/htoprc" ]]; then
+    print_step "Skipped: Linking ${HOME}/.config/htop/htoprc"
+  else
+    if file_exists "${HOME}/.config/htop/htoprc"; then
+      rm -f "${HOME}/.config/htop/htoprc"
+    fi
+    print_step "Linking ${HOME}/.config/htop/htoprc -> ${HOME}/.dotfiles/htop/htoprc"
+    ln -s "${HOME}/.dotfiles/htop/htoprc" "${HOME}/.config/htop/htoprc"
+  fi
+
   abort_file_dne "${HOME}/.dotfiles/vim/.vimrc"
   if [[ "$(readlink -f "${HOME}/.vimrc")" == "${HOME}/.dotfiles/vim/.vimrc" ]]; then
     print_step "Skipped: Linking ${HOME}/.vimrc"

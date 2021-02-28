@@ -12,6 +12,7 @@ if [[ -d "${HOME}/.dotfiles" ]]; then
     [[ -d "${DOTFILES_PATH}/git" ]] && export DOTFILES_GIT_PATH="${DOTFILES_PATH}/git"
     [[ -d "${DOTFILES_PATH}/gnome" ]] && export DOTFILES_GNOME_PATH="${DOTFILES_PATH}/gnome"
     [[ -d "${DOTFILES_PATH}/hardware" ]] && export DOTFILES_HARDWARE_PATH="${DOTFILES_PATH}/hardware"
+    [[ -d "${DOTFILES_PATH}/htop" ]] && export DOTFILES_HTOP_PATH="${DOTFILES_PATH}/htop"
     [[ -d "${DOTFILES_PATH}/projects" ]] && export DOTFILES_PROJECTS_PATH="${DOTFILES_PATH}/projects"
     [[ -d "${DOTFILES_PATH}/scripts" ]] && export DOTFILES_SCRIPTS_PATH="${DOTFILES_PATH}/scripts"
     [[ -d "${DOTFILES_PATH}/term" ]] && export DOTFILES_TERM_PATH="${DOTFILES_PATH}/term"
