@@ -55,8 +55,6 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Command history timestamp format
 HIST_STAMPS="yyyy-mm-dd"
 
-# @todo Fix Z Integration
-# @body Fix either the ZSH-Z or the original Z "frecently" application integration, since it currently does not jump to a path.
 plugins=(
   colored-man-pages
   extract
