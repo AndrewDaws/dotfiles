@@ -1,12 +1,12 @@
 #!/bin/bash
 # Link shared Chrome OS directories in home directory
 
-if [[ -f ".functions" ]]; then
+if [[ -f "$(dirname "${0}")/.functions" ]]; then
   # shellcheck disable=SC1090
-  # shellcheck disable=SC1091
-  source ".functions"
+  source "$(dirname "${0}")/.functions"
 else
-  echo "Could not find .functions file in current directory!"
+  echo "File does not exist!"
+  echo "$(dirname "${0}")/.functions"
   exit "1"
 fi
 

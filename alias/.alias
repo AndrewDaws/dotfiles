@@ -1,10 +1,10 @@
-if [[ -f "${HOME}/.dotfiles/functions/.functions" ]]; then
-  # shellcheck disable=SC1090
-  # shellcheck disable=SC1091
-  source "${HOME}/.dotfiles/functions/.functions"
-else
-  echo "Could not find .functions file in dotfiles directory!"
-  exit "1"
+#!/bin/bash
+#
+# Application and function aliases
+
+# Ensure this file is only sourced, not executed
+if [[ "${BASH_SOURCE[0]}" -ef "${0}" ]]; then
+  exit 1
 fi
 
 ####################
@@ -232,16 +232,20 @@ alias font_refresh="sudo fc-cache -f -v"
 # Package Managers
 ####################
 # apt
-is_installed apt && file_exists "${HOME}/.dotfiles/alias/.apt.alias" && source "${HOME}/.dotfiles/alias/.apt.alias"
+# shellcheck disable=SC1090
+which "apt" &>/dev/null && [[ -f "$(dirname "${0}")/.apt.alias" ]] && source "$(dirname "${0}")/.apt.alias"
 
 # dpkg
-is_installed dpkg && file_exists "${HOME}/.dotfiles/alias/.dpkg.alias" && source "${HOME}/.dotfiles/alias/.dpkg.alias"
+# shellcheck disable=SC1090
+which "dpkg" &>/dev/null && [[ -f "$(dirname "${0}")/.dpkg.alias" ]] && source "$(dirname "${0}")/.dpkg.alias"
 
 # pip
-is_installed pip3 && file_exists "${HOME}/.dotfiles/alias/.pip.alias" && source "${HOME}/.dotfiles/alias/.pip.alias"
+# shellcheck disable=SC1090
+which "pip3" &>/dev/null && [[ -f "$(dirname "${0}")/.pip.alias" ]] && source "$(dirname "${0}")/.pip.alias"
 
 # gem
-is_installed gem && file_exists "${HOME}/.dotfiles/alias/.gem.alias" && source "${HOME}/.dotfiles/alias/.gem.alias"
+# shellcheck disable=SC1090
+which "gem" &>/dev/null && [[ -f "$(dirname "${0}")/.gem.alias" ]] && source "$(dirname "${0}")/.gem.alias"
 ####################
 ####################
 
@@ -249,33 +253,43 @@ is_installed gem && file_exists "${HOME}/.dotfiles/alias/.gem.alias" && source "
 # Applications
 ####################
 # chrome
-is_installed google-chrome && file_exists "${HOME}/.dotfiles/alias/.chrome.alias" && source "${HOME}/.dotfiles/alias/.chrome.alias"
+# shellcheck disable=SC1090
+which "google-chrome" &>/dev/null && [[ -f "$(dirname "${0}")/.chrome.alias" ]] && source "$(dirname "${0}")/.chrome.alias"
 
 # exa
-is_installed exa && file_exists "${HOME}/.dotfiles/alias/.exa.alias" && source "${HOME}/.dotfiles/alias/.exa.alias"
+# shellcheck disable=SC1090
+which "exa" &>/dev/null && [[ -f "$(dirname "${0}")/.exa.alias" ]] && source "$(dirname "${0}")/.exa.alias"
 
 # git
-#is_installed git && file_exists "${HOME}/.dotfiles/alias/.git.alias" && source "${HOME}/.dotfiles/alias/.git.alias"
+# shellcheck disable=SC1090
+#which "git" &>/dev/null && [[ -f "$(dirname "${0}")/.git.alias" ]] && source "$(dirname "${0}")/.git.alias"
 
 # httpie
-is_installed http && file_exists "${HOME}/.dotfiles/alias/.httpie.alias" && source "${HOME}/.dotfiles/alias/.httpie.alias"
+# shellcheck disable=SC1090
+which "http" &>/dev/null && [[ -f "$(dirname "${0}")/.httpie.alias" ]] && source "$(dirname "${0}")/.httpie.alias"
 
 # hub
-#is_installed hub && file_exists "${HOME}/.dotfiles/alias/.hub.alias" && source "${HOME}/.dotfiles/alias/.hub.alias"
+# shellcheck disable=SC1090
+#which "hub" &>/dev/null && [[ -f "$(dirname "${0}")/.hub.alias" ]] && source "$(dirname "${0}")/.hub.alias"
 
 # hyperfine
-is_installed hyperfine && file_exists "${HOME}/.dotfiles/alias/.hyperfine.alias" && source "${HOME}/.dotfiles/alias/.hyperfine.alias"
+# shellcheck disable=SC1090
+which "hyperfine" &>/dev/null && [[ -f "$(dirname "${0}")/.hyperfine.alias" ]] && source "$(dirname "${0}")/.hyperfine.alias"
 
 # nmap
-is_installed nmap && file_exists "${HOME}/.dotfiles/alias/.nmap.alias" && source "${HOME}/.dotfiles/alias/.nmap.alias"
+# shellcheck disable=SC1090
+which "nmap" &>/dev/null && [[ -f "$(dirname "${0}")/.nmap.alias" ]] && source "$(dirname "${0}")/.nmap.alias"
 
 # ssh
-is_installed ssh && file_exists "${HOME}/.dotfiles/alias/.ssh.alias" && source "${HOME}/.dotfiles/alias/.ssh.alias"
+# shellcheck disable=SC1090
+which "ssh" &>/dev/null && [[ -f "$(dirname "${0}")/.ssh.alias" ]] && source "$(dirname "${0}")/.ssh.alias"
 
 # vim
-is_installed vim && file_exists "${HOME}/.dotfiles/alias/.vim.alias" && source "${HOME}/.dotfiles/alias/.vim.alias"
+# shellcheck disable=SC1090
+which "vim" &>/dev/null && [[ -f "$(dirname "${0}")/.vim.alias" ]] && source "$(dirname "${0}")/.vim.alias"
 
 # vscode
-is_installed code && file_exists "${HOME}/.dotfiles/alias/.vscode.alias" && source "${HOME}/.dotfiles/alias/.vscode.alias"
+# shellcheck disable=SC1090
+which "code" &>/dev/null && [[ -f "$(dirname "${0}")/.vscode.alias" ]] && source "$(dirname "${0}")/.vscode.alias"
 ####################
 ####################

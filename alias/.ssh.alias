@@ -1,5 +1,11 @@
-# ssh aliases
-source "${HOME}/.dotfiles/functions/.functions"
+#!/bin/bash
+#
+# Ssh aliases
+
+# Ensure this file is only sourced, not executed
+if [[ "${BASH_SOURCE[0]}" -ef "${0}" ]]; then
+  exit 1
+fi
 
 alias ssh="TERM=xterm-256color ssh"
 
@@ -23,17 +29,19 @@ ssh_gen() {
     sshHost="${2}"
     sshKey="${HOME}/.ssh/${sshHost}-${sshUser}"
 
-    print_stage "Creating ssh key ${sshHost}"
+    echo "------------------------------------------------------------------------"
+    echo "   Creating ssh key ${sshHost}"
+    echo "------------------------------------------------------------------------"
     ssh-keygen -t ed25519 -N '' -f "${sshKey}"
 
-    print_step "Copy public key to ${sshHost}? [Y/N] "
+    echo "=> Copy public key to ${sshHost}? [Y/N] "
     read confirmCopy
     confirmCopy="$(echo "${confirmCopy}" | tr '[:lower:]' '[:upper:]')"
     if [[ "${confirmCopy}" == 'YES' || "${confirmCopy}" == 'Y' ]]; then
       ssh_copy "${sshUser}" "${sshHost}" "${sshKey}"
     fi
 
-    print_step "Generate an SSH config? [Y/N] "
+    echo "=> Generate an SSH config? [Y/N] "
     read confirmConfig
     confirmConfig="$(echo "${confirmConfig}" | tr '[:lower:]' '[:upper:]')"
     if [[ "${confirmConfig}" == 'YES' || "${confirmConfig}" == 'Y' ]]; then
@@ -62,7 +70,9 @@ ssh_copy() {
   sshKey="${3}"
 
   if [[ -n "${sshHost}" ]]; then
-    print_stage "Copying ssh key ${sshKey}.pub"
+    echo "------------------------------------------------------------------------"
+    echo "   Copying ssh key ${sshKey}.pub"
+    echo "------------------------------------------------------------------------"
     ssh-copy-id -o PreferredAuthentications=password -o PubkeyAuthentication=no -i "${sshKey}" "${sshUser}@${sshHost}"
   else
     ssh-copy-id
@@ -81,10 +91,12 @@ ssh_config() {
   sshAlias=""
 
   if [[ -n "${sshHost}" ]]; then
-    print_step "What is the alias you would like to configure? "
+    echo "=> What is the alias you would like to configure? "
     read sshAlias
     if [[ -n "${sshAlias}" ]]; then
-      print_stage "Creating ssh config ${sshUser}@${sshHost}"
+      echo "------------------------------------------------------------------------"
+      echo "   Creating ssh config ${sshUser}@${sshHost}"
+      echo "------------------------------------------------------------------------"
 
       touch "${HOME}/.ssh/config"
       {
@@ -102,7 +114,7 @@ ssh_config() {
 }
 
 ssh_perm() {
-  if directory_dne "${HOME}/.ssh"; then
+  if [[ ! -d "${HOME}/.ssh" ]]; then
     mkdir -p "${HOME}/.ssh"
     echo "Created: ${HOME}/.ssh"
   fi
@@ -113,22 +125,22 @@ ssh_perm() {
   find "${HOME}/.ssh" -type f -exec chmod 600 {} \;
   find "${HOME}/.ssh" -type f -exec echo "Modified: {} = 600" \;
 
-  if file_exists "${HOME}/.ssh/authorized_keys"; then
+  if [[ -f "${HOME}/.ssh/authorized_keys" ]]; then
     chmod 644 "${HOME}/.ssh/authorized_keys"
     echo "Modifed: ${HOME}/.ssh/authorized_keys = 644"
   fi
 
-  if file_exists "${HOME}/.ssh/known_hosts"; then
+  if [[ -f "${HOME}/.ssh/known_hosts" ]]; then
     chmod 644 "${HOME}/.ssh/known_hosts"
     echo "Modifed: ${HOME}/.ssh/known_hosts = 644"
   fi
 
-  if file_exists "${HOME}/.ssh/config"; then
+  if [[ -f "${HOME}/.ssh/config" ]]; then
     chmod 644 "${HOME}/.ssh/config"
     echo "Modifed: ${HOME}/.ssh/config = 644"
   fi
 
-  if find "${HOME}/.ssh/"*.pub >/dev/null; then
+  if find "${HOME}/.ssh/"*.pub &>/dev/null; then
     find "${HOME}/.ssh/"*.pub -type f -exec chmod 644 {} \;
     find "${HOME}/.ssh/"*.pub -type f -exec echo "Modified: {} = 644" \;
   fi

@@ -5,12 +5,12 @@
 # @todo Improve Printed Text and Prompts
 # @body Clean up printed text with better separation of stages and description of what is happening. Better define what the prompts are actually asking.
 
-if [[ -f "${HOME}/.dotfiles/functions/.functions" ]]; then
+if [[ -f "$(dirname "${0}")/.functions" ]]; then
   # shellcheck disable=SC1090
-  # shellcheck disable=SC1091
-  source "${HOME}/.dotfiles/functions/.functions"
+  source "$(dirname "${0}")/.functions"
 else
-  echo "Could not find .functions file in dotfiles directory!"
+  echo "File does not exist!"
+  echo "$(dirname "${0}")/.functions"
   exit "1"
 fi
 
@@ -286,7 +286,6 @@ desktop_setup() {
   # Rust environment handling
   if file_exists "${HOME}/.cargo/env"; then
     # shellcheck disable=SC1090
-    # shellcheck disable=SC1091
     source "${HOME}/.cargo/env"
 
     # Add cargo tools to path if not already in the path

@@ -2,7 +2,14 @@
 #
 # Hardware configuration installation script
 
-source "${HOME}/.dotfiles/functions/.functions"
+if [[ -f "$(dirname "${0}")/.functions" ]]; then
+  # shellcheck disable=SC1090
+  source "$(dirname "${0}")/.functions"
+else
+  echo "File does not exist!"
+  echo "$(dirname "${0}")/.functions"
+  exit "1"
+fi
 
 hwdb_install() {
   # Declare local variables

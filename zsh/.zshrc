@@ -5,15 +5,6 @@ else
   export TERM="xterm-256color"
 fi
 
-if [[ -f "${HOME}/.dotfiles/functions/.functions" ]]; then
-  # shellcheck disable=SC1090
-  # shellcheck disable=SC1091
-  source "${HOME}/.dotfiles/functions/.functions"
-else
-  echo "Could not find .functions file in dotfiles directory!"
-  exit "1"
-fi
-
 # @todo Improve Tmux Session Algorithm
 # @body Optimize the algorithm so the session starts as fast as possible, and improve reliablity for edge cases like resuming session with multiple clients still connected.
 # Ignore terminals started inside specific applications
@@ -107,13 +98,13 @@ setopt SHARE_HISTORY
 [[ -d "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/themes/powerlevel10k" ]] && [[ -f "${HOME}/.p10k.zsh" ]] && source "${HOME}/.p10k.zsh"
 
 # Bat Configuration
-is_installed "bat" && [[ -f "${HOME}/.dotfiles/zsh/.bat.zsh" ]] && source "${HOME}/.dotfiles/zsh/.bat.zsh"
+which "bat" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.bat.zsh" ]] && source "${HOME}/.dotfiles/zsh/.bat.zsh"
 
 # FZF Configuration
-is_installed "fzf" && [[ -f "${HOME}/.dotfiles/zsh/.fzf.zsh" ]] && source "${HOME}/.dotfiles/zsh/.fzf.zsh"
+which "fzf" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.fzf.zsh" ]] && source "${HOME}/.dotfiles/zsh/.fzf.zsh"
 
 # FZF-Tab Configuration
-[[ -f "${HOME}/.dotfiles/zsh/.fzf-tab.zsh" ]] && source "${HOME}/.dotfiles/zsh/.fzf-tab.zsh"
+which "fzf" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.fzf-tab.zsh" ]] && source "${HOME}/.dotfiles/zsh/.fzf-tab.zsh"
 
 # Git Auto-Fetch Configuration
 GIT_AUTO_FETCH_INTERVAL="1200"
