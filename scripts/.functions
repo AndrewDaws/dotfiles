@@ -267,7 +267,7 @@ is_installed() {
   input_application="${1}"
 
   # Returns 0 if application is installed or error if it is not
-  if command -v "${input_application}" &>/dev/null; then
+  if command -v -- "${input_application}" &>/dev/null; then
     return 0
   else
     return 1
@@ -282,7 +282,7 @@ not_installed() {
   input_application="${1}"
 
   # Returns 0 if application is not installed or error if it is
-  if ! command -v "${input_application}" &>/dev/null; then
+  if ! command -v -- "${input_application}" &>/dev/null; then
     return 0
   else
     return 1
@@ -738,7 +738,7 @@ add_sudoers() {
     # Loop through all applications in the list
     for current_application in "${application_list[@]}"; do
       # Find path to current application
-      found_application="$(command -v "${current_application}")"
+      found_application="$(command -v -- "${current_application}")"
       # Check that application was found
       if [[ "${found_application}" != "" ]]; then
         # Append to path list

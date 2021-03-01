@@ -98,13 +98,13 @@ setopt SHARE_HISTORY
 [[ -d "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/themes/powerlevel10k" ]] && [[ -f "${HOME}/.p10k.zsh" ]] && source "${HOME}/.p10k.zsh"
 
 # Bat Configuration
-command -v "bat" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.bat.zsh" ]] && source "${HOME}/.dotfiles/zsh/.bat.zsh"
+command -v -- "bat" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.bat.zsh" ]] && source "${HOME}/.dotfiles/zsh/.bat.zsh"
 
 # FZF Configuration
-command -v "fzf" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.fzf.zsh" ]] && source "${HOME}/.dotfiles/zsh/.fzf.zsh"
+command -v -- "fzf" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.fzf.zsh" ]] && source "${HOME}/.dotfiles/zsh/.fzf.zsh"
 
 # FZF-Tab Configuration
-command -v "fzf" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.fzf-tab.zsh" ]] && source "${HOME}/.dotfiles/zsh/.fzf-tab.zsh"
+command -v -- "fzf" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.fzf-tab.zsh" ]] && source "${HOME}/.dotfiles/zsh/.fzf-tab.zsh"
 
 # Git Auto-Fetch Configuration
 GIT_AUTO_FETCH_INTERVAL="1200"

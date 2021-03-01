@@ -400,7 +400,7 @@ final_setup() {
     print_step "Skipped: Changing shell to ZSH"
   else
     print_step "Changing shell to ZSH"
-    sudo usermod -s "$(command -v zsh)" "${USER}"
+    sudo usermod -s "$(command -v -- zsh)" "${USER}"
     env zsh -l
   fi
 }
