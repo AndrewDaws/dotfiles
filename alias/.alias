@@ -233,19 +233,19 @@ alias font_refresh="sudo fc-cache -f -v"
 ####################
 # apt
 # shellcheck disable=SC1090
-which "apt" &>/dev/null && [[ -f "$(dirname "${0}")/.apt.alias" ]] && source "$(dirname "${0}")/.apt.alias"
+which "apt" &>/dev/null && [[ -f "${HOME}/.dotfiles/alias/.apt.alias" ]] && source "${HOME}/.dotfiles/alias/.apt.alias"
 
 # dpkg
 # shellcheck disable=SC1090
-which "dpkg" &>/dev/null && [[ -f "$(dirname "${0}")/.dpkg.alias" ]] && source "$(dirname "${0}")/.dpkg.alias"
+which "dpkg" &>/dev/null && [[ -f "${HOME}/.dotfiles/alias/.dpkg.alias" ]] && source "${HOME}/.dotfiles/alias/.dpkg.alias"
 
 # pip
 # shellcheck disable=SC1090
-which "pip3" &>/dev/null && [[ -f "$(dirname "${0}")/.pip.alias" ]] && source "$(dirname "${0}")/.pip.alias"
+which "pip3" &>/dev/null && [[ -f "${HOME}/.dotfiles/alias/.pip.alias" ]] && source "${HOME}/.dotfiles/alias/.pip.alias"
 
 # gem
 # shellcheck disable=SC1090
-which "gem" &>/dev/null && [[ -f "$(dirname "${0}")/.gem.alias" ]] && source "$(dirname "${0}")/.gem.alias"
+which "gem" &>/dev/null && [[ -f "${HOME}/.dotfiles/alias/.gem.alias" ]] && source "${HOME}/.dotfiles/alias/.gem.alias"
 ####################
 ####################
 
@@ -254,42 +254,42 @@ which "gem" &>/dev/null && [[ -f "$(dirname "${0}")/.gem.alias" ]] && source "$(
 ####################
 # chrome
 # shellcheck disable=SC1090
-which "google-chrome" &>/dev/null && [[ -f "$(dirname "${0}")/.chrome.alias" ]] && source "$(dirname "${0}")/.chrome.alias"
+which "google-chrome" &>/dev/null && [[ -f "${HOME}/.dotfiles/alias/.chrome.alias" ]] && source "${HOME}/.dotfiles/alias/.chrome.alias"
 
 # exa
 # shellcheck disable=SC1090
-which "exa" &>/dev/null && [[ -f "$(dirname "${0}")/.exa.alias" ]] && source "$(dirname "${0}")/.exa.alias"
+which "exa" &>/dev/null && [[ -f "${HOME}/.dotfiles/alias/.exa.alias" ]] && source "${HOME}/.dotfiles/alias/.exa.alias"
 
 # git
 # shellcheck disable=SC1090
-#which "git" &>/dev/null && [[ -f "$(dirname "${0}")/.git.alias" ]] && source "$(dirname "${0}")/.git.alias"
+#which "git" &>/dev/null && [[ -f "${HOME}/.dotfiles/alias/.git.alias" ]] && source "${HOME}/.dotfiles/alias/.git.alias"
 
 # httpie
 # shellcheck disable=SC1090
-which "http" &>/dev/null && [[ -f "$(dirname "${0}")/.httpie.alias" ]] && source "$(dirname "${0}")/.httpie.alias"
+which "http" &>/dev/null && [[ -f "${HOME}/.dotfiles/alias/.httpie.alias" ]] && source "${HOME}/.dotfiles/alias/.httpie.alias"
 
 # hub
 # shellcheck disable=SC1090
-#which "hub" &>/dev/null && [[ -f "$(dirname "${0}")/.hub.alias" ]] && source "$(dirname "${0}")/.hub.alias"
+#which "hub" &>/dev/null && [[ -f "${HOME}/.dotfiles/alias/.hub.alias" ]] && source "${HOME}/.dotfiles/alias/.hub.alias"
 
 # hyperfine
 # shellcheck disable=SC1090
-which "hyperfine" &>/dev/null && [[ -f "$(dirname "${0}")/.hyperfine.alias" ]] && source "$(dirname "${0}")/.hyperfine.alias"
+which "hyperfine" &>/dev/null && [[ -f "${HOME}/.dotfiles/alias/.hyperfine.alias" ]] && source "${HOME}/.dotfiles/alias/.hyperfine.alias"
 
 # nmap
 # shellcheck disable=SC1090
-which "nmap" &>/dev/null && [[ -f "$(dirname "${0}")/.nmap.alias" ]] && source "$(dirname "${0}")/.nmap.alias"
+which "nmap" &>/dev/null && [[ -f "${HOME}/.dotfiles/alias/.nmap.alias" ]] && source "${HOME}/.dotfiles/alias/.nmap.alias"
 
 # ssh
 # shellcheck disable=SC1090
-which "ssh" &>/dev/null && [[ -f "$(dirname "${0}")/.ssh.alias" ]] && source "$(dirname "${0}")/.ssh.alias"
+which "ssh" &>/dev/null && [[ -f "${HOME}/.dotfiles/alias/.ssh.alias" ]] && source "${HOME}/.dotfiles/alias/.ssh.alias"
 
 # vim
 # shellcheck disable=SC1090
-which "vim" &>/dev/null && [[ -f "$(dirname "${0}")/.vim.alias" ]] && source "$(dirname "${0}")/.vim.alias"
+which "vim" &>/dev/null && [[ -f "${HOME}/.dotfiles/alias/.vim.alias" ]] && source "${HOME}/.dotfiles/alias/.vim.alias"
 
 # vscode
 # shellcheck disable=SC1090
-which "code" &>/dev/null && [[ -f "$(dirname "${0}")/.vscode.alias" ]] && source "$(dirname "${0}")/.vscode.alias"
+which "code" &>/dev/null && [[ -f "${HOME}/.dotfiles/alias/.vscode.alias" ]] && source "${HOME}/.dotfiles/alias/.vscode.alias"
 ####################
 ####################
