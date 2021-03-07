@@ -136,6 +136,7 @@ headless_setup() {
     htop
     xclip
     apt-utils
+    ncdu
   )
 
   print_stage "Headless applications setup"
