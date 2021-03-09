@@ -147,5 +147,9 @@ ssh_perm() {
 }
 
 ssh_pass() {
-  ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no "${*}"
+  ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no ${*}
+}
+
+scp_pass() {
+  scp -o PreferredAuthentications=password -o PubkeyAuthentication=no ${*}
 }
