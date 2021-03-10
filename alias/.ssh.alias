@@ -146,10 +146,26 @@ ssh_perm() {
   fi
 }
 
-ssh_pass() {
-  ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no ${*}
+ssh_password() {
+  ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no "${@}"
 }
 
-scp_pass() {
-  scp -o PreferredAuthentications=password -o PubkeyAuthentication=no ${*}
+scp_password() {
+  scp -o PreferredAuthentications=password -o PubkeyAuthentication=no "${@}"
+}
+
+ssh_ignore() {
+  ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "${@}"
+}
+
+scp_ignore() {
+  scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "${@}"
+}
+
+ssh_ignore_password() {
+  ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o PubkeyAuthentication=no "${@}"
+}
+
+scp_ignore_password() {
+  scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o PubkeyAuthentication=no "${@}"
 }
