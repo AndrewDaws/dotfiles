@@ -1,5 +1,9 @@
 [color]
   ui = auto
+  status = auto
+  interactive = auto
+  diff = auto
+  branch = auto
 
 [diff]
   tool = meld
@@ -22,15 +26,20 @@
 [push]
   default = simple
 
+[url "git@bitbucket.org:"]
+  pushInsteadOf = git://bitbucket.org/
+  pushInsteadOf = http://bitbucket.org/
+  pushInsteadOf = https://bitbucket.org/
+
 [url "git@github.com:"]
   pushInsteadOf = git://github.com/
   pushInsteadOf = http://github.com/
   pushInsteadOf = https://github.com/
 
-[url "git@bitbucket.org:"]
-  pushInsteadOf = git://bitbucket.org/
-  pushInsteadOf = http://bitbucket.org/
-  pushInsteadOf = https://bitbucket.org/
+[url "git@gitlab.com:"]
+  pushInsteadOf = git://gitlab.com/
+  pushInsteadOf = http://gitlab.com/
+  pushInsteadOf = https://gitlab.com/
 
 [web]
   browser = firefox
