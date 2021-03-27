@@ -73,7 +73,7 @@ ssh_copy() {
     echo "------------------------------------------------------------------------"
     echo "   Copying ssh key ${sshKey}.pub"
     echo "------------------------------------------------------------------------"
-    ssh-copy-id -o PreferredAuthentications=password -o PubkeyAuthentication=no -i "${sshKey}" "${sshUser}@${sshHost}"
+    ssh-copy-id -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o PubkeyAuthentication=no -i "${sshKey}" "${sshUser}@${sshHost}"
   else
     ssh-copy-id
   fi
