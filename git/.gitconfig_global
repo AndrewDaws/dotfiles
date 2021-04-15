@@ -46,4 +46,3 @@
 
 [core]
   whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
-  pager = delta --highlight-removed --dark --theme="zenburn" --plus-color="#1F2E1F" --plus-emph-color="#507350" --minus-color="#2E0F0F" --minus-emph-color="#732222"
