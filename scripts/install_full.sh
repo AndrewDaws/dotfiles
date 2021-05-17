@@ -5,12 +5,13 @@
 # @todo Improve Printed Text and Prompts
 # @body Clean up printed text with better separation of stages and description of what is happening. Better define what the prompts are actually asking.
 
-if [[ -f "$(dirname "${0}")/.functions" ]]; then
+if [[ -f "$(dirname "$(readlink -f "${0}")")/.functions" ]]; then
   # shellcheck disable=SC1090
-  source "$(dirname "${0}")/.functions"
+  # shellcheck disable=SC1091
+  source "$(dirname "$(readlink -f "${0}")")/.functions"
 else
   echo "File does not exist!"
-  echo "$(dirname "${0}")/.functions"
+  echo "$(dirname "$(readlink -f "${0}")")/.functions"
   exit "1"
 fi
 

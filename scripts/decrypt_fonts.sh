@@ -2,12 +2,13 @@
 # Decrypts and installs the encrypted fonts
 script_name="$(basename "${0}")"
 
-if [[ -f "$(dirname "${0}")/.functions" ]]; then
+if [[ -f "$(dirname "$(readlink -f "${0}")")/.functions" ]]; then
   # shellcheck disable=SC1090
-  source "$(dirname "${0}")/.functions"
+  # shellcheck disable=SC1091
+  source "$(dirname "$(readlink -f "${0}")")/.functions"
 else
   echo "File does not exist!"
-  echo "$(dirname "${0}")/.functions"
+  echo "  $(dirname "$(readlink -f "${0}")")/.functions"
   exit "1"
 fi
 
