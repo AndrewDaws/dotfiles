@@ -1,9 +1,3 @@
-# Setup fzf
-# ---------
-if [[ ! "${PATH}" == *"${HOME}/.fzf/bin"* ]]; then
-  export PATH="${PATH}:${HOME}/.fzf/bin"
-fi
-
 # Options to fzf command
 export FZF_COMPLETION_OPTS='+c -x'
 
@@ -105,8 +99,6 @@ export FZF_DEFAULT_OPTS="
 "
 }
 
-_gen_fzf_default_opts
-
 # Configure default settings
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 export FZF_DEFAULT_OPTS="
@@ -126,9 +118,3 @@ ${FZF_DEFAULT_OPTS}
 --select-1
 --exit-0
 "
-
-# Auto-completion
-[[ $- == *i* ]] && source "${HOME}/.fzf/shell/completion.zsh" 2> /dev/null
-
-# Key bindings
-source "${HOME}/.fzf/shell/key-bindings.zsh"

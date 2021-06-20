@@ -12,6 +12,17 @@ else
 fi
 
 link_headless() {
+  abort_file_dne "${HOME}/.dotfiles/zsh/.zshenv"
+  if [[ "$(readlink -f "${HOME}/.zshenv")" == "${HOME}/.dotfiles/zsh/.zshenv" ]]; then
+    print_step "Skipped: Linking ${HOME}/.zshenv"
+  else
+    if file_exists "${HOME}/.zshenv"; then
+      rm -f "${HOME}/.zshenv"
+    fi
+    print_step "Linking ${HOME}/.zshenv -> ${HOME}/.dotfiles/zsh/.zshenv"
+    ln -s "${HOME}/.dotfiles/zsh/.zshenv" "${HOME}/.zshenv"
+  fi
+
   abort_file_dne "${HOME}/.dotfiles/zsh/.zshrc"
   if [[ "$(readlink -f "${HOME}/.zshrc")" == "${HOME}/.dotfiles/zsh/.zshrc" ]]; then
     print_step "Skipped: Linking ${HOME}/.zshrc"
@@ -21,17 +32,6 @@ link_headless() {
     fi
     print_step "Linking ${HOME}/.zshrc -> ${HOME}/.dotfiles/zsh/.zshrc"
     ln -s "${HOME}/.dotfiles/zsh/.zshrc" "${HOME}/.zshrc"
-  fi
-
-  abort_file_dne "${HOME}/.dotfiles/zsh/.p10k.zsh"
-  if [[ "$(readlink -f "${HOME}/.p10k.zsh")" == "${HOME}/.dotfiles/zsh/.p10k.zsh" ]]; then
-    print_step "Skipped: Linking ${HOME}/.p10k.zsh"
-  else
-    if file_exists "${HOME}/.p10k.zsh"; then
-      rm -f "${HOME}/.p10k.zsh"
-    fi
-    print_step "Linking ${HOME}/.p10k.zsh -> ${HOME}/.dotfiles/zsh/.p10k.zsh"
-    ln -s "${HOME}/.dotfiles/zsh/.p10k.zsh" "${HOME}/.p10k.zsh"
   fi
 
   abort_file_dne "${HOME}/.dotfiles/tmux/.tmux.conf"

@@ -159,62 +159,25 @@ headless_setup() {
     fi
   done
 
-  # Install Fd
-  if not_installed "fd"; then
-    "${HOME}/.dotfiles/scripts/install_fd.sh"
-  else
-    print_step "Skipped: Installing fd"
-  fi
-
   # Install Tmux Plugin Manager
   git_update "https://github.com/tmux-plugins/tpm" "${HOME}/.tmux/plugins/tpm" "Tmux Plugin Manager"
 
-  # Install Fzf
-  if directory_exists "${HOME}/.fzf"; then
-    if git_up-to-date "${HOME}/.fzf"; then
-      print_step "Skipped: Updating fzf repo"
-    else
-      print_step "Updating fzf repo"
-      git -C "${HOME}/.fzf" pull
-      "${HOME}/.fzf/install" --bin
-    fi
+  # Install Zinit Framework
+  if directory_exists "${HOME}/.zinit"; then
+    print_step "Updating zinit"
+    # @todo Fix Zinit Updating
+    # @body Find a way to fix the zinit self updating and plugin updating in install script.
+    # zinit self-update
+    # zinit update --parallel
+    # zinit delete --clean --yes
   else
-    print_step "Cloning fzf repo"
-    git clone --depth 1 https://github.com/junegunn/fzf.git "${HOME}/.fzf"
-    "${HOME}/.fzf/install" --bin
+    git_update "https://github.com/zdharma/zinit.git" "${HOME}/.zinit/bin" "zinit"
   fi
-
-  # Install Oh-My-Zsh Framework
-  if directory_exists "${HOME}/.oh-my-zsh"; then
-    if git_up-to-date "${HOME}/.oh-my-zsh"; then
-      print_step "Skipped: Updating Oh-My-Zsh repo"
-    else
-      print_step "Updating Oh-My-Zsh repo"
-      git -C "${HOME}/.oh-my-zsh" pull
-    fi
-  else
-    print_step "Installing Oh-My-Zsh"
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" "" --unattended
-  fi
-
-  # Install Oh-My-Zsh Theme
-  git_update "https://github.com/romkatv/powerlevel10k.git" "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/themes/powerlevel10k" "powerlevel10k"
-
-  # Install Oh-My-Zsh Plugins
-  git_update "https://github.com/zdharma/fast-syntax-highlighting.git" "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting" "fast-syntax-highlighting"
-  git_update "https://github.com/Aloxaf/fzf-tab.git" "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/fzf-tab" "fzf-tab"
-  git_update "https://github.com/jimhester/per-directory-history.git" "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/per-directory-history" "per-directory-history"
-  git_update "https://github.com/hlissner/zsh-autopair.git" "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-autopair" "zsh-autopair"
-  git_update "https://github.com/agkozak/zsh-z.git" "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-z" "zsh-z"
-  git_update "https://github.com/zsh-users/zsh-autosuggestions.git" "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" "zsh-autosuggestions"
-  git_update "https://github.com/zsh-users/zsh-completions.git" "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-completions" "zsh-completions"
-  git_update "https://github.com/zsh-users/zsh-history-substring-search.git" "${ZSH_CUSTOM:-${HOME}/.oh-my-zsh/custom}/plugins/zsh-history-substring-search" "zsh-history-substring-search"
 
   print_step "Installing headless application configurations"
   rm -f "${HOME}/.bash_history"
   rm -f "${HOME}/.bash_logout"
   rm -f "${HOME}/.bashrc"
-  rm -f "${HOME}/.zshrc.pre-oh-my-zsh"
 
   # Create links
   abort_file_dne "${HOME}/.dotfiles/scripts/create_links.sh"
@@ -271,13 +234,6 @@ desktop_setup() {
     fi
   fi
 
-  # Install Bat
-  if not_installed "bat"; then
-    "${HOME}/.dotfiles/scripts/install_bat.sh"
-  else
-    print_step "Skipped: Installing Bat"
-  fi
-
   # Installis_installed Rustup
   if not_installed "rustup"; then
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
@@ -329,14 +285,6 @@ desktop_setup() {
     fi
   else
     print_step "Skipped: Installing alacritty"
-  fi
-
-  # Install Exa
-  if not_installed "exa"; then
-    print_step "Installing exa"
-    cargo install exa
-  else
-    print_step "Skipped: Installing exa"
   fi
 
   # @todo File Manager Installation

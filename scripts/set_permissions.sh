@@ -92,18 +92,6 @@ if [[ "${argument_flag}" == "false" || "${alacritty_mode}" == "enabled" ]]; then
   fi
 fi
 
-# Alias
-if [[ "${argument_flag}" == "false" || "${alias_mode}" == "enabled" ]]; then
-  if [[ -d "${HOME}/.dotfiles/alias" ]]; then
-    find "${HOME}/.dotfiles/alias" -type f -exec chmod 644 {} \;
-    find "${HOME}/.dotfiles/alias" -type f -exec echo "Modified: {} = 644" \;
-  else
-    echo "Aborting ${script_name}"
-    echo "  Directory ${HOME}/.dotfiles/alias Does Not Exist!"
-    exit 1
-  fi
-fi
-
 # Fonts
 if [[ "${argument_flag}" == "false" || "${fonts_mode}" == "enabled" ]]; then
   if [[ -d "${HOME}/.dotfiles/fonts" ]]; then

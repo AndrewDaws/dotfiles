@@ -18,8 +18,8 @@ alias czsh=""${EDITOR}" "${HOME}/.zshrc""
 alias szsh="source "${HOME}/.zshrc""
 
 # alias
-alias cali=""${EDITOR}" "${HOME}/.dotfiles/alias/alias""
-alias sali="source "${HOME}/.dotfiles/alias/.alias""
+alias cali=""${EDITOR}" "${HOME}/.dotfiles/zsh/.alias.zsh""
+alias sali="source "${HOME}/.dotfiles/zsh/.alias.zsh""
 
 # oh-my-zsh
 alias cozsh=""${EDITOR}" "${HOME}/.oh-my-zsh""
@@ -233,19 +233,19 @@ alias font_refresh="sudo fc-cache -f -v"
 ####################
 # apt
 # shellcheck disable=SC1090
-command -v -- "apt" &>/dev/null && [[ -f "${HOME}/.dotfiles/alias/.apt.alias" ]] && source "${HOME}/.dotfiles/alias/.apt.alias"
+command -v -- "apt" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.apt.zsh" ]] && source "${HOME}/.dotfiles/zsh/.apt.zsh"
 
 # dpkg
 # shellcheck disable=SC1090
-command -v -- "dpkg" &>/dev/null && [[ -f "${HOME}/.dotfiles/alias/.dpkg.alias" ]] && source "${HOME}/.dotfiles/alias/.dpkg.alias"
+command -v -- "dpkg" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.dpkg.zsh" ]] && source "${HOME}/.dotfiles/zsh/.dpkg.zsh"
 
 # pip
 # shellcheck disable=SC1090
-command -v -- "pip3" &>/dev/null && [[ -f "${HOME}/.dotfiles/alias/.pip.alias" ]] && source "${HOME}/.dotfiles/alias/.pip.alias"
+command -v -- "pip3" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.pip.zsh" ]] && source "${HOME}/.dotfiles/zsh/.pip.zsh"
 
 # gem
 # shellcheck disable=SC1090
-command -v -- "gem" &>/dev/null && [[ -f "${HOME}/.dotfiles/alias/.gem.alias" ]] && source "${HOME}/.dotfiles/alias/.gem.alias"
+command -v -- "gem" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.gem.zsh" ]] && source "${HOME}/.dotfiles/zsh/.gem.zsh"
 ####################
 ####################
 
@@ -254,42 +254,42 @@ command -v -- "gem" &>/dev/null && [[ -f "${HOME}/.dotfiles/alias/.gem.alias" ]]
 ####################
 # chrome
 # shellcheck disable=SC1090
-command -v -- "google-chrome" &>/dev/null && [[ -f "${HOME}/.dotfiles/alias/.chrome.alias" ]] && source "${HOME}/.dotfiles/alias/.chrome.alias"
+command -v -- "google-chrome" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.chrome.zsh" ]] && source "${HOME}/.dotfiles/zsh/.chrome.zsh"
 
 # exa
 # shellcheck disable=SC1090
-command -v -- "exa" &>/dev/null && [[ -f "${HOME}/.dotfiles/alias/.exa.alias" ]] && source "${HOME}/.dotfiles/alias/.exa.alias"
+# command -v -- "exa" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.exa.zsh" ]] && source "${HOME}/.dotfiles/zsh/.exa.zsh"
 
 # git
 # shellcheck disable=SC1090
-#command -v -- "git" &>/dev/null && [[ -f "${HOME}/.dotfiles/alias/.git.alias" ]] && source "${HOME}/.dotfiles/alias/.git.alias"
+#command -v -- "git" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.git.zsh" ]] && source "${HOME}/.dotfiles/zsh/.git.zsh"
 
 # httpie
 # shellcheck disable=SC1090
-command -v -- "http" &>/dev/null && [[ -f "${HOME}/.dotfiles/alias/.httpie.alias" ]] && source "${HOME}/.dotfiles/alias/.httpie.alias"
+command -v -- "http" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.httpie.zsh" ]] && source "${HOME}/.dotfiles/zsh/.httpie.zsh"
 
 # hub
 # shellcheck disable=SC1090
-#command -v -- "hub" &>/dev/null && [[ -f "${HOME}/.dotfiles/alias/.hub.alias" ]] && source "${HOME}/.dotfiles/alias/.hub.alias"
+#command -v -- "hub" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.hub.zsh" ]] && source "${HOME}/.dotfiles/zsh/.hub.zsh"
 
 # hyperfine
 # shellcheck disable=SC1090
-command -v -- "hyperfine" &>/dev/null && [[ -f "${HOME}/.dotfiles/alias/.hyperfine.alias" ]] && source "${HOME}/.dotfiles/alias/.hyperfine.alias"
+command -v -- "hyperfine" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.hyperfine.zsh" ]] && source "${HOME}/.dotfiles/zsh/.hyperfine.zsh"
 
 # nmap
 # shellcheck disable=SC1090
-command -v -- "nmap" &>/dev/null && [[ -f "${HOME}/.dotfiles/alias/.nmap.alias" ]] && source "${HOME}/.dotfiles/alias/.nmap.alias"
+command -v -- "nmap" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.nmap.zsh" ]] && source "${HOME}/.dotfiles/zsh/.nmap.zsh"
 
 # ssh
 # shellcheck disable=SC1090
-command -v -- "ssh" &>/dev/null && [[ -f "${HOME}/.dotfiles/alias/.ssh.alias" ]] && source "${HOME}/.dotfiles/alias/.ssh.alias"
+command -v -- "ssh" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.ssh.zsh" ]] && source "${HOME}/.dotfiles/zsh/.ssh.zsh"
 
 # vim
 # shellcheck disable=SC1090
-command -v -- "vim" &>/dev/null && [[ -f "${HOME}/.dotfiles/alias/.vim.alias" ]] && source "${HOME}/.dotfiles/alias/.vim.alias"
+command -v -- "vim" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.vim.zsh" ]] && source "${HOME}/.dotfiles/zsh/.vim.zsh"
 
 # vscode
 # shellcheck disable=SC1090
-command -v -- "code" &>/dev/null && [[ -f "${HOME}/.dotfiles/alias/.vscode.alias" ]] && source "${HOME}/.dotfiles/alias/.vscode.alias"
+command -v -- "code" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.vscode.zsh" ]] && source "${HOME}/.dotfiles/zsh/.vscode.zsh"
 ####################
 ####################
