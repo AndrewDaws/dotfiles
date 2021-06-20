@@ -253,7 +253,7 @@ command -v -- "google-chrome" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.chrom
 
 # git
 # shellcheck disable=SC1090
-#command -v -- "git" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.git.zsh" ]] && source "${HOME}/.dotfiles/zsh/.git.zsh"
+command -v -- "git" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.git.zsh" ]] && source "${HOME}/.dotfiles/zsh/.git.zsh"
 
 # httpie
 # shellcheck disable=SC1090
