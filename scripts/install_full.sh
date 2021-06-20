@@ -230,7 +230,9 @@ desktop_setup() {
   # Configure Firefox to default browser
   if is_installed "firefox"; then
     if is_installed "xdg-settings"; then
-      xdg-settings set default-web-browser firefox.desktop
+      if [[ "$(xdg-settings get default-web-browser)" != "firefox.desktop" ]]; then
+        xdg-settings set default-web-browser firefox.desktop
+      fi
     fi
   fi
 
