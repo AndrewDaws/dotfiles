@@ -227,7 +227,7 @@ zinit light-mode compile"handler" for \
 zinit ice wait"0b" lucid from"gh-r" as"program" pick"fzf" atload"source ${ZSH}/.fzf.zsh"
 zinit light junegunn/fzf
 
-zinit ice wait"0c" lucid as"program" pick"bin/fzf-tmux"
+zinit ice wait"0c" lucid as"program" id-as"junegunn/fzf_completions" pick"bin/fzf-tmux"
 zinit light junegunn/fzf
 
 zinit ice wait"0c" lucid id-as"junegunn/fzf_completions" pick"/dev/null" multisrc"shell/{completion,key-bindings}.zsh"
