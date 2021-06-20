@@ -10,7 +10,7 @@ fi
 # set default flags
 alias exa="exa --color=always --color-scale --git --time-style=long-iso -F --icons"
 
-e() {
+l() {
   if [[ -n "${1}" ]]; then
     if [[ "${1: -1}" == "/" ]]; then
       exa --git-ignore -l "${1}"
@@ -26,7 +26,7 @@ e() {
   fi
 }
 
-ea() {
+la() {
   if [[ -n "${1}" ]]; then
     if [[ "${1: -1}" == "/" ]]; then
       exa -la "${1}"
@@ -42,7 +42,7 @@ ea() {
   fi
 }
 
-eg() {
+lg() {
   if [[ -n "${1}" ]]; then
     if [[ "${1: -1}" == "/" ]]; then
       exa --git-ignore -lg "${1}"
@@ -58,7 +58,7 @@ eg() {
   fi
 }
 
-ega() {
+lga() {
   if [[ -n "${1}" ]]; then
     if [[ "${1: -1}" == "/" ]]; then
       exa -lga "${1}"
@@ -74,7 +74,7 @@ ega() {
   fi
 }
 
-et() {
+lt() {
   if [[ -n "${1}" ]]; then
     if [[ "${1: -1}" == "/" ]]; then
       exa --git-ignore --sort=newest -lr -- "${1}" | head -10
@@ -90,7 +90,7 @@ et() {
   fi
 }
 
-eta() {
+lta() {
   if [[ -n "${1}" ]]; then
     if [[ "${1: -1}" == "/" ]]; then
       exa --sort=newest -lra -- "${1}" | head -10
@@ -106,7 +106,7 @@ eta() {
   fi
 }
 
-ef() {
+lf() {
   if [[ -n "${1}" ]]; then
     if [[ "${1: -1}" == "/" ]]; then
       exa --git-ignore -ld -- "${1}"*(-.)
@@ -122,7 +122,7 @@ ef() {
   fi
 }
 
-efa() {
+lfa() {
   if [[ -n "${1}" ]]; then
     if [[ "${1: -1}" == "/" ]]; then
       exa -lad -- "${1}"*(D-.)
@@ -138,7 +138,7 @@ efa() {
   fi
 }
 
-ed() {
+ld() {
   if [[ -n "${1}" ]]; then
     if [[ "${1: -1}" == "/" ]]; then
       exa --git-ignore -ld -- "${1}"*(-/)
@@ -154,7 +154,7 @@ ed() {
   fi
 }
 
-eda() {
+lda() {
   if [[ -n "${1}" ]]; then
     if [[ "${1: -1}" == "/" ]]; then
       exa -lad -- "${1}"*(D-/)
@@ -169,15 +169,3 @@ eda() {
     exa -lad -- *(D-/)
   fi
 }
-
-# override ls aliases
-alias l="e"
-alias la="ea"
-alias lg="eg"
-alias lga="ega"
-alias lt="et"
-alias lta="eta"
-alias lf="ef"
-alias lfa="efa"
-alias ld="ed"
-alias lda="eda"
