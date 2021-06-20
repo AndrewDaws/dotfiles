@@ -1,5 +1,5 @@
 # Set default flags
-alias exa="exa --color=always --color-scale --git --time-style=long-iso -F --icons"
+alias exa="exa --color=always --color-scale --git --time-style=long-iso --classify --icons"
 
 # Aliases
 l() {
