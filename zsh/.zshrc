@@ -202,8 +202,7 @@ setopt promptsubst
 
 # Provide a simple prompt till the theme loads
 PS1=">"
-# ZLE_RPROMPT_INDENT="0"
-zinit ice depth"1" lucid atload'ZLE_RPROMPT_INDENT=0; source ${ZSH}/.p10k.zsh' nocd
+zinit ice depth"1" lucid atload'export ZLE_RPROMPT_INDENT=0; source ${ZSH}/.p10k.zsh' nocd
 zinit light romkatv/powerlevel10k
 
 
@@ -225,43 +224,34 @@ zinit light-mode compile"handler" for \
 # - - - - - - - - - - - - - - - - - - - -
 
 # junegunn/fzf
-zinit ice lucid wait'0b' from"gh-r" as"program" atload"source ${ZSH}/.fzf.zsh"
+zinit ice wait"0b" lucid from"gh-r" as"program" pick"fzf" atload"source ${ZSH}/.fzf.zsh"
 zinit light junegunn/fzf
 
-zinit ice lucid wait'0c' as"command" pick"bin/fzf-tmux"
+zinit ice wait"0c" lucid as"program" pick"bin/fzf-tmux"
 zinit light junegunn/fzf
 
-zinit ice lucid wait'0c' multisrc"shell/{completion,key-bindings}.zsh" id-as"junegunn/fzf_completions" pick"/dev/null"
+zinit ice wait"0c" lucid id-as"junegunn/fzf_completions" pick"/dev/null" multisrc"shell/{completion,key-bindings}.zsh"
 zinit light junegunn/fzf
 
 # sharkdp/fd
-zinit ice as"command" from"gh-r" mv"fd* -> fd" pick"fd/fd"
+zinit ice wait"1" lucid as"program" from"gh-r" mv"fd* -> fd" pick"fd/fd"
 zinit light sharkdp/fd
 
 # BurntSushi/ripgrep
-zinit ice as"command" from"gh-r" mv"ripgrep* -> rg" pick"rg/rg"
+zinit ice wait"2" lucid as"program" from"gh-r" mv"ripgrep* -> rg" pick"rg/rg"
 zinit light BurntSushi/ripgrep
 
 # sharkdp/bat
-zinit ice as"command" from"gh-r" mv"bat* -> bat" pick"bat/bat" atload"source ${ZSH}/.bat.zsh"
+zinit ice wait"1" lucid as"program" from"gh-r" mv"bat* -> bat" pick"bat/bat" atload"source ${ZSH}/.bat.zsh"
 zinit light sharkdp/bat
 
 # dandavision/delta
-zinit ice as"command" from"gh-r" mv"delta* -> delta" pick"delta/delta"
+zinit ice wait"2" lucid as"program" from"gh-r" mv"delta* -> delta" pick"delta/delta"
 zinit light dandavison/delta
 
 # ogham/exa
-zinit ice wait"1" lucid from"gh-r" as"program" mv"bin/exa* -> exa" atload"source ${ZSH}/.exa.zsh"
+zinit ice wait lucid as"program" from"gh-r" pick"bin/exa" atload"source ${ZSH}/.exa.zsh"
 zinit light ogham/exa
-
-# All of the above using the for-syntax and also z-a-bin-gem-node annex
-zinit wait"1" lucid from"gh-r" as"null" for \
-  sbin"fzf"          junegunn/fzf \
-  sbin"**/fd"        @sharkdp/fd \
-  sbin"**/rg"        @BurntSushi/ripgrep \
-  sbin"**/bat"       @sharkdp/bat \
-  sbin"**/delta"     @dandavison/delta \
-  sbin"exa* -> exa"  ogham/exa
 
 
 # - - - - - - - - - - - - - - - - - - - -
@@ -276,16 +266,16 @@ zinit wait lucid light-mode for \
     OMZ::plugins/colored-man-pages/colored-man-pages.plugin.zsh \
     zdharma/fast-syntax-highlighting
 
-zinit ice wait"2" lucid atload"source ${ZSH}/.git-auto-fetch.zsh"
+zinit ice wait"3" lucid atload"source ${ZSH}/.git-auto-fetch.zsh"
 zinit snippet OMZ::plugins/git-auto-fetch/git-auto-fetch.plugin.zsh
 
 zinit ice wait"1" lucid atload"source ${ZSH}/.zsh-history-substring-search.zsh"
 zinit light zsh-users/zsh-history-substring-search
 
-zinit ice wait"1" lucid atload"enable-fzf-tab" atload"source ${ZSH}/.fzf-tab.zsh"
+zinit ice wait"1" lucid atload"enable-fzf-tab; source ${ZSH}/.fzf-tab.zsh"
 zinit light Aloxaf/fzf-tab
 
-zinit ice wait lucid atload"_zsh_autosuggest_start" atload"source ${ZSH}/.zsh-auto-suggestions.zsh"
+zinit ice wait lucid atload"_zsh_autosuggest_start; source ${ZSH}/.zsh-auto-suggestions.zsh"
 zinit light zsh-users/zsh-autosuggestions
 
 # Recommended to be loaded last
