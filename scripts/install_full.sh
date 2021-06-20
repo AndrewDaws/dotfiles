@@ -290,9 +290,6 @@ desktop_setup() {
   # @todo File Manager Installation
   # @body Determine and automate a file manager (like Double Commander) installation.
 
-  # @todo Hub Installation
-  # @body Determine a non-brew method to install Hub.
-
   # @todo VS Code Installation
   # @body Automate the VS Code installation.
 
