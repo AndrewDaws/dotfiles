@@ -1,6 +1,39 @@
-# Options to fzf command
+# Set default options
+FZF_DEFAULT_OPTS_LOCAL_VARIABLE="
+  --height=70%
+  --border
+  --color=bg:#2d2d2d,bg+:#393939
+  --color=fg:#a09f93,fg+:#e8e6df
+  --color=hl:#6699cc,hl+:#6699cc
+  --color=prompt:#ffcc66
+  --color=pointer:#66cccc
+  --color=marker:#66cccc
+  --color=spinner:#66cccc
+  --color=header:#6699cc
+  --color=info:#ffcc66
+  --color=preview-bg:#2d2d2d
+  --layout=reverse
+  --info=inline
+  --preview-window=right:60%:border
+  --select-1
+  --exit-0
+  "
+
 export FZF_COMPLETION_OPTS='+c -x'
 
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+export FZF_DEFAULT_OPTS="
+  ${FZF_DEFAULT_OPTS}
+  ${FZF_DEFAULT_OPTS_LOCAL_VARIABLE}
+  "
+
+export FZF_CTRL_T_COMMAND="${FZF_DEFAULT_COMMAND}"
+export FZF_CTRL_T_OPTS="
+  ${FZF_DEFAULT_OPTS}
+  --preview='bat --style=numbers --color=always {} | head -500'
+  "
+
+# Modify functions
 # Use fd (https://github.com/sharkdp/fd) instead of the default find
 # command for listing path candidates.
 # - The first argument to the function ($1) is the base path to start traversal
@@ -14,107 +47,24 @@ _fzf_compgen_dir() {
   fd --type d --hidden --follow --exclude ".git" . "${1}"
 }
 
-# @todo Clean-up FZF Config
-# @body Eliminate the duplicate color and default option definitions.
+_gen_fzf_default_opts() {
+  export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS_LOCAL_VARIABLE}"
+}
 
 # (EXPERIMENTAL) Advanced customization of fzf options via _fzf_comprun function
 # - The first argument to the function is the name of the command.
 # - You should make sure to pass the rest of the arguments to fzf.
 _fzf_comprun() {
-local command="${1}"
-shift
+  local command="${1}"
+  shift
 
-local color00='#2d2d2d'
-local color01='#393939'
-local color02='#515151'
-local color03='#747369'
-local color04='#a09f93'
-local color05='#d3d0c8'
-local color06='#e8e6df'
-local color07='#f2f0ec'
-local color08='#f2777a'
-local color09='#f99157'
-local color0A='#ffcc66'
-local color0B='#99cc99'
-local color0C='#66cccc'
-local color0D='#6699cc'
-local color0E='#cc99cc'
-local color0F='#d27b53'
+  export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS_LOCAL_VARIABLE}"
 
-export FZF_DEFAULT_OPTS="
---color=bg:${color00},bg+:${color01}
---color=fg:${color04},fg+:${color06}
---color=hl:${color0D},hl+:${color0D}
---color=prompt:${color0A}
---color=pointer:${color0C}
---color=marker:${color0C}
---color=spinner:${color0C}
---color=header:${color0D}
---color=info:${color0A}
---color=preview-bg:${color00}
---height 70%
---layout reverse
---border
-"
-
-case "${command}" in
-  cd)           fzf "${@}" --preview 'tree -C {} | head -200' --preview-window right:60%:border ;;
-  export|unset) fzf "${@}" --preview "eval 'echo \$'{}" --preview-window right:60%:border ;;
-  ssh)          fzf "${@}" --preview 'dig {}' --preview-window right:60%:border ;;
-  *)            fzf "${@}" --info inline --preview 'bat --style=numbers --color=always {} | head -500' --preview-window right:60%:border ;;
-esac
+  case "${command}" in
+    cd)                 fzf "${@}" --preview='exa --color=always --color-scale --git --classify --icons --tree --level=1 {}' ;;
+    cat|bat|more|less)  fzf "${@}" --preview='[[ -d {} ]] && exa --color=always --color-scale --git --classify --icons --tree --level=1 {} || bat --style=numbers --color=always {} | head -500' ;;
+    export|unset)       fzf "${@}" --preview="eval 'echo \$'{}" ;;
+    ssh)                fzf "${@}" --preview='dig {}' ;;
+    *)                  fzf "${@}" ;;
+  esac
 }
-
-# Base16 Eighties
-# Author: Chris Kempson (http://chriskempson.com)
-_gen_fzf_default_opts() {
-local color00='#2d2d2d'
-local color01='#393939'
-local color02='#515151'
-local color03='#747369'
-local color04='#a09f93'
-local color05='#d3d0c8'
-local color06='#e8e6df'
-local color07='#f2f0ec'
-local color08='#f2777a'
-local color09='#f99157'
-local color0A='#ffcc66'
-local color0B='#99cc99'
-local color0C='#66cccc'
-local color0D='#6699cc'
-local color0E='#cc99cc'
-local color0F='#d27b53'
-
-export FZF_DEFAULT_OPTS="
---color=bg:${color00},bg+:${color01}
---color=fg:${color04},fg+:${color06}
---color=hl:${color0D},hl+:${color0D}
---color=prompt:${color0A}
---color=pointer:${color0C}
---color=marker:${color0C}
---color=spinner:${color0C}
---color=header:${color0D}
---color=info:${color0A}
---color=preview-bg:${color00}
-"
-}
-
-# Configure default settings
-export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
-export FZF_DEFAULT_OPTS="
-${FZF_DEFAULT_OPTS}
---height 70%
---layout reverse
---border
-"
-
-# Configure CTRL+T settings
-export FZF_CTRL_T_COMMAND="${FZF_DEFAULT_COMMAND}"
-export FZF_CTRL_T_OPTS="
-${FZF_DEFAULT_OPTS}
---info inline
---preview 'bat --style=numbers --color=always {} | head -500'
---preview-window right:60%:border
---select-1
---exit-0
-"
