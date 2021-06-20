@@ -16,21 +16,24 @@ hub() {
     init
   )
 
-  # Execute original hub command and check return code
+  # Execute original git command and check return code
   if command -- hub ${@}; then
-    # Verify at least one argument provided
-    if [[ -n "${1}" ]]; then
-      # Prevent nested execution
-      if [[ "${1}" != "status" ]]; then
-        # Search command list for a match
-        for command_index in "${command_list[@]}"; do
-          # Compare first hub argument against list
-          if [[ "${1}" == "${command_index}" ]]; then
-            # Execute hub status command when match found
-            command -- hub status
-            break
-          fi
-        done
+    # Verify not attached to a pipe or redirection
+    if [[ -t 0 && -t 1 && ! -p /dev/stdout ]]; then
+      # Verify at least one argument provided
+      if [[ -n "${1}" ]]; then
+        # Prevent nested execution
+        if [[ "${1}" != "status" ]]; then
+          # Search command list for a match
+          for command_index in "${command_list[@]}"; do
+            # Compare first hub argument against list
+            if [[ "${1}" == "${command_index}" ]]; then
+              # Execute hub status command when match found
+              command -- hub status
+              break
+            fi
+          done
+        fi
       fi
     fi
   fi
