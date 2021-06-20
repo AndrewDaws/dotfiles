@@ -1,15 +1,7 @@
-#!/bin/bash
-#
-# Exa aliases
-
-# Ensure this file is only sourced, not executed
-if [[ "${BASH_SOURCE[0]}" -ef "${0}" ]]; then
-  exit 1
-fi
-
-# set default flags
+# Set default flags
 alias exa="exa --color=always --color-scale --git --time-style=long-iso -F --icons"
 
+# Aliases
 l() {
   if [[ -n "${1}" ]]; then
     if [[ "${1: -1}" == "/" ]]; then

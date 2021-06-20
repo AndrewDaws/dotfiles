@@ -1,15 +1,8 @@
-#!/bin/bash
-#
-# Ssh aliases
-
-# Ensure this file is only sourced, not executed
-if [[ "${BASH_SOURCE[0]}" -ef "${0}" ]]; then
-  exit 1
-fi
-
+# Set default flags
 alias ssh="TERM=xterm-256color ssh"
 alias scp="scp -p"
 
+# Aliases
 ssh_gen() {
   # Declare local variables
   local sshHost

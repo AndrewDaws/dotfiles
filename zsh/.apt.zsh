@@ -1,13 +1,4 @@
-#!/bin/bash
-#
-# Apt aliases
-
-# Ensure this file is only sourced, not executed
-if [[ "${BASH_SOURCE[0]}" -ef "${0}" ]]; then
-  exit 1
-fi
-
-# apt aliases
+# Aliases
 alias pkg_update="sudo apt update && sudo apt upgrade"
 alias pkg_install="sudo apt install --no-install-recommends"
 alias pkg_uninstall="sudo apt remove"

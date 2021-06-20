@@ -1,12 +1,4 @@
-#!/bin/bash
-#
-# Pip aliases
-
-# Ensure this file is only sourced, not executed
-if [[ "${BASH_SOURCE[0]}" -ef "${0}" ]]; then
-  exit 1
-fi
-
+# Aliases
 # @todo Pip vs Pip3 Detection
 # @body Detect if normal pip or pip3 is installed, and create generic alias(es) for one or both.
 #alias pip="pip3"

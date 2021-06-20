@@ -1,12 +1,3 @@
-#!/bin/bash
-#
-# Git aliases
-
-# Ensure this file is only sourced, not executed
-if [[ "${BASH_SOURCE[0]}" -ef "${0}" ]]; then
-  exit 1
-fi
-
 # Source: https://gist.githubusercontent.com/oshybystyi/475ee7768efc03727f21/raw/4bfd57ef277f5166f3070f11800548b95a501a19/git-auto-status.plugin.zsh
 # default list of git commands `git status` is running after
 gitPreAutoStatusCommands=(
@@ -19,6 +10,7 @@ gitPreAutoStatusCommands=(
     'init'
 )
 
+# Aliases
 # taken from http://stackoverflow.com/a/8574392/4647743
 function elementInArray() {
     local e
