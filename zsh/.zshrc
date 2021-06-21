@@ -257,6 +257,9 @@ zinit light ogham/exa
 zinit ice wait"3" lucid as"program" from"gh-r" mv"hub* -> hub" pick"hub/bin/hub" atload"source ${ZSH}/.hub.zsh"
 zinit light github/hub
 
+zplugin ice wait"3" lucid as"completion" mv'*ion -> _hub'
+zplugin snippet https://github.com/github/hub/raw/master/etc/hub.zsh_completion
+
 
 # - - - - - - - - - - - - - - - - - - - -
 # Plugins
