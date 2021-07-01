@@ -272,6 +272,7 @@ zinit wait lucid light-mode for \
     jimhester/per-directory-history \
   atinit"zicompinit; zicdreplay" \
     OMZ::plugins/colored-man-pages/colored-man-pages.plugin.zsh \
+    OMZ::plugins/sudo/sudo.plugin.zsh \
     zdharma/fast-syntax-highlighting
 
 zinit ice wait"3" lucid atload"source ${ZSH}/.git-auto-fetch.zsh"
