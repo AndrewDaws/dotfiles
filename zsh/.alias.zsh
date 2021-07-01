@@ -47,7 +47,9 @@ alias cd....="cd ../.."
 alias cd/="cd /"
 
 # set default flags
+alias rm='rm --one-file-system -I'
 alias ls="ls --color=always -h --si"
+alias grep="grep --color=always"
 
 unalias -m 'l'
 l() {
