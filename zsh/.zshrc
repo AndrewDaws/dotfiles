@@ -175,6 +175,7 @@ setopt hist_save_no_dups      # Do not write a duplicate event to the history fi
 setopt hist_verify            # Do not execute immediately upon history expansion
 setopt extended_history       # Show timestamp in history
 
+
 # - - - - - - - - - - - - - - - - - - - -
 # Zinit Configuration
 # - - - - - - - - - - - - - - - - - - - -
@@ -293,11 +294,19 @@ zinit light zsh-users/zsh-autosuggestions
 zinit ice wait blockf lucid atpull'zinit creinstall -q .'
 zinit light zsh-users/zsh-completions
 
+
 # - - - - - - - - - - - - - - - - - - - -
 # Aliases
 # - - - - - - - - - - - - - - - - - - - -
 
 [[ -f "${DOTFILES}/zsh/.alias.zsh" ]] && source "${DOTFILES}/zsh/.alias.zsh"
+
+
+# - - - - - - - - - - - - - - - - - - - -
+# Key bindings
+# - - - - - - - - - - - - - - - - - - - -
+
+[[ -f "${DOTFILES}/zsh/.key-binding.zsh" ]] && source "${DOTFILES}/zsh/.key-binding.zsh"
 
 
 # - - - - - - - - - - - - - - - - - - - -
