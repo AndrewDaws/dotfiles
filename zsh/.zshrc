@@ -267,7 +267,6 @@ zplugin snippet https://github.com/github/hub/raw/master/etc/hub.zsh_completion
 # - - - - - - - - - - - - - - - - - - - -
 
 zinit wait lucid light-mode for \
-    agkozak/zsh-z \
     hlissner/zsh-autopair \
     jimhester/per-directory-history \
   atinit"zicompinit; zicdreplay" \
@@ -277,6 +276,9 @@ zinit wait lucid light-mode for \
 
 zinit ice wait"3" lucid atload"source ${ZSH}/.git-auto-fetch.zsh"
 zinit snippet OMZ::plugins/git-auto-fetch/git-auto-fetch.plugin.zsh
+
+zinit ice wait"3" lucid atload"source ${ZSH}/.zsh-z.zsh"
+zinit light agkozak/zsh-z
 
 zinit ice wait"1" lucid atload"source ${ZSH}/.zsh-history-substring-search.zsh"
 zinit light zsh-users/zsh-history-substring-search
