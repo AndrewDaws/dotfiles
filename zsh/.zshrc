@@ -175,6 +175,7 @@ setopt hist_save_no_dups      # Do not write a duplicate event to the history fi
 setopt hist_verify            # Do not execute immediately upon history expansion
 setopt extended_history       # Show timestamp in history
 
+zshaddhistory() { whence ${${(z)1}[1]} >| /dev/null || return 1 } # Do not store failed commands to history
 
 # - - - - - - - - - - - - - - - - - - - -
 # Zinit Configuration
