@@ -2,9 +2,6 @@
 #
 # Unix full post-install script
 
-# @todo Improve Printed Text and Prompts
-# @body Clean up printed text with better separation of stages and description of what is happening. Better define what the prompts are actually asking.
-
 if [[ -f "$(dirname "$(readlink -f "${0}")")/.functions" ]]; then
   # shellcheck disable=SC1090
   # shellcheck disable=SC1091
