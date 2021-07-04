@@ -15,18 +15,18 @@ fi
 repo_update() {
   # Declare local variables
   local current_script
-  local updated_script
+  local new_script
   local current_checksum
-  local updated_checksum
-  local updated_flag
+  local new_checksum
+  local new_flag
   local return_code
 
   # Initialize local variables
   current_script="$(realpath "${0}")"
-  updated_script="${HOME}/.dotfiles/scripts/install_full.sh"
+  new_script="${HOME}/.dotfiles/scripts/update.sh"
   current_checksum=""
-  updated_checksum=""
-  updated_flag="1"
+  new_checksum=""
+  new_flag="1"
   return_code="1"
 
   print_stage "Updating dotfiles repo"
@@ -43,29 +43,29 @@ repo_update() {
   print_step "Updating dotfiles repo"
   git -C "${HOME}/.dotfiles" pull
 
-  # Compute new install script checksum
-  updated_checksum="$(checksum_file "${updated_script}")"
+  # Compute new update script checksum
+  new_checksum="$(checksum_file "${new_script}")"
 
   # Compare this and new install script checksums
-  if [[ "${current_script}" == "${updated_script}" ]]; then
-    if [[ "${current_checksum}" -eq "${updated_checksum}" ]]; then
-      updated_flag="0"
+  if [[ "${current_script}" == "${new_script}" ]]; then
+    if [[ "${current_checksum}" -eq "${new_checksum}" ]]; then
+      new_flag="0"
     fi
   fi
 
   # Check if install script was new or updated
-  if [[ "${updated_flag}" -ne 0 ]]; then
+  if [[ "${new_flag}" -ne 0 ]]; then
     # Ensure new install script can execute
-    chmod +x "${updated_script}"
+    chmod +x "${new_script}"
 
     # Run new install script
     print_step "Running updated install script"
-    "${updated_script}"
+    "${new_script}"
     return_code="${?}"
 
     # Delete current install script if no error
     if [[ "${return_code}" -eq 0 ]]; then
-      if [[ "${current_script}" != "${updated_script}" ]]; then
+      if [[ "${current_script}" != "${new_script}" ]]; then
         print_step "Deleting current install script"
         rm -f "${current_script}"
       fi

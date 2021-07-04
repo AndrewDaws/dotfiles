@@ -20,15 +20,15 @@ repo_setup() {
   # Declare local variables
   local input_arguments
   local current_script
-  local updated_script
-  local full_script
+  local new_script
+  local update_script
   local return_code
 
   # Initialize local variables
   input_arguments="${*}"
   current_script="$(realpath "${0}")"
-  updated_script="${HOME}/.dotfiles/scripts/install.sh"
-  full_script="${HOME}/.dotfiles/scripts/install_full.sh"
+  new_script="${HOME}/.dotfiles/scripts/install.sh"
+  update_script="${HOME}/.dotfiles/scripts/update.sh"
   return_code="1"
 
   echo "------------------------------------------------------------------------"
@@ -87,17 +87,17 @@ repo_setup() {
   fi
 
   # Ensure new install script can execute
-  chmod +x "${updated_script}"
-  chmod +x "${full_script}"
+  chmod +x "${new_script}"
+  chmod +x "${update_script}"
 
   # Run new install script
   echo "=> Running updated install script"
-  "${updated_script}" "${input_arguments}"
+  "${new_script}" "${input_arguments}"
   return_code="${?}"
 
   # Delete current install script if no error
   if [[ "${return_code}" -eq 0 ]]; then
-    if [[ "${current_script}" != "${updated_script}" ]]; then
+    if [[ "${current_script}" != "${new_script}" ]]; then
       echo "=> Deleting current install script"
       rm -f "${current_script}"
     fi
@@ -116,8 +116,8 @@ full_install() {
   input_arguments="${*}"
   return_code="1"
 
-  # Execute full install script
-  "${HOME}/.dotfiles/scripts/install_full.sh" "${input_arguments}"
+  # Execute update script
+  "${HOME}/.dotfiles/scripts/update.sh" "${input_arguments}"
   return_code="${?}"
 
   # Repeat return code and exit
@@ -131,9 +131,9 @@ main() {
   # Initialize local variables
   input_arguments="${*}"
 
-  # Check if full install script is available
-  if [[ -f "${HOME}/.dotfiles/scripts/install_full.sh" ]]; then
-    # Use full install for newly cloned or previously existing installs
+  # Check if update script is available
+  if [[ -f "${HOME}/.dotfiles/scripts/update.sh" ]]; then
+    # Use update script for newly cloned or previously existing installs
     full_install "${input_arguments}"
   else
     # Fall back on core repo setup

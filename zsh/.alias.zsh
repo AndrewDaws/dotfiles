@@ -33,7 +33,7 @@ alias ktmux="pkill -f tmux"
 alias dotfiles_create_gitconfig="${HOME}/.dotfiles/scripts/create_gitconfig.sh"
 alias dotfiles_create_links="${HOME}/.dotfiles/scripts/create_links.sh"
 alias dotfiles_decrypt_fonts="${HOME}/.dotfiles/scripts/decrypt_fonts.sh"
-alias dotfiles_install="${HOME}/.dotfiles/scripts/install.sh"
+alias dotfiles_update="${HOME}/.dotfiles/scripts/update.sh"
 alias dotfiles_set_permissions="${HOME}/.dotfiles/scripts/set_permissions.sh"
 ####################
 ####################
