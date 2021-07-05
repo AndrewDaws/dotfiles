@@ -171,6 +171,7 @@ setopt hist_ignore_dups       # Do not record an event that was just recorded ag
 setopt hist_ignore_all_dups   # Delete an old recorded event if a new event is a duplicate
 setopt hist_find_no_dups      # Do not display a previously found event
 setopt hist_ignore_space      # Do not record an event starting with a space
+setopt hist_reduce_blanks     # Remove superfluous blanks from commands added to history
 setopt hist_save_no_dups      # Do not write a duplicate event to the history file
 setopt hist_verify            # Do not execute immediately upon history expansion
 setopt extended_history       # Show timestamp in history
