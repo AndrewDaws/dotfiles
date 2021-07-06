@@ -310,7 +310,7 @@ zinit wait lucid light-mode for \
 zinit ice wait"3" lucid atload"source ${ZSH}/.git-auto-fetch.zsh"
 zinit snippet OMZ::plugins/git-auto-fetch/git-auto-fetch.plugin.zsh
 
-zinit ice wait"3" lucid atload"source ${ZSH}/.zsh-z.zsh"
+zinit ice wait"1" lucid atload"source ${ZSH}/.zsh-z.zsh"
 zinit light agkozak/zsh-z
 
 zinit ice wait"1" lucid atload"source ${ZSH}/.zsh-history-substring-search.zsh"
