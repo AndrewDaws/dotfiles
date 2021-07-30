@@ -281,19 +281,6 @@ zinit light github/hub
 zplugin ice wait"3" lucid as"completion" mv'*ion -> _hub'
 zplugin snippet https://github.com/github/hub/raw/master/etc/hub.zsh_completion
 
-# denisidoro/navi
-zinit ice wait"4b" lucid as"program" from"gh-r" pick"navi/navi"
-zinit light denisidoro/navi
-
-zinit ice wait"4c" lucid id-as"denisidoro/navi_shell" pick"/dev/null" src"shell/navi.plugin.zsh" \
-  atclone"mkdir -p ${HOME}/.local/share/navi/cheats/denisidoro__cheats;
-          git clone https://github.com/denisidoro/cheats ${HOME}/.local/share/navi/cheats/denisidoro__cheats;
-          mkdir -p ${HOME}/.local/share/navi/cheats/denisidoro__navi-tldr-pages;
-          git clone https://github.com/denisidoro/navi-tldr-pages ${HOME}/.local/share/navi/cheats/denisidoro__navi-tldr-pages" \
-  atpull"git -C ${HOME}/.local/share/navi/cheats/denisidoro__cheats pull;
-          git -C ${HOME}/.local/share/navi/cheats/denisidoro__navi-tldr-pages pull"
-zinit light denisidoro/navi
-
 
 # - - - - - - - - - - - - - - - - - - - -
 # Plugins
