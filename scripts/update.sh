@@ -288,8 +288,15 @@ desktop_setup() {
   # @todo File Manager Installation
   # @body Determine and automate a file manager (like Double Commander) installation.
 
-  # @todo VS Code Installation
-  # @body Automate the VS Code installation.
+  if not_installed "code"; then
+    print_step "Installing vs code"
+    rm -f "${PWD}/vscode.deb"
+    wget "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64" -O "${PWD}/vscode.deb"
+    sudo apt install "${PWD}/vscode.deb"
+    rm -f "${PWD}/vscode.deb"
+  else
+    print_step "Skipped: Installing vs code"
+  fi
 
   # @todo VS Code Config and Extensions
   # @body Export VS Code settings and installation of extensions.
