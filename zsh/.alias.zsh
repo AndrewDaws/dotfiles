@@ -8,13 +8,12 @@ alias cdd="cd "${HOME}/.dotfiles""
 alias czsh=""${EDITOR}" "${HOME}/.zshrc""
 alias szsh="source "${HOME}/.zshrc""
 
+# zinit
+alias uzsh="zinit self-update && zinit update --no-pager --parallel --all && zinit delete --clean --yes"
+
 # alias
 alias cali=""${EDITOR}" "${HOME}/.dotfiles/zsh/.alias.zsh""
 alias sali="source "${HOME}/.dotfiles/zsh/.alias.zsh""
-
-# oh-my-zsh
-alias cozsh=""${EDITOR}" "${HOME}/.oh-my-zsh""
-alias sozsh="source "${HOME}/.oh-my-zsh""
 
 # powerlevel10k
 alias cp10k=""${EDITOR}" "${HOME}/.dotfiles/zsh/.p10k.zsh""

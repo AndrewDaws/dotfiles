@@ -162,13 +162,12 @@ headless_setup() {
   # Install Zinit Framework
   if directory_exists "${HOME}/.zinit"; then
     print_step "Updating zinit"
-    # @todo Fix Zinit Updating
-    # @body Find a way to fix the zinit self updating and plugin updating in install script.
-    # zinit self-update
-    # zinit update --parallel
-    # zinit delete --clean --yes
+    zsh -c "source ${HOME}/.zshrc && zinit self-update"
+    zsh -c "source ${HOME}/.zshrc && zinit update --no-pager --parallel --all"
+    # zsh -c "source ${HOME}/.zshrc && zinit delete --clean --yes"
   else
     git_update "https://github.com/zdharma/zinit.git" "${HOME}/.zinit/bin" "zinit"
+    zsh -c "source ${HOME}/.zshrc && zinit update --no-pager --parallel --all"
   fi
 
   print_step "Installing headless application configurations"
