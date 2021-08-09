@@ -1,163 +1,360 @@
 # Set default flags
-alias exa="exa --color=always --color-scale --git --time-style=long-iso --classify --icons"
+alias exa="\exa \
+  --classify \
+  --color-scale \
+  --color=always \
+  --git \
+  --icons \
+  --time-style=long-iso \
+  "
 
 # Aliases
 l() {
   if [[ -n "${1}" ]]; then
     if [[ "${1: -1}" == "/" ]]; then
-      exa --git-ignore -l "${1}"
+      exa \
+        --git-ignore \
+        --long \
+        -- "${1}"
     elif [[ -d "${1}" ]]; then
-      exa --git-ignore -l "${1}"/
+      exa \
+        --git-ignore \
+        --long \
+        -- "${1}"/
     elif [[ "${1}" =~ "/" ]]; then
-      exa --git-ignore -ld "$(dirname "${1}")"/*"$(basename "${1}")"*
+      exa \
+        --git-ignore \
+        --long \
+        -- "$(dirname "${1}")"/*"$(basename "${1}")"*
     else
-      exa --git-ignore -ld *"${1}"*
+      exa \
+        --git-ignore \
+        --long \
+        -- *"${1}"*
     fi
   else
-    exa --git-ignore -l .
+    exa \
+      --git-ignore \
+      --long \
+      -- .
   fi
 }
 
 la() {
   if [[ -n "${1}" ]]; then
     if [[ "${1: -1}" == "/" ]]; then
-      exa -la "${1}"
+      exa \
+        --all \
+        --long \
+        -- "${1}"
     elif [[ -d "${1}" ]]; then
-      exa -la "${1}"/
+      exa \
+        --all \
+        --long \
+        -- "${1}"/
     elif [[ "${1}" =~ "/" ]]; then
-      exa -lad "$(dirname "${1}")"/*"$(basename "${1}")"*
+      exa \
+        --all \
+        --long \
+        -- "$(dirname "${1}")"/*"$(basename "${1}")"*
     else
-      exa -lad *"${1}"*
+      exa \
+        --all \
+        --long \
+        -- *"${1}"*
     fi
   else
-    exa -la .
+    exa \
+      --all \
+      --long \
+      -- .
   fi
 }
 
 lg() {
   if [[ -n "${1}" ]]; then
     if [[ "${1: -1}" == "/" ]]; then
-      exa --git-ignore -lg "${1}"
+      exa \
+        --git-ignore \
+        --group \
+        --long \
+        -- "${1}"
     elif [[ -d "${1}" ]]; then
-      exa --git-ignore -lg "${1}"/
+      exa \
+        --git-ignore \
+        --group \
+        --long \
+        -- "${1}"/
     elif [[ "${1}" =~ "/" ]]; then
-      exa --git-ignore -lgd "$(dirname "${1}")"/*"$(basename "${1}")"*
+      exa \
+        --git-ignore \
+        --group \
+        --long \
+        -- "$(dirname "${1}")"/*"$(basename "${1}")"*
     else
-      exa --git-ignore -lgd *"${1}"*
+      exa \
+        --git-ignore \
+        --group \
+        --long \
+        -- *"${1}"*
     fi
   else
-    exa --git-ignore -lg .
+    exa \
+      --git-ignore \
+      --group \
+      --long \
+      -- .
   fi
 }
 
 lga() {
   if [[ -n "${1}" ]]; then
     if [[ "${1: -1}" == "/" ]]; then
-      exa -lga "${1}"
+      exa \
+        --all \
+        --group \
+        --long \
+        -- "${1}"
     elif [[ -d "${1}" ]]; then
-      exa -lga "${1}"/
+      exa \
+        --all \
+        --group \
+        --long \
+        -- "${1}"/
     elif [[ "${1}" =~ "/" ]]; then
-      exa -lgad "$(dirname "${1}")"/*"$(basename "${1}")"*
+      exa \
+        --all \
+        --group \
+        --long \
+        -- "$(dirname "${1}")"/*"$(basename "${1}")"*
     else
-      exa -lgad *"${1}"*
+      exa \
+        --all \
+        --group \
+        --long \
+        -- *"${1}"*
     fi
   else
-    exa -lga .
+    exa \
+      --all \
+      --group \
+      --long \
+      -- .
   fi
 }
 
 lt() {
   if [[ -n "${1}" ]]; then
     if [[ "${1: -1}" == "/" ]]; then
-      exa --git-ignore --sort=newest -lr -- "${1}" | head -10
+      exa \
+        --git-ignore \
+        --long \
+        --reverse \
+        --sort=newest \
+        -- "${1}" | head -10
     elif [[ -d "${1}" ]]; then
-      exa --git-ignore --sort=newest -lr -- "${1}"/ | head -10
+      exa \
+        --git-ignore \
+        --long \
+        --reverse \
+        --sort=newest \
+        -- "${1}"/ | head -10
     elif [[ "${1}" =~ "/" ]]; then
-      exa --git-ignore --sort=newest -lrd -- "$(dirname "${1}")"/*"$(basename "${1}")"* | head -10
+      exa \
+        --git-ignore \
+        --long \
+        --reverse \
+        --sort=newest \
+        -- "$(dirname "${1}")"/*"$(basename "${1}")"* | head -10
     else
-      exa --git-ignore --sort=newest -lrd -- *"${1}"* | head -10
+      exa \
+        --git-ignore \
+        --long \
+        --reverse \
+        --sort=newest \
+        -- *"${1}"* | head -10
     fi
   else
-    exa --git-ignore --sort=newest -lr -- . | head -10
+    exa \
+      --git-ignore \
+      --long \
+      --reverse \
+      --sort=newest \
+      -- . | head -10
   fi
 }
 
 lta() {
   if [[ -n "${1}" ]]; then
     if [[ "${1: -1}" == "/" ]]; then
-      exa --sort=newest -lra -- "${1}" | head -10
+      exa \
+        --all \
+        --long \
+        --reverse \
+        --sort=newest \
+        -- "${1}" | head -10
     elif [[ -d "${1}" ]]; then
-      exa --sort=newest -lra -- "${1}"/ | head -10
+      exa \
+        --all \
+        --long \
+        --reverse \
+        --sort=newest \
+        -- "${1}"/ | head -10
     elif [[ "${1}" =~ "/" ]]; then
-      exa --sort=newest -lrad -- "$(dirname "${1}")"/*"$(basename "${1}")"* | head -10
+      exa \
+        --all \
+        --long \
+        --reverse \
+        --sort=newest \
+        -- "$(dirname "${1}")"/*"$(basename "${1}")"* | head -10
     else
-      exa --sort=newest -lrad -- *"${1}"* | head -10
+      exa \
+        --all \
+        --long \
+        --reverse \
+        --sort=newest \
+        -- *"${1}"* | head -10
     fi
   else
-    exa --sort=newest -lra -- . | head -10
+    exa \
+      --all \
+      --long \
+      --reverse \
+      --sort=newest \
+      -- . | head -10
   fi
 }
 
 lf() {
   if [[ -n "${1}" ]]; then
     if [[ "${1: -1}" == "/" ]]; then
-      exa --git-ignore -ld -- "${1}"*(-.)
+      exa \
+        --git-ignore \
+        --long \
+        -- "${1}"*(-.)
     elif [[ -d "${1}" ]]; then
-      exa --git-ignore -ld -- "${1}"/*(-.)
+      exa \
+        --git-ignore \
+        --long \
+        -- "${1}"/*(-.)
     elif [[ "${1}" =~ "/" ]]; then
-      exa --git-ignore -ld -- "$(dirname "${1}")"/*"$(basename "${1}")"*(-.)
+      exa \
+        --git-ignore \
+        --long \
+        -- "$(dirname "${1}")"/*"$(basename "${1}")"*(-.)
     else
-      exa --git-ignore -ld -- *"${1}"*(-.)
+      exa \
+        --git-ignore \
+        --long \
+        -- *"${1}"*(-.)
     fi
   else
-    exa --git-ignore -l -- *(-.)
+    exa \
+      --git-ignore \
+      --long \
+      -- *(-.)
   fi
 }
 
 lfa() {
   if [[ -n "${1}" ]]; then
     if [[ "${1: -1}" == "/" ]]; then
-      exa -lad -- "${1}"*(D-.)
+      exa \
+        --all \
+        --long \
+        -- "${1}"*(D-.)
     elif [[ -d "${1}" ]]; then
-      exa -lad -- "${1}"/*(D-.)
+      exa \
+        --all \
+        --long \
+        -- "${1}"/*(D-.)
     elif [[ "${1}" =~ "/" ]]; then
-      exa -lad -- "$(dirname "${1}")"/*"$(basename "${1}")"*(D-.)
+      exa \
+        --all \
+        --long \
+        -- "$(dirname "${1}")"/*"$(basename "${1}")"*(D-.)
     else
-      exa -lad -- *"${1}"*(D-.)
+      exa \
+        --all \
+        --long \
+        -- *"${1}"*(D-.)
     fi
   else
-    exa -la -- *(D-.)
+    exa \
+      --all \
+      --long \
+      -- *(D-.)
   fi
 }
 
 ld() {
   if [[ -n "${1}" ]]; then
     if [[ "${1: -1}" == "/" ]]; then
-      exa --git-ignore -ld -- "${1}"*(-/)
+      exa \
+        --git-ignore \
+        --long \
+        --only-dirs \
+        -- "${1}"*(-/)
     elif [[ -d "${1}" ]]; then
-      exa --git-ignore -ld -- "${1}"/*(-/)
+      exa \
+        --git-ignore \
+        --long \
+        --only-dirs \
+        -- "${1}"/*(-/)
     elif [[ "${1}" =~ "/" ]]; then
-      exa --git-ignore -ld -- "$(dirname "${1}")"/*"$(basename "${1}")"*(-/)
+      exa \
+        --git-ignore \
+        --long \
+        --only-dirs \
+        -- "$(dirname "${1}")"/*"$(basename "${1}")"*(-/)
     else
-      exa --git-ignore -ld -- *"${1}"*(-/)
+      exa \
+        --git-ignore \
+        --long \
+        --only-dirs \
+        -- *"${1}"*(-/)
     fi
   else
-    exa --git-ignore -ld -- *(-/)
+    exa \
+      --git-ignore \
+      --long \
+      --only-dirs \
+      -- "${PWD}"
   fi
 }
 
 lda() {
   if [[ -n "${1}" ]]; then
     if [[ "${1: -1}" == "/" ]]; then
-      exa -lad -- "${1}"*(D-/)
+      exa \
+        --all \
+        --long \
+        --only-dirs \
+        -- "${1}"*(D-/)
     elif [[ -d "${1}" ]]; then
-      exa -lad -- "${1}"/*(D-/)
+      exa \
+        --all \
+        --long \
+        --only-dirs \
+        -- "${1}"/*(D-/)
     elif [[ "${1}" =~ "/" ]]; then
-      exa -lad -- "$(dirname "${1}")"/*"$(basename "${1}")"*(D-/)
+      exa \
+        --all \
+        --long \
+        --only-dirs \
+        -- "$(dirname "${1}")"/*"$(basename "${1}")"*(D-/)
     else
-      exa -lad -- *"${1}"*(D-/)
+      exa \
+        --all \
+        --long \
+        --only-dirs \
+        -- *"${1}"*(D-/)
     fi
   else
-    exa -lad -- *(D-/)
+    exa \
+      --all \
+      --long \
+      --only-dirs \
+      -- "${PWD}"
   fi
 }
