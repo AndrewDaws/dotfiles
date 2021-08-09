@@ -46,24 +46,64 @@ alias cd....="cd ../.."
 alias cd/="cd /"
 
 # set default flags
-alias rm='rm --one-file-system -I'
-alias ls="ls --color=always -h --si"
-alias grep="grep --color=always"
+alias ls="\ls \
+  --classify \
+  --color=always \
+  --escape \
+  --human-readable \
+  --hyperlink=always \
+  --literal \
+  --no-group \
+  --si \
+  --time-style=long-iso \
+  "
+alias cp="\cp \
+  --interactive \
+  --one-file-system \
+  --preserve \
+  --recursive \
+  --verbose \
+  "
+alias mv="\mv \
+  --interactive \
+  --strip-trailing-slashes \
+  --verbose \
+  "
+alias mkdir="\mkdir \
+  --parents \
+  --verbose \
+  "
+alias rm="\rm \
+  --interactive=once \
+  --one-file-system \
+  --verbose \
+  "
+alias grep="\grep \
+  --color=always \
+  --ignore-case \
+  "
 
 unalias -m 'l'
 l() {
   if [[ -n "${1}" ]]; then
     if [[ "${1: -1}" == "/" ]]; then
-      ls -G -l -- "${1}" | sed '/total /d'
+      ls \
+        -l -- "${1}" | sed '/total /d'
     elif [[ -d "${1}" ]]; then
-      ls -G -l -- "${1}"/ | sed '/total /d'
+      ls \
+        -l -- "${1}"/ | sed '/total /d'
     elif [[ "${1}" =~ "/" ]]; then
-      ls -G -ld -- "$(dirname "${1}")"/*"$(basename "${1}")"* | sed '/total /d'
+      ls \
+        --directory \
+        -l -- "$(dirname "${1}")"/*"$(basename "${1}")"* | sed '/total /d'
     else
-      ls -G -ld -- *"${1}"* | sed '/total /d'
+      ls \
+        --directory \
+        -l -- *"${1}"* | sed '/total /d'
     fi
   else
-    ls -G -l -- . | sed '/total /d'
+    ls \
+      -l -- . | sed '/total /d'
   fi
 }
 
@@ -71,144 +111,310 @@ unalias -m 'la'
 la() {
   if [[ -n "${1}" ]]; then
     if [[ "${1: -1}" == "/" ]]; then
-      ls -G -lA -- "${1}" | sed '/total /d'
+      ls \
+        --almost-all \
+        -l -- "${1}" | sed '/total /d'
     elif [[ -d "${1}" ]]; then
-      ls -G -lA -- "${1}"/ | sed '/total /d'
+      ls \
+        --almost-all \
+        -l -- "${1}"/ | sed '/total /d'
     elif [[ "${1}" =~ "/" ]]; then
-      ls -G -lAd -- "$(dirname "${1}")"/*"$(basename "${1}")"* | sed '/total /d'
+      ls \
+        --almost-all \
+        --directory \
+        -l -- "$(dirname "${1}")"/*"$(basename "${1}")"* | sed '/total /d'
     else
-      ls -G -lAd -- *"${1}"* | sed '/total /d'
+      ls \
+        --almost-all \
+        --directory \
+        -l -- *"${1}"* | sed '/total /d'
     fi
   else
-    ls -G -lA -- . | sed '/total /d'
+    ls \
+      --almost-all \
+      -l -- . | sed '/total /d'
   fi
 }
 
 lg() {
   if [[ -n "${1}" ]]; then
     if [[ "${1: -1}" == "/" ]]; then
-      ls -l -- "${1}" | sed '/total /d'
+      \ls \
+        --classify \
+        --color=always \
+        --escape \
+        --human-readable \
+        --literal \
+        --si \
+        --time-style=long-iso \
+        -l -- "${1}" | sed '/total /d'
     elif [[ -d "${1}" ]]; then
-      ls -l -- "${1}"/ | sed '/total /d'
+      \ls \
+        --classify \
+        --color=always \
+        --escape \
+        --human-readable \
+        --literal \
+        --si \
+        --time-style=long-iso \
+        -l -- "${1}"/ | sed '/total /d'
     elif [[ "${1}" =~ "/" ]]; then
-      ls -ld -- "$(dirname "${1}")"/*"$(basename "${1}")"* | sed '/total /d'
+      \ls \
+        --classify \
+        --color=always \
+        --escape \
+        --human-readable \
+        --literal \
+        --si \
+        --time-style=long-iso \
+        --directory -l -- "$(dirname "${1}")"/*"$(basename "${1}")"* | sed '/total /d'
     else
-      ls -ld -- *"${1}"* | sed '/total /d'
+      \ls \
+        --classify \
+        --color=always \
+        --escape \
+        --human-readable \
+        --literal \
+        --si \
+        --time-style=long-iso \
+        --directory -l -- *"${1}"* | sed '/total /d'
     fi
   else
-    ls -l -- . | sed '/total /d'
+    \ls \
+      --classify \
+      --color=always \
+      --escape \
+      --human-readable \
+      --literal \
+      --si \
+      --time-style=long-iso \
+      -l -- . | sed '/total /d'
   fi
 }
 
 lga() {
   if [[ -n "${1}" ]]; then
     if [[ "${1: -1}" == "/" ]]; then
-      ls -lA -- "${1}" | sed '/total /d'
+      \ls \
+        --almost-all \
+        --classify \
+        --color=always \
+        --escape \
+        --human-readable \
+        --literal \
+        --si \
+        --time-style=long-iso \
+        -l -- "${1}" | sed '/total /d'
     elif [[ -d "${1}" ]]; then
-      ls -lA -- "${1}"/ | sed '/total /d'
+      \ls \
+        --almost-all \
+        --classify \
+        --color=always \
+        --escape \
+        --human-readable \
+        --literal \
+        --si \
+        --time-style=long-iso \
+        -l -- "${1}"/ | sed '/total /d'
     elif [[ "${1}" =~ "/" ]]; then
-      ls -lAd -- "$(dirname "${1}")"/*"$(basename "${1}")"* | sed '/total /d'
+      \ls \
+        --almost-all \
+        --classify \
+        --color=always \
+        --escape \
+        --human-readable \
+        --literal \
+        --si \
+        --time-style=long-iso \
+        --directory \
+        -l -- "$(dirname "${1}")"/*"$(basename "${1}")"* | sed '/total /d'
     else
-      ls -lAd -- *"${1}"* | sed '/total /d'
+      \ls \
+        --almost-all \
+        --classify \
+        --color=always \
+        --escape \
+        --human-readable \
+        --literal \
+        --si \
+        --time-style=long-iso \
+        --directory \
+        -l -- *"${1}"* | sed '/total /d'
     fi
   else
-    ls -lA -- . | sed '/total /d'
+    \ls \
+      --almost-all \
+      --classify \
+      --color=always \
+      --escape \
+      --human-readable \
+      --literal \
+      --si \
+      --time-style=long-iso \
+      -l -- . | sed '/total /d'
   fi
 }
 
 lt() {
   if [[ -n "${1}" ]]; then
     if [[ "${1: -1}" == "/" ]]; then
-      ls -G -lt -- "${1}" | sed '/total /d' | head -10
+      ls \
+        -lt -- "${1}" | sed '/total /d' | head -10
     elif [[ -d "${1}" ]]; then
-      ls -G -lt -- "${1}"/ | sed '/total /d' | head -10
+      ls \
+        -lt -- "${1}"/ | sed '/total /d' | head -10
     elif [[ "${1}" =~ "/" ]]; then
-      ls -G -ltd -- "$(dirname "${1}")"/*"$(basename "${1}")"* | sed '/total /d' | head -10
+      ls \
+        --directory \
+        -lt -- "$(dirname "${1}")"/*"$(basename "${1}")"* | sed '/total /d' | head -10
     else
-      ls -G -ltd -- *"${1}"* | sed '/total /d' | head -10
+      ls \
+        --directory \
+        -lt -- *"${1}"* | sed '/total /d' | head -10
     fi
   else
-    ls -G -lt -- . | sed '/total /d' | head -10
+    ls \
+      -lt -- . | sed '/total /d' | head -10
   fi
 }
 
 lta() {
   if [[ -n "${1}" ]]; then
     if [[ "${1: -1}" == "/" ]]; then
-      ls -G -ltA -- "${1}" | sed '/total /d' | head -10
+      ls \
+        --almost-all \
+        -lt -- "${1}" | sed '/total /d' | head -10
     elif [[ -d "${1}" ]]; then
-      ls -G -ltA -- "${1}"/ | sed '/total /d' | head -10
+      ls \
+        --almost-all \
+        -lt -- "${1}"/ | sed '/total /d' | head -10
     elif [[ "${1}" =~ "/" ]]; then
-      ls -G -ltAd -- "$(dirname "${1}")"/*"$(basename "${1}")"* | sed '/total /d' | head -10
+      ls \
+        --almost-all \
+        --directory \
+        -lt -- "$(dirname "${1}")"/*"$(basename "${1}")"* | sed '/total /d' | head -10
     else
-      ls -G -ltAd -- *"${1}"* | sed '/total /d' | head -10
+      ls \
+        --almost-all \
+        --directory \
+        -lt -- *"${1}"* | sed '/total /d' | head -10
     fi
   else
-    ls -G -ltA -- . | sed '/total /d' | head -10
+    ls \
+      --almost-all \
+      -lt -- . | sed '/total /d' | head -10
   fi
 }
 
 lf() {
   if [[ -n "${1}" ]]; then
     if [[ "${1: -1}" == "/" ]]; then
-      ls -G -ld -- "${1}"*(-.)
+      ls \
+        --directory \
+        -l -- "${1}"*(-.)
     elif [[ -d "${1}" ]]; then
-      ls -G -ld -- "${1}"/*(-.)
+      ls \
+        --directory \
+        -l -- "${1}"/*(-.)
     elif [[ "${1}" =~ "/" ]]; then
-      ls -G -ld -- "$(dirname "${1}")"/*"$(basename "${1}")"*(-.)
+      ls \
+        --directory \
+        -l -- "$(dirname "${1}")"/*"$(basename "${1}")"*(-.)
     else
-      ls -G -ld -- *"${1}"*(-.)
+      ls \
+        --directory \
+        -l -- *"${1}"*(-.)
     fi
   else
-    ls -G -l -- *(-.)
+    ls \
+      -l -- *(-.)
   fi
 }
 
 lfa() {
   if [[ -n "${1}" ]]; then
     if [[ "${1: -1}" == "/" ]]; then
-      ls -G -ldA -- "${1}"*(D-.)
+      ls \
+        --almost-all \
+        --directory \
+        -l -- "${1}"*(D-.)
     elif [[ -d "${1}" ]]; then
-      ls -G -ldA -- "${1}"/*(D-.)
+      ls \
+        --almost-all \
+        --directory \
+        -l -- "${1}"/*(D-.)
     elif [[ "${1}" =~ "/" ]]; then
-      ls -G -ldA -- "$(dirname "${1}")"/*"$(basename "${1}")"*(D-.)
+      ls \
+        --almost-all \
+        --directory \
+        -l -- "$(dirname "${1}")"/*"$(basename "${1}")"*(D-.)
     else
-      ls -G -ldA -- *"${1}"*(D-.)
+      ls \
+        --almost-all \
+        --directory \
+        -l -- *"${1}"*(D-.)
     fi
   else
-    ls -G -lA -- *(D-.)
+    ls \
+      --almost-all \
+      -l -- *(D-.)
   fi
 }
 
 ld() {
   if [[ -n "${1}" ]]; then
     if [[ "${1: -1}" == "/" ]]; then
-      ls -G -ld -- "${1}"*(-/)
+      ls \
+        --directory \
+        -l -- "${1}"*(-/)
     elif [[ -d "${1}" ]]; then
-      ls -G -ld -- "${1}"/*(-/)
+      ls \
+        --directory \
+        -l -- "${1}"/*(-/)
     elif [[ "${1}" =~ "/" ]]; then
-      ls -G -ld -- "$(dirname "${1}")"/*"$(basename "${1}")"*(-/)
+      ls \
+        --directory \
+        -l -- "$(dirname "${1}")"/*"$(basename "${1}")"*(-/)
     else
-      ls -G -ld -- *"${1}"*(-/)
+      ls \
+        --directory \
+        -l -- *"${1}"*(-/)
     fi
   else
-    ls -G -ld -- *(-/)
+    ls \
+      --directory \
+      -l -- *(-/)
   fi
 }
 
 lda() {
   if [[ -n "${1}" ]]; then
     if [[ "${1: -1}" == "/" ]]; then
-      ls -G -ldA -- "${1}"*(D-/)
+      ls \
+        --almost-all \
+        --directory \
+        -l -- "${1}"*(D-/)
     elif [[ -d "${1}" ]]; then
-      ls -G -ldA -- "${1}"/*(D-/)
+      ls \
+        --almost-all \
+        --directory \
+        -l -- "${1}"/*(D-/)
     elif [[ "${1}" =~ "/" ]]; then
-      ls -G -ldA -- "$(dirname "${1}")"/*"$(basename "${1}")"*(D-/)
+      ls \
+        --almost-all \
+        --directory \
+        -l -- "$(dirname "${1}")"/*"$(basename "${1}")"*(D-/)
     else
-      ls -G -ldA -- *"${1}"*(D-/)
+      ls \
+        --almost-all \
+        --directory \
+        -l -- *"${1}"*(D-/)
     fi
   else
-    ls -G -ldA -- *(D-/)
+    ls \
+      --almost-all \
+      --directory \
+      -l -- *(D-/)
   fi
 }
 
