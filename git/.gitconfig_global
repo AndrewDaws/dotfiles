@@ -23,6 +23,9 @@
 [difftool "meld"]
   cmd = meld "$LOCAL" "$REMOTE"
 
+[fetch]
+	prune = true
+
 [hub]
   protocol = https
 
@@ -42,6 +45,9 @@
   log = delta
   reflog = delta
   show = delta
+
+[pull]
+	prune = true
 
 [push]
   default = simple
