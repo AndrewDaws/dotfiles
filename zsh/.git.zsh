@@ -36,3 +36,5 @@ git() {
     fi
   fi
 }
+
+alias git_remove_last="git reset --hard HEAD^"
