@@ -755,7 +755,8 @@ add_sudoers() {
         # Append to path list
         path_list="${path_list} ${found_application}"
       else
-        return 1
+        # Append to path list, hopefully sudoers will still work without the full application path
+        path_list="${path_list} ${current_application}"
       fi
     done
 
