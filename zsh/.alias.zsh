@@ -51,7 +51,6 @@ alias ls="\ls \
   --color=always \
   --escape \
   --human-readable \
-  --hyperlink=always \
   --literal \
   --no-group \
   --si \
