@@ -166,7 +166,7 @@ headless_setup() {
     zsh -c "source ${HOME}/.zshrc && zinit update --no-pager --parallel --all"
     # zsh -c "source ${HOME}/.zshrc && zinit delete --clean --yes"
   else
-    git_update "https://github.com/zdharma/zinit.git" "${HOME}/.zinit/bin" "zinit"
+    git_update "https://github.com/zdharma-continuum/zinit.git" "${HOME}/.zinit/bin" "zinit"
     zsh -c "source ${HOME}/.zshrc && zinit update --no-pager --parallel --all"
   fi
 

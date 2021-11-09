@@ -202,9 +202,9 @@ zshaddhistory() { whence ${${(z)1}[1]} >| /dev/null || return 1 } # Do not store
 __ZINIT="${ZDOTDIR:-${HOME}}/.zinit/bin/zinit.zsh"
 
 if [[ ! -f "${__ZINIT}" ]]; then
-  print -P "%F{33}▓▒░ %F{220}Installing DHARMA Initiative Plugin Manager (zdharma/zinit)…%f"
+  print -P "%F{33}▓▒░ %F{220}Installing DHARMA Initiative Plugin Manager (zdharma-continuum/zinit)…%f"
   command mkdir -p "${HOME}/.zinit" && command chmod g-rwX "${HOME}/.zinit"
-  command git clone https://github.com/zdharma/zinit "${HOME}/.zinit/bin" && \
+  command git clone https://github.com/zdharma-continuum/zinit "${HOME}/.zinit/bin" && \
     print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
     print -P "%F{160}▓▒░ The clone has failed.%f%b"
 fi
@@ -237,7 +237,7 @@ zinit light-mode compile"handler" for \
   zinit-zsh/z-a-as-monitor \
   zinit-zsh/z-a-bin-gem-node \
   zinit-zsh/z-a-submods \
-  zdharma/declare-zsh
+  zdharma-continuum/declare-zsh
 
 
 # - - - - - - - - - - - - - - - - - - - -
@@ -292,7 +292,7 @@ zinit wait lucid light-mode for \
   atinit"zicompinit; zicdreplay" \
     OMZ::plugins/colored-man-pages/colored-man-pages.plugin.zsh \
     OMZ::plugins/sudo/sudo.plugin.zsh \
-    zdharma/fast-syntax-highlighting
+    zdharma-continuum/fast-syntax-highlighting
 
 zinit ice wait"3" lucid atload"source ${ZSH}/.git-auto-fetch.zsh"
 zinit snippet OMZ::plugins/git-auto-fetch/git-auto-fetch.plugin.zsh
