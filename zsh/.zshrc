@@ -233,10 +233,10 @@ zinit light romkatv/powerlevel10k
 
 # Load a few important annexes, without turbo (this is currently required for annexes)
 zinit light-mode compile"handler" for \
-  zinit-zsh/z-a-patch-dl \
-  zinit-zsh/z-a-as-monitor \
-  zinit-zsh/z-a-bin-gem-node \
-  zinit-zsh/z-a-submods \
+  zdharma-continuum/z-a-patch-dl \
+  zdharma-continuum/z-a-as-monitor \
+  zdharma-continuum/z-a-bin-gem-node \
+  zdharma-continuum/z-a-submods \
   zdharma-continuum/declare-zsh
 
 
