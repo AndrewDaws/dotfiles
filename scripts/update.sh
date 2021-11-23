@@ -160,13 +160,13 @@ headless_setup() {
   git_update "https://github.com/tmux-plugins/tpm" "${HOME}/.tmux/plugins/tpm" "Tmux Plugin Manager"
 
   # Install Zinit Framework
-  if directory_exists "${HOME}/.zinit"; then
+  if file_exists "${HOME}/.local/share/zinit/bin/zinit.zsh"; then
     print_step "Updating zinit"
     zsh -c "source ${HOME}/.zshrc && zinit self-update"
     zsh -c "source ${HOME}/.zshrc && zinit update --no-pager --parallel --all"
     # zsh -c "source ${HOME}/.zshrc && zinit delete --clean --yes"
   else
-    git_update "https://github.com/zdharma-continuum/zinit.git" "${HOME}/.zinit/bin" "zinit"
+    git_update "https://github.com/zdharma-continuum/zinit.git" "${HOME}/.local/share/zinit/bin" "zinit"
     zsh -c "source ${HOME}/.zshrc && zinit update --no-pager --parallel --all"
   fi
 

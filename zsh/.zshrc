@@ -199,12 +199,12 @@ zshaddhistory() { whence ${${(z)1}[1]} >| /dev/null || return 1 } # Do not store
 # Zinit Configuration
 # - - - - - - - - - - - - - - - - - - - -
 
-__ZINIT="${ZDOTDIR:-${HOME}}/.zinit/bin/zinit.zsh"
+__ZINIT="${ZDOTDIR:-${HOME}/.local/share}/zinit/bin/zinit.zsh"
 
 if [[ ! -f "${__ZINIT}" ]]; then
   print -P "%F{33}▓▒░ %F{220}Installing DHARMA Initiative Plugin Manager (zdharma-continuum/zinit)…%f"
-  command mkdir -p "${HOME}/.zinit" && command chmod g-rwX "${HOME}/.zinit"
-  command git clone https://github.com/zdharma-continuum/zinit "${HOME}/.zinit/bin" && \
+  command mkdir -p "${HOME}/.local/share/zinit" && command chmod g-rwX "${HOME}/.local/share/zinit"
+  command git clone https://github.com/zdharma-continuum/zinit "${HOME}/.local/share/zinit/bin" && \
     print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
     print -P "%F{160}▓▒░ The clone has failed.%f%b"
 fi
