@@ -294,13 +294,13 @@ zinit wait lucid light-mode for \
     OMZ::plugins/sudo/sudo.plugin.zsh \
     zdharma-continuum/fast-syntax-highlighting
 
-zinit ice wait"3" lucid atload"source ${ZSH}/.git-auto-fetch.zsh"
+zinit ice wait"5" lucid atload"source ${ZSH}/.git-auto-fetch.zsh"
 zinit snippet OMZ::plugins/git-auto-fetch/git-auto-fetch.plugin.zsh
 
-zinit ice wait"1" lucid atload"source ${ZSH}/.zsh-z.zsh"
+zinit ice wait lucid atload"source ${ZSH}/.zsh-z.zsh"
 zinit light agkozak/zsh-z
 
-zinit ice wait"1" lucid atload"source ${ZSH}/.zsh-history-substring-search.zsh"
+zinit ice wait"2" lucid atload"source ${ZSH}/.zsh-history-substring-search.zsh"
 zinit light zsh-users/zsh-history-substring-search
 
 zinit ice wait"1" lucid atload"enable-fzf-tab; source ${ZSH}/.fzf-tab.zsh"
