@@ -20,46 +20,49 @@ fi
 # @body Optimize the algorithm so the session starts as fast as possible, and improve reliablity for edge cases like resuming session with multiple clients still connected.
 # Check if current shell session is in a tmux process
 if [[ -z "${TMUX}" ]]; then
-  # Tmux banned applications list
-  TMUX_BANNED_APPS=(
-    vscode
-  )
+  # Check if GUI environment
+  if [[ -t 0 ]]; then
+    # Tmux banned applications list
+    TMUX_BANNED_APPS=(
+      "vscode"
+    )
 
-  # Ignore terminals started inside specific applications
-  if [[ ! "${TMUX_BANNED_APPS[*]}" == "${TERM_PROGRAM}" ]]; then
-    # Check if Tmux is installed
-    if command -v -- "tmux" &>/dev/null; then
-      TMUX_SESSION_BASE="Local"
-      TMUX_SESSION_NUMBER="1"
-      TMUX_SESSION_CLIENTS="$(tmux list-clients | wc -l)"
-      TMUX_SESSION_WINDOWS="1"
+    # Ignore terminals started inside specific applications
+    if [[ ! "${TMUX_BANNED_APPS[*]}" == "${TERM_PROGRAM}" ]]; then
+      # Check if Tmux is installed
+      if command -v -- "tmux" &>/dev/null; then
+        TMUX_SESSION_BASE="Local"
+        TMUX_SESSION_NUMBER="1"
+        TMUX_SESSION_CLIENTS="$(tmux list-clients | wc -l)"
+        TMUX_SESSION_WINDOWS="1"
 
-      # Do not use Tmux if SSH client
-      if [[ -z "${SSH_CLIENT}" ]]; then
-        # Create a new session if it does not exist
-        if tmux -2 has-session -t "1  ${TMUX_SESSION_BASE}"; then
-          # Check if clients are connected to session
-          if [[ "${TMUX_SESSION_CLIENTS}" -ge 1 ]]; then
-            # Find unused client id
-            while [[ -n "$(tmux list-clients -t "${TMUX_SESSION_NUMBER}  ${TMUX_SESSION_BASE}")" ]]; do
-              TMUX_SESSION_NUMBER="$((TMUX_SESSION_NUMBER+1))"
-            done
+        # Do not use Tmux if SSH client
+        if [[ -z "${SSH_CLIENT}" ]]; then
+          # Create a new session if it does not exist
+          if tmux -2 has-session -t "1  ${TMUX_SESSION_BASE}"; then
+            # Check if clients are connected to session
+            if [[ "${TMUX_SESSION_CLIENTS}" -ge 1 ]]; then
+              # Find unused client id
+              while [[ -n "$(tmux list-clients -t "${TMUX_SESSION_NUMBER}  ${TMUX_SESSION_BASE}")" ]]; do
+                TMUX_SESSION_NUMBER="$((TMUX_SESSION_NUMBER+1))"
+              done
 
-            # Check how many windows exist in session
-            TMUX_SESSION_WINDOWS="$(tmux list-windows -t "${TMUX_SESSION_NUMBER}  ${TMUX_SESSION_BASE}" -F '#{session_windows}' | wc -l)"
+              # Check how many windows exist in session
+              TMUX_SESSION_WINDOWS="$(tmux list-windows -t "${TMUX_SESSION_NUMBER}  ${TMUX_SESSION_BASE}" -F '#{session_windows}' | wc -l)"
 
-            # Attach to current session as new client
-            tmux -2 new-session -d -t "1  ${TMUX_SESSION_BASE}" -s "${TMUX_SESSION_NUMBER}  ${TMUX_SESSION_BASE}"
-            tmux -2 attach-session -t "${TMUX_SESSION_NUMBER}  ${TMUX_SESSION_BASE}" \; set-option destroy-unattached \; set-window-option -g aggressive-resize \; new-window
-            exit
+              # Attach to current session as new client
+              tmux -2 new-session -d -t "1  ${TMUX_SESSION_BASE}" -s "${TMUX_SESSION_NUMBER}  ${TMUX_SESSION_BASE}"
+              tmux -2 attach-session -t "${TMUX_SESSION_NUMBER}  ${TMUX_SESSION_BASE}" \; set-option destroy-unattached \; set-window-option -g aggressive-resize \; new-window
+              exit
+            else
+              # Attach to pre-existing session as previous client
+              tmux -2 attach-session -t "1  ${TMUX_SESSION_BASE}" \; set-window-option -g aggressive-resize
+              exit
+            fi
           else
-            # Attach to pre-existing session as previous client
-            tmux -2 attach-session -t "1  ${TMUX_SESSION_BASE}" \; set-window-option -g aggressive-resize
+            tmux -2 new-session -s "1  ${TMUX_SESSION_BASE}" \; set-window-option -g aggressive-resize
             exit
           fi
-        else
-          tmux -2 new-session -s "1  ${TMUX_SESSION_BASE}" \; set-window-option -g aggressive-resize
-          exit
         fi
       fi
     fi
