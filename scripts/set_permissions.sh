@@ -1,7 +1,18 @@
 #!/bin/bash
-# Creates sym-links to dotfiles stored in the repo.
-script_name="$(basename "${0}")"
+#
+# Set permissions of files and directories
 
+if [[ -f "$(dirname "$(readlink -f "${0}")")/.functions" ]]; then
+  # shellcheck disable=SC1090
+  # shellcheck disable=SC1091
+  source "$(dirname "$(readlink -f "${0}")")/.functions"
+else
+  echo "File does not exist!"
+  echo "$(dirname "$(readlink -f "${0}")")/.functions"
+  exit "1"
+fi
+
+# Temporary variables
 argument_flag="false"
 alacritty_mode="disabled"
 alias_mode="disabled"
@@ -22,7 +33,7 @@ for argument in "${@}"; do
   argument_flag="true"
   if [[ "${argument}" == "-?" || "${argument}" == "--help" ]]; then
     echo "Usage:"
-    echo "  ${script_name} [options]"
+    echo "  $(script_filename) [options]"
     echo "  -?, --help    show list of command-line options"
     echo ""
     echo "OPTIONS"
@@ -67,161 +78,81 @@ for argument in "${@}"; do
   elif [[ "${argument}" == "-z" || "${argument}" == "--zsh" ]]; then
     zsh_mode="enabled"
   else
-    echo "Aborting ${script_name}"
-    echo "  Invalid Argument!"
-    echo ""
-    echo "Usage:"
-    echo "  ${script_name} [options]"
-    echo "  -?, --help    show list of command-line options"
-    exit 1
+    abort_script "Invalid Argument!" "" "Usage:" "  $(script_filename) [options]" "  -?, --help    show list of command-line options"
   fi
 done
 
 # Begin setting file permissions
-echo '=> Setting Permissions'
+print_stage "Setting file permissions"
 
 # Alacritty
 if [[ "${argument_flag}" == "false" || "${alacritty_mode}" == "enabled" ]]; then
-  if [[ -d "${HOME}/.dotfiles/alacritty" ]]; then
-    find "${HOME}/.dotfiles/alacritty" -type f -exec chmod 640 {} \;
-    find "${HOME}/.dotfiles/alacritty" -type f -exec echo "Modified: {} = 640" \;
-  else
-    echo "Aborting ${script_name}"
-    echo "  Directory ${HOME}/.dotfiles/alacritty Does Not Exist!"
-    exit 1
-  fi
+  # Set permissions of all files in directory
+  set_permissions "640" "${HOME}/.dotfiles/alacritty"
 fi
 
 # Fonts
 if [[ "${argument_flag}" == "false" || "${fonts_mode}" == "enabled" ]]; then
-  if [[ -d "${HOME}/.dotfiles/fonts" ]]; then
-    find "${HOME}/.dotfiles/fonts" -type f -exec chmod 644 {} \;
-    find "${HOME}/.dotfiles/fonts" -type f -exec echo "Modified: {} = 644" \;
-  else
-    echo "Aborting ${script_name}"
-    echo "  Directory ${HOME}/.dotfiles/fonts Does Not Exist!"
-    exit 1
-  fi
+  # Set permissions of all files in directory
+  set_permissions "644" "${HOME}/.dotfiles/fonts"
 fi
 
 # Git
 if [[ "${argument_flag}" == "false" || "${git_mode}" == "enabled" ]]; then
-  if [[ -d "${HOME}/.dotfiles/git" ]]; then
-    find "${HOME}/.dotfiles/git" -type f -exec chmod 664 {} \;
-    find "${HOME}/.dotfiles/git" -type f -exec echo "Modified: {} = 664" \;
-  else
-    echo "Aborting ${script_name}"
-    echo "  Directory ${HOME}/.dotfiles/git Does Not Exist!"
-    exit 1
-  fi
+  # Set permissions of all files in directory
+  set_permissions "664" "${HOME}/.dotfiles/git"
 fi
 
 # Gnome
 if [[ "${argument_flag}" == "false" || "${gnome_mode}" == "enabled" ]]; then
-  if [[ -d "${HOME}/.dotfiles/gnome" ]]; then
-    find "${HOME}/.dotfiles/gnome" -type f -exec chmod 664 {} \;
-    find "${HOME}/.dotfiles/gnome" -type f -exec echo "Modified: {} = 664" \;
-  else
-    echo "Aborting ${script_name}"
-    echo "  Directory ${HOME}/.dotfiles/gnome Does Not Exist!"
-    exit 1
-  fi
+  # Set permissions of all files in directory
+  set_permissions "664" "${HOME}/.dotfiles/gnome"
 fi
 
 # Hardware
 if [[ "${argument_flag}" == "false" || "${hardware_mode}" == "enabled" ]]; then
-  if [[ -d "${HOME}/.dotfiles/hardware" ]]; then
-    find "${HOME}/.dotfiles/hardware" -type f -exec chmod 644 {} \;
-    find "${HOME}/.dotfiles/hardware" -type f -exec echo "Modified: {} = 644" \;
-  else
-    echo "Aborting ${script_name}"
-    echo "  Directory ${HOME}/.dotfiles/hardware Does Not Exist!"
-    exit 1
-  fi
+  # Set permissions of all files in directory
+  set_permissions "644" "${HOME}/.dotfiles/hardware"
 fi
 
 # Htop
 if [[ "${argument_flag}" == "false" || "${htop_mode}" == "enabled" ]]; then
-  if [[ -d "${HOME}/.dotfiles/htop" ]]; then
-    find "${HOME}/.dotfiles/htop" -type f -exec chmod 664 {} \;
-    find "${HOME}/.dotfiles/htop" -type f -exec echo "Modified: {} = 664" \;
-  else
-    echo "Aborting ${script_name}"
-    echo "  Directory ${HOME}/.dotfiles/htop Does Not Exist!"
-    exit 1
-  fi
+  # Set permissions of all files in directory
+  set_permissions "664" "${HOME}/.dotfiles/htop"
 fi
 
 # Projects
 if [[ "${argument_flag}" == "false" || "${projects_mode}" == "enabled" ]]; then
-  if [[ -d "${HOME}/.dotfiles/projects" ]]; then
-    find "${HOME}/.dotfiles/projects" -type f -exec chmod 644 {} \;
-    find "${HOME}/.dotfiles/projects" -type f -exec echo "Modified: {} = 644" \;
-  else
-    echo "Aborting ${script_name}"
-    echo "  Directory ${HOME}/.dotfiles/projects Does Not Exist!"
-    exit 1
-  fi
+  # Set permissions of all files in directory
+  set_permissions "644" "${HOME}/.dotfiles/projects"
 fi
 
 # Scripts
 if [[ "${argument_flag}" == "false" || "${scripts_mode}" == "enabled" ]]; then
-  if [[ -d "${HOME}/.dotfiles/scripts" ]]; then
-    find "${HOME}/.dotfiles/scripts" -type f -exec chmod 755 {} \;
-    find "${HOME}/.dotfiles/scripts" -type f -exec echo "Modified: {} = 755" \;
-  else
-    echo "Aborting ${script_name}"
-    echo "  Directory ${HOME}/.dotfiles/scripts Does Not Exist!"
-    exit 1
-  fi
+  # Set permissions of all files in directory
+  set_permissions "755" "${HOME}/.dotfiles/scripts"
 fi
 
 # Term
 if [[ "${argument_flag}" == "false" || "${term_mode}" == "enabled" ]]; then
-  if [[ -d "${HOME}/.dotfiles/term" ]]; then
-    find "${HOME}/.dotfiles/term" -type f -exec chmod 664 {} \;
-    find "${HOME}/.dotfiles/term" -type f -exec echo "Modified: {} = 664" \;
-  else
-    echo "Aborting ${script_name}"
-    echo "  Directory ${HOME}/.dotfiles/term Does Not Exist!"
-    exit 1
-  fi
+  # Set permissions of all files in directory
+  set_permissions "664" "${HOME}/.dotfiles/term"
 fi
 
 # Tmux
 if [[ "${argument_flag}" == "false" || "${tmux_mode}" == "enabled" ]]; then
-  if [[ -d "${HOME}/.dotfiles/tmux" ]]; then
-    find "${HOME}/.dotfiles/tmux" -type f -exec chmod 644 {} \;
-    find "${HOME}/.dotfiles/tmux" -type f -exec echo "Modified: {} = 644" \;
-  else
-    echo "Aborting ${script_name}"
-    echo "  Directory ${HOME}/.dotfiles/tmux Does Not Exist!"
-    exit 1
-  fi
+  # Set permissions of all files in directory
+  set_permissions "644" "${HOME}/.dotfiles/tmux"
 fi
 
 # Vim
 if [[ "${argument_flag}" == "false" || "${vim_mode}" == "enabled" ]]; then
-  if [[ -d "${HOME}/.dotfiles/vim" ]]; then
-    find "${HOME}/.dotfiles/vim" -type f -exec chmod 644 {} \;
-    find "${HOME}/.dotfiles/vim" -type f -exec echo "Modified: {} = 644" \;
-  else
-    echo "Aborting ${script_name}"
-    echo "  Directory ${HOME}/.dotfiles/vim Does Not Exist!"
-    exit 1
-  fi
+  # Set permissions of all files in directory
+  set_permissions "644" "${HOME}/.dotfiles/vim"
 fi
 
 # Zsh
 if [[ "${argument_flag}" == "false" || "${zsh_mode}" == "enabled" ]]; then
-  if [[ -d "${HOME}/.dotfiles/zsh" ]]; then
-    find "${HOME}/.dotfiles/zsh" -type f -exec chmod 644 {} \;
-    find "${HOME}/.dotfiles/zsh" -type f -exec echo "Modified: {} = 644" \;
-  else
-    echo "Aborting ${script_name}"
-    echo "  Directory ${HOME}/.dotfiles/zsh Does Not Exist!"
-    exit 1
-  fi
+  # Set permissions of all files in directory
+  set_permissions "644" "${HOME}/.dotfiles/vim"
 fi
-
-exit 0

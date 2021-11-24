@@ -917,6 +917,117 @@ root_owner() {
 }
 
 ########################################
+# Permissions
+########################################
+check_permissions() {
+  # Declare local variables
+  local input_permission
+  local input_path
+  local test_file
+  local test_permission
+
+
+  # Initialize local variables
+  input_permission="${1}"
+  input_path="${2}"
+  test_file=""
+  test_permission=""
+
+  # Check if input variables are set
+  abort_variable_unset "input_permission" "${input_permission}"
+  abort_variable_unset "input_path" "${input_path}"
+
+  # Check if input path is not missing
+  abort_path_dne "${input_path}"
+
+  # Check if provided path is a directory or file
+  if directory_exists "${input_path}"; then
+    # Check permissions of all files in directory
+    find "${input_path}" -maxdepth 1 -type f -print0 | while IFS= read -r -d $'\0' test_file; do
+      # Check if test variable is set
+      abort_variable_unset "test_file" "${test_file}"
+
+      # Check for valid file in directory before proceeding
+      abort_file_dne "${test_file}"
+
+      # Get current test file permissions
+      test_permission="$(stat -L -c "%a" "${test_file}")"
+
+      # Check if test variable is set
+      abort_variable_unset "test_permission" "${test_permission}"
+
+      # Check if current file has the expected permission
+      if [[ "${test_permission}" -ne "${input_permission}" ]]; then
+        # Exit as soon as a permission mis-match is found and throw an error return code
+        return 1
+        break
+      fi
+    done
+  else
+    # Get current test file permissions
+    test_permission="$(stat -L -c "%a" "${input_path}")"
+
+    # Check if test variable is set
+    abort_variable_unset "test_permission" "${test_permission}"
+
+    # Check if input file has the expected permission
+    if [[ "${test_permission}" -ne "${input_permission}" ]]; then
+      # Permission mis-match is found and throw an error return code
+      return 1
+    fi
+  fi
+}
+
+set_permissions() {
+  # Declare local variables
+  local input_permission
+  local input_path
+  local test_file
+  local test_permission
+  local return_code
+
+
+  # Initialize local variables
+  input_permission="${1}"
+  input_path="${2}"
+  test_file=""
+
+  # Check if input variables are set
+  abort_variable_unset "input_permission" "${input_permission}"
+  abort_variable_unset "input_path" "${input_path}"
+
+  # Check if input path is not missing
+  abort_path_dne "${input_path}"
+
+  # Check if provided path is a directory or file
+  if directory_exists "${input_path}"; then
+    # Check file permissions
+    if check_permissions "${input_permission}" "${input_path}"; then
+      print_step "Skipped: ${input_path}"
+    else
+      # Check permissions of all files in directory
+      find "${input_path}" -maxdepth 1 -type f -print0 | while IFS= read -r -d $'\0' test_file; do
+        # Check if current file has the expected permission
+        if ! check_permissions "${input_permission}" "${test_file}"; then
+          # Permission mis-match is found, update permissions
+          chmod "${input_permission}" "${test_file}"
+          print_step "Modified: ${test_file}"
+        fi
+      done
+    fi
+  else
+    # Check if input file has the expected permission
+    if check_permissions "${input_permission}" "${input_path}"; then
+      print_step "Skipped: ${input_path}"
+    else
+      # Permission mis-match is found, update permissions
+      chmod "${input_permission}" "${input_path}"
+      print_step "Modified: ${input_path}"
+    fi
+  fi
+}
+
+########################################
 # Checksum
 ########################################
 checksum_file() {
