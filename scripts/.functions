@@ -435,28 +435,48 @@ print_step() {
 ########################################
 abort_script() {
   # Declare local variables
-  local calling_function
+  local function_total
+  local function_name
+  local function_count
 
   # Initialize local variables
-  calling_function=""
+  function_total="${#FUNCNAME[@]}"
+  function_name=""
+  function_count="0"
+  space_offset=""
+
+  # Print abort header
+  print_stage "Aborting execution of $(script_filename)"
 
   # Go through function caller trace to identify original function
   for function_name in "${FUNCNAME[@]}"; do
-    if [[ "${function_name}" != "abort_"* ]]; then
-      calling_function="${function_name}"
-      break
+    # Increment function index
+    function_count="$((function_count + 1))"
+
+    # Ignore this function
+    if [[ "${function_count}" -ne 1 ]]; then
+      # Ignore abort functions
+      if [[ "${function_name}" != "abort_"* ]]; then
+        # Ignore if not actually called from another function
+        if [[ "${function_count}" -ne "${function_total}" ]]; then
+          # Print function with error
+          if [[ -n "${*}" ]]; then
+            echo "Error in function ${function_name}:"
+            space_offset="  "
+          else
+            echo "Error in function ${function_name}"
+          fi
+          break
+        fi
+      fi
     fi
   done
-
-  # Print error message
-  print_stage "Aborting execution of $(script_filename)"
-  echo "Error in function ${calling_function}:"
 
   # Check for error messages
   if [[ -n "${*}" ]]; then
     # Treat each input parameter as a separate line
     for error_msg in "${@}"; do
-      echo "  ${error_msg}"
+      echo "${space_offset}${error_msg}"
     done
   fi
 
@@ -926,7 +946,6 @@ check_permissions() {
   local test_file
   local test_permission
 
-
   # Initialize local variables
   input_permission="${1}"
   input_path="${2}"
@@ -985,7 +1004,6 @@ set_permissions() {
   local test_file
   local test_permission
   local return_code
-
 
   # Initialize local variables
   input_permission="${1}"
