@@ -20,8 +20,8 @@ fi
 # @body Optimize the algorithm so the session starts as fast as possible, and improve reliablity for edge cases like resuming session with multiple clients still connected.
 # Check if current shell session is in a tmux process
 if [[ -z "${TMUX}" ]]; then
-  # Check if GUI environment
-  if [[ -t 0 ]]; then
+  # Check if interactive or stdin is a socket
+  if [[ -t 0 || -p /dev/stdin ]]; then
     # Tmux banned applications list
     TMUX_BANNED_APPS=(
       "vscode"
