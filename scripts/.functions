@@ -235,6 +235,24 @@ command_failed() {
   fi
 }
 
+is_prompt() {
+  # Returns 0 if is a prompt or error if it is not
+  if [[ -z "${PS1}" ]]; then
+    return 1
+  else
+    return 0
+  fi
+}
+
+is_interactive() {
+  # Returns 0 if interactive or error if it is not
+  if [[ -t 0 || -p /dev/stdin ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
 is_pipe() {
   # Returns 0 if in a pipe or error if it is not
   if [[ -t 1 ]]; then
