@@ -477,6 +477,10 @@ command -v -- "hyperfine" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.hyperfine
 # shellcheck disable=SC1090
 command -v -- "nmap" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.nmap.zsh" ]] && source "${HOME}/.dotfiles/zsh/.nmap.zsh"
 
+# rsync
+# shellcheck disable=SC1090
+command -v -- "rsync" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.rsync.zsh" ]] && source "${HOME}/.dotfiles/zsh/.rsync.zsh"
+
 # ssh
 # shellcheck disable=SC1090
 command -v -- "ssh" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.ssh.zsh" ]] && source "${HOME}/.dotfiles/zsh/.ssh.zsh"
