@@ -336,6 +336,64 @@ not_root() {
   fi
 }
 
+line_exists() {
+  # Declare local variables
+  local input_file
+  local input_line
+  local return_code
+
+  # Initialize local variables
+  input_file="${1}"
+  # shellcheck disable=SC2124
+  input_line="${@:2}"
+  return_code="-1"
+
+  # Check grep is installed
+  if is_installed grep; then
+    # Check file exists
+    if file_exists "${input_file}"; then
+      # Search for target line
+      if grep --line-regexp --max-count=1 -- "${input_line}" "${input_file}" &>/dev/null; then
+        return_code="0"
+      else
+        return_code="1"
+      fi
+    fi
+  fi
+
+  # Return 0 if exists, 1 if does not exist, or -1 if file does not exist or grep not installed
+  return "${return_code}"
+}
+
+line_dne() {
+  # Declare local variables
+  local input_file
+  local input_line
+  local return_code
+
+  # Initialize local variables
+  input_file="${1}"
+  # shellcheck disable=SC2124
+  input_line="${@:2}"
+  return_code="-1"
+
+  # Check grep is installed
+  if is_installed grep; then
+    # Check file exists
+    if file_exists "${input_file}"; then
+      # Search for target line
+      if ! grep --line-regexp --max-count=1 -- "${input_line}" "${input_file}" &>/dev/null; then
+        return_code="0"
+      else
+        return_code="1"
+      fi
+    fi
+  fi
+
+  # Return 0 if exists, 1 if does not exist, or -1 if file does not exist or grep not installed
+  return "${return_code}"
+}
+
 check_connectivity() {
   # Declare local variables
   local test_address
