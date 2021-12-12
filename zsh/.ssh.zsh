@@ -21,10 +21,10 @@ ssh_gen() {
   if [[ -n "${2}" ]]; then
     sshUser="${1}"
     sshHost="${2}"
-    sshKey="${HOME}/.ssh/${sshHost}-${sshUser}"
+    sshKey="${HOME}/.ssh/id_ed25519_${sshHost}"
 
     echo "------------------------------------------------------------------------"
-    echo "   Creating ssh key ${sshHost}"
+    echo "   Creating ssh key ${sshKey}"
     echo "------------------------------------------------------------------------"
     ssh-keygen -t ed25519 -N '' -f "${sshKey}"
 
@@ -45,7 +45,10 @@ ssh_gen() {
     if [[ -n "${1}" ]]; then
       sshHost="${1}"
 
-      ssh-keygen -t ed25519 -N '' -f "${HOME}/.ssh/${sshHost}"
+      echo "------------------------------------------------------------------------"
+      echo "   Creating ssh key ${sshKey}"
+      echo "------------------------------------------------------------------------"
+      ssh-keygen -t ed25519 -N '' -f "${sshKey}"
     else
       ssh-keygen
     fi
@@ -98,8 +101,8 @@ ssh_config() {
         echo "Host ${sshAlias}"
         echo "  HostName ${sshHost}"
         echo "  User ${sshUser}"
-        echo "  IdentitiesOnly yes"
-        echo "  IdentityFile ${HOME}/.ssh/${sshHost}-${sshUser}"
+        echo "  IdentityFile ~/.ssh/id_ed25519_${sshHost}"
+        echo "  PreferredAuthentications publickey"
       } >>"${HOME}/.ssh/config"
     fi
   else
