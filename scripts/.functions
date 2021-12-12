@@ -336,6 +336,52 @@ not_root() {
   fi
 }
 
+newline_exists() {
+  # Declare local variables
+  local input_file
+  local return_code
+
+  # Initialize local variables
+  input_file="${1}"
+  return_code="-1"
+
+  # Check file exists
+  if file_exists "${input_file}"; then
+    # Check if newline exists at eof
+    if [[ -s "${input_file}" && -z "$(tail -c 1 "${input_file}")" ]]; then
+      return_code="0"
+    else
+      return_code="1"
+    fi
+  fi
+
+  # Return 0 if exists, 1 if does not exist, or -1 if file does not exist
+  return "${return_code}"
+}
+
+newline_dne() {
+  # Declare local variables
+  local input_file
+  local return_code
+
+  # Initialize local variables
+  input_file="${1}"
+  return_code="-1"
+
+  # Check file exists
+  if file_exists "${input_file}"; then
+    # Check if newline exists at eof
+    if [[ -s "${input_file}" && -z "$(tail -c 1 "${input_file}")" ]]; then
+      return_code="1"
+    else
+      return_code="0"
+    fi
+  fi
+
+  # Return 0 if does not exist, 1 if exists, or -1 if file does not exist
+  return "${return_code}"
+}
+
 line_exists() {
   # Declare local variables
   local input_file
@@ -1118,6 +1164,109 @@ set_permissions() {
       chmod "${input_permission}" "${input_path}"
       print_step "Modified: ${input_path}"
     fi
+  fi
+}
+
+########################################
+# Files
+########################################
+prepend_line() {
+  # Declare local variables
+  local input_file
+  local input_argument
+  local argument_count
+  local argument_minimum
+  local has_newline
+  local prepend_text
+
+  # Initialize local variables
+  input_file="${1}"
+  input_argument=""
+  argument_count="${#}"
+  argument_minimum="2"
+  has_newline="true"
+  prepend_text=""
+
+  # Check if input file variable is set
+  abort_variable_unset "input_file" "${input_file}"
+
+  # Check for arguments
+  if (("${argument_count}" >= "${argument_minimum}")); then
+    # Check if file exists
+    if file_exists "${input_file}"; then
+      # Check if newline at eof
+      if newline_dne "${input_file}"; then
+        # Set newline flag for later reference
+        has_newline="false"
+      fi
+    else
+      # Create file
+      touch "${input_file}"
+
+      # Set newline flag for later reference
+      has_newline="false"
+    fi
+
+    # Loop through arguments in reverse
+    for ((input_argument = "${argument_count}"; input_argument >= "${argument_minimum}"; input_argument--)); do
+      # Join arguments into single text variable (faster than writing to the file multiple times)
+      prepend_text="${!input_argument}\n${prepend_text}"
+    done
+
+    # Check if newline at eof needs to be skipped
+    if [[ "${has_newline}" == "false" ]]; then
+      # Prepend text to file and skip newline
+      echo -e -n "${prepend_text}$(cat "${input_file}")" >"${input_file}"
+    else
+      # Prepend text to file
+      echo -e "${prepend_text}$(cat "${input_file}")" >"${input_file}"
+    fi
+  fi
+}
+
+append_line() {
+  # Declare local variables
+  local input_file
+  local input_argument
+  local argument_count
+  local argument_minimum
+  local has_newline
+
+  # Initialize local variables
+  input_file="${1}"
+  input_argument=""
+  argument_count="${#}"
+  argument_minimum="2"
+  has_newline="true"
+
+  # Check if input file variable is set
+  abort_variable_unset "input_file" "${input_file}"
+
+  # Check for arguments
+  if (("${argument_count}" >= "${argument_minimum}")); then
+    # Check if file exists
+    if file_exists "${input_file}"; then
+      # Check if newline at eof
+      if newline_dne "${input_file}"; then
+        # Set newline flag for later reference
+        has_newline="false"
+
+        # Append newline to avoid writing to existing line
+        echo "" >>"${input_file}"
+      fi
+    fi
+
+    # Loop through arguments in reverse
+    for ((input_argument = "${argument_minimum}"; input_argument <= "${argument_count}"; input_argument++)); do
+      # Check if newline at eof needs to be skipped
+      if [[ "${has_newline}" == "false" && "${input_argument}" -eq "${argument_count}" ]]; then
+        # Append text to file and skip newline
+        echo -n "${!input_argument}" >>"${input_file}"
+      else
+        # Append text to file
+        echo "${!input_argument}" >>"${input_file}"
+      fi
+    done
   fi
 }
 
