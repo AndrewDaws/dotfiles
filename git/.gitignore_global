@@ -87,6 +87,7 @@ dkms.conf
 *.key
 *.crt
 *.cer
+*.der
 *.priv
 
 ### CMake ###
@@ -256,6 +257,9 @@ secring.*
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+
+# AWS User-specific
+.idea/**/aws.xml
 
 # Generated files
 .idea/**/contentModel.xml
@@ -456,7 +460,6 @@ parts/
 sdist/
 var/
 wheels/
-pip-wheel-metadata/
 share/python-wheels/
 *.egg-info/
 .installed.cfg
@@ -486,7 +489,7 @@ coverage.xml
 *.py,cover
 .hypothesis/
 .pytest_cache/
-pytestdebug.log
+cover/
 
 # Translations
 *.mo
@@ -507,9 +510,9 @@ instance/
 
 # Sphinx documentation
 docs/_build/
-doc/_build/
 
 # PyBuilder
+.pybuilder/
 target/
 
 # Jupyter Notebook
@@ -520,7 +523,9 @@ profile_default/
 ipython_config.py
 
 # pyenv
-.python-version
+#   For a library or package, you might want to ignore these files since the code is
+#   intended to run in multiple environments; otherwise, check them in:
+# .python-version
 
 # pipenv
 #   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
@@ -547,7 +552,6 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-pythonenv*
 
 # Spyder project settings
 .spyderproject
@@ -570,8 +574,8 @@ dmypy.json
 # pytype static type analyzer
 .pytype/
 
-# profiling data
-.prof
+# Cython debug symbols
+cython_debug/
 
 ### Qt ###
 # C++ objects and libs
@@ -610,10 +614,12 @@ target_wrapper.*
 # QtCreator CMake
 CMakeLists.txt.user*
 
-# QtCreator 4.8< compilation database 
+# QtCreator 4.8< compilation database
 
 # QtCreator local machine specific files for imported projects
 *creator.user*
+
+*_qmlcache.qrc
 
 ### SSH ###
 **/.ssh/id_*
@@ -642,14 +648,22 @@ tags
 
 ### VisualStudioCode ###
 .vscode/*
+!.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
+!.vscode/extensions.json
 *.code-workspace
+
+# Local History for Visual Studio Code
+.history/
 
 ### VisualStudioCode Patch ###
 # Ignore all local history of files
 .history
 .ionide
+
+# Support for Project snippet scope
+!.vscode/*.code-snippets
 
 ### Windows ###
 # Windows thumbnail cache files
@@ -737,6 +751,7 @@ mono_crash.*
 [Rr]eleases/
 x64/
 x86/
+[Ww][Ii][Nn]32/
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
 bld/
@@ -775,6 +790,9 @@ project.lock.json
 project.fragment.lock.json
 artifacts/
 
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
 # StyleCop
 StyleCopReport.xml
 
@@ -794,6 +812,7 @@ StyleCopReport.xml
 *.tlh
 *.tmp_proj
 *_wpftmp.csproj
+*.tlog
 *.vspscc
 *.vssscc
 .builds
@@ -846,7 +865,9 @@ _TeamCity*
 !.axoCover/settings.json
 
 # Coverlet is a free, cross platform Code Coverage Tool
-coverage*[.json, .xml, .info]
+coverage*.json
+coverage*.xml
+coverage*.info
 
 # Visual Studio code coverage results
 *.coverage
@@ -906,6 +927,9 @@ PublishScripts/
 # NuGet v3's project.json files produces more ignorable files
 *.nuget.props
 *.nuget.targets
+
+# Nuget personal access tokens and Credentials
+# nuget.config
 
 # Microsoft Azure Build Output
 csx/
@@ -1057,5 +1081,20 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# Fody - auto-generated XML schema
+FodyWeavers.xsd
+
+# VS Code files for those working on multiple tools
+
+# Local History for Visual Studio Code
+
+# Windows Installer files from build outputs
+
+# JetBrains Rider
+*.sln.iml
+
+### VisualStudio Patch ###
+# Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/c,qt,vim,git,gpg,c++,ssh,linux,macos,emacs,cmake,xcode,backup,matlab,python,eclipse,windows,codeblocks,libreoffice,certificates,visualstudio,jetbrains+all,microsoftoffice,visualstudiocode
