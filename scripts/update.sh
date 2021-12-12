@@ -334,6 +334,19 @@ desktop_setup() {
     print_step "Installed ${HOME}/.dotfiles/term/xterm-256color-italic.terminfo"
   fi
 
+  # Configure SSH config
+  if directory_dne "${HOME}/.ssh"; then
+    mkdir -p "${HOME}/.ssh"
+  fi
+  chmod 700 "${HOME}/.ssh"
+  if line_dne "${HOME}/.ssh/config" "Include ~/.dotfiles/ssh/config_global"; then
+    print_step "Including global SSH config"
+    prepend_line "${HOME}/.ssh/config" "Include ~/.dotfiles/ssh/config_global" ""
+  else
+    print_step "Skipped: Including global SSH config"
+  fi
+  chmod 644 "${HOME}/.ssh/config"
+
   # Create Global Git Config
   # Temporary measure until gitconfig logic is fixed.
   if file_exists "${HOME}/.gitconfig"; then
