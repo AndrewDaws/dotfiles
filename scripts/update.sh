@@ -157,7 +157,7 @@ headless_setup() {
   done
 
   # Install Tmux Plugin Manager
-  git_update "https://github.com/tmux-plugins/tpm" "${HOME}/.tmux/plugins/tpm" "Tmux Plugin Manager"
+  # git_update "https://github.com/tmux-plugins/tpm" "${HOME}/.tmux/plugins/tpm" "Tmux Plugin Manager"
 
   # Install Zinit Framework
   if file_exists "${HOME}/.local/share/zinit/bin/zinit.zsh"; then
