@@ -1,75 +1,60 @@
 [color]
-  ui = auto
-  status = auto
-  interactive = auto
-  diff = auto
-  branch = auto
-
+	branch = auto
+	diff = auto
+	interactive = auto
+	status = auto
+	ui = auto
+[core]
+	pager = delta --highlight-removed --dark --plus-color="#1F2E1F" --plus-emph-color="#507350" --minus-color="#2E0F0F" --minus-emph-color="#732222"
+	whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
 [delta]
-  syntax-theme = zenburn
-  line-numbers = true
-  zero-style = dim syntax
-  features = side-by-side line-numbers decorations
-  whitespace-error-style = 22 reverse
+	features = side-by-side line-numbers decorations
+	line-numbers = true
+	syntax-theme = zenburn
+	whitespace-error-style = 22 reverse
+	zero-style = dim syntax
 [delta "decorations"]
-  commit-decoration-style = bold yellow box ul
-  file-style = bold yellow ul
-  file-decoration-style = none
-
+	commit-decoration-style = bold yellow box ul
+	file-decoration-style = none
+	file-style = bold yellow ul
 [diff]
-  tool = meld
+	tool = meld
 [difftool]
-  prompt = false
+	prompt = false
 [difftool "meld"]
-  cmd = meld "$LOCAL" "$REMOTE"
-
+	cmd = meld "$LOCAL" "$REMOTE"
 [fetch]
 	prune = true
-
 [hub]
-  protocol = https
-
+	protocol = https
 [interactive]
-  diffFilter = delta --color-only
-
+	diffFilter = delta --color-only
 [log]
-  date = iso
-
+	date = iso
 [merge]
-  tool = meld
+	tool = meld
 [mergetool "meld"]
-  cmd = meld "$LOCAL" "$BASE" "$REMOTE" --output "$MERGED"
-
+	cmd = meld "$LOCAL" "$BASE" "$REMOTE" --output "$MERGED"
 [pager]
-  diff = delta
-  log = delta
-  reflog = delta
-  show = delta
-
+	diff = delta
+	log = delta
+	reflog = delta
+	show = delta
 [pull]
 	prune = true
-
 [push]
-  default = simple
-
+	default = simple
 [url "git@bitbucket.org:"]
-  pushInsteadOf = git://bitbucket.org/
-  pushInsteadOf = http://bitbucket.org/
-  pushInsteadOf = https://bitbucket.org/
-
+	pushInsteadOf = git://bitbucket.org/
+	pushInsteadOf = http://bitbucket.org/
+	pushInsteadOf = https://bitbucket.org/
 [url "git@github.com:"]
-  pushInsteadOf = git://github.com/
-  pushInsteadOf = http://github.com/
-  pushInsteadOf = https://github.com/
-
+	pushInsteadOf = git://github.com/
+	pushInsteadOf = http://github.com/
+	pushInsteadOf = https://github.com/
 [url "git@gitlab.com:"]
-  pushInsteadOf = git://gitlab.com/
-  pushInsteadOf = http://gitlab.com/
-  pushInsteadOf = https://gitlab.com/
-
+	pushInsteadOf = git://gitlab.com/
+	pushInsteadOf = http://gitlab.com/
+	pushInsteadOf = https://gitlab.com/
 [web]
-  browser = firefox
-
-[core]
-  whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
-  pager = delta --highlight-removed --dark --plus-color="#1F2E1F" --plus-emph-color="#507350" --minus-color="#2E0F0F" --minus-emph-color="#732222"
+	browser = firefox
