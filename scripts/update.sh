@@ -348,11 +348,47 @@ desktop_setup() {
   chmod 644 "${HOME}/.ssh/config"
 
   # Create Global Git Config
-  # Temporary measure until gitconfig logic is fixed.
   if file_exists "${HOME}/.gitconfig"; then
-    print_step "Skipped: ${HOME}/.dotfiles/scripts/create_gitconfig.sh"
+    chmod 664 "${HOME}/.gitconfig"
+  fi
+  # shellcheck disable=SC2088
+  if [[ "$(git config --global core.attributesfile)" != "~/.dotfiles/git/.gitattributes_global" ]]; then
+    print_step "Including global git attributes"
+    git config --global --add core.attributesfile "~/.dotfiles/git/.gitattributes_global"
   else
-    "${HOME}/.dotfiles/scripts/create_gitconfig.sh"
+    print_step "Skipped: Including global git attributes"
+  fi
+  # shellcheck disable=SC2088
+  if [[ "$(git config --global core.excludesfile)" != "~/.dotfiles/git/.gitignore_global" ]]; then
+    print_step "Including global git ignore"
+    git config --global --add core.excludesfile "~/.dotfiles/git/.gitignore_global"
+  else
+    print_step "Skipped: Including global git ignore"
+  fi
+  # shellcheck disable=SC2088
+  if [[ "$(git config --global include.path)" != "~/.dotfiles/git/.gitconfig_global" ]]; then
+    print_step "Including global git config"
+    git config --global --add include.path "~/.dotfiles/git/.gitconfig_global"
+  else
+    print_step "Skipped: Including global git config"
+  fi
+  # shellcheck disable=SC2088
+  if [[ -z "$(git config --global user.email)" ]]; then
+    print_step "Creating global git email" "What is your git email?:"
+    read -r git_email
+    abort_variable_unset "git_email" "${git_email}"
+    git config --global --add user.email "${git_email}"
+  else
+    print_step "Skipped: Creating global git email"
+  fi
+  # shellcheck disable=SC2088
+  if [[ -z "$(git config --global user.name)" ]]; then
+    print_step "Creating global git name" "What is your git name?:"
+    read -r git_name
+    abort_variable_unset "git_name" "${git_name}"
+    git config --global --add user.name "${git_name}"
+  else
+    print_step "Skipped: Creating global git name"
   fi
 }
 
