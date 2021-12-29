@@ -277,12 +277,12 @@ zinit light dandavison/delta
 zinit ice wait lucid as"program" from"gh-r" pick"bin/exa" atload"source ${ZSH}/.exa.zsh"
 zinit light ogham/exa
 
-# github/hub
-zinit ice wait"3" lucid as"program" from"gh-r" mv"hub* -> hub" pick"hub/bin/hub" atload"source ${ZSH}/.hub.zsh"
-zinit light github/hub
-
-zplugin ice wait"3" lucid as"completion" mv'*ion -> _hub'
-zplugin snippet https://github.com/github/hub/raw/master/etc/hub.zsh_completion
+# # github/hub
+# zinit ice wait"3" lucid as"program" from"gh-r" mv"hub* -> hub" pick"hub/bin/hub" atload"source ${ZSH}/.hub.zsh"
+# zinit light github/hub
+#
+# zplugin ice wait"3" lucid as"completion" mv'*ion -> _hub'
+# zplugin snippet https://github.com/github/hub/raw/master/etc/hub.zsh_completion
 
 
 # - - - - - - - - - - - - - - - - - - - -
