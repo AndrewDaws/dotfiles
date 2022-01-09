@@ -473,6 +473,11 @@ command -v -- "http" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.httpie.zsh" ]]
 # shellcheck disable=SC1090
 command -v -- "hyperfine" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.hyperfine.zsh" ]] && source "${HOME}/.dotfiles/zsh/.hyperfine.zsh"
 
+# iperf
+# shellcheck disable=SC1090
+command -v -- "iperf3" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.iperf.zsh" ]] && source "${HOME}/.dotfiles/zsh/.iperf.zsh"
+
+
 # nmap
 # shellcheck disable=SC1090
 command -v -- "nmap" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.nmap.zsh" ]] && source "${HOME}/.dotfiles/zsh/.nmap.zsh"
