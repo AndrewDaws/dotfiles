@@ -15,7 +15,6 @@ fi
 # Temporary variables
 argument_flag="false"
 alacritty_mode="disabled"
-alias_mode="disabled"
 fonts_mode="disabled"
 git_mode="disabled"
 gnome_mode="disabled"
@@ -38,7 +37,6 @@ for argument in "${@}"; do
     echo ""
     echo "OPTIONS"
     echo "      --alacritty    force enable alacritty mode"
-    echo "  -a, --alias        force enable alias mode"
     echo "      --fonts        force enable fonts mode"
     echo "  -g, --git          force enable git mode"
     echo "      --gnome        force enable gnome mode"
@@ -53,8 +51,6 @@ for argument in "${@}"; do
     exit 0
   elif [[ "${argument}" == "--alacritty" ]]; then
     alacritty_mode="enabled"
-  elif [[ "${argument}" == "-a" || "${argument}" == "--alias" ]]; then
-    alias_mode="enabled"
   elif [[ "${argument}" == "--fonts" ]]; then
     fonts_mode="enabled"
   elif [[ "${argument}" == "-g" || "${argument}" == "--git" ]]; then
