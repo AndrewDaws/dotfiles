@@ -8,7 +8,7 @@ if [[ -f "$(dirname "$(readlink -f "${0}")")/.functions" ]]; then
   source "$(dirname "$(readlink -f "${0}")")/.functions"
 else
   echo "File does not exist!"
-  echo "$(dirname "$(readlink -f "${0}")")/.functions"
+  echo "  $(dirname "$(readlink -f "${0}")")/.functions"
   exit "1"
 fi
 
