@@ -1,0 +1,2 @@
+ACTION=="add", KERNEL=="card*", SUBSYSTEM=="sound", ATTRS{idVendor}=="0d8c", ATTRS{idProduct}=="0319", ATTR{id}="WA7_Fireflies"
+ACTION=="change", KERNEL=="card*", SUBSYSTEM=="sound", ATTRS{idVendor}=="0d8c", ATTRS{idProduct}=="0319", ENV{PULSE_NAME}="WA7 Fireflies"

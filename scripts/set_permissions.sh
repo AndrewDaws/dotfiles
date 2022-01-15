@@ -21,9 +21,11 @@ gnome_mode="disabled"
 hardware_mode="disabled"
 htop_mode="disabled"
 projects_mode="disabled"
+pulse_mode="disabled"
 scripts_mode="disabled"
 term_mode="disabled"
 tmux_mode="disabled"
+udev_mode="disabled"
 vim_mode="disabled"
 zsh_mode="disabled"
 
@@ -43,9 +45,11 @@ for argument in "${@}"; do
     echo "      --hardware     force enable hardware mode"
     echo "      --htop         force enable htop mode"
     echo "  -p, --projects     force enable projects mode"
+    echo "      --pulse        force enable pulse mode"
     echo "  -s, --scripts      force enable scripts mode"
     echo "      --term         force enable term mode"
     echo "  -t, --tmux         force enable tmux mode"
+    echo "      --udev         force enable udev mode"
     echo "  -v, --vim          force enable vim mode"
     echo "  -z, --zsh          force enable zsh mode"
     exit 0
@@ -63,12 +67,16 @@ for argument in "${@}"; do
     htop_mode="enabled"
   elif [[ "${argument}" == "-p" || "${argument}" == "--projects" ]]; then
     projects_mode="enabled"
+  elif [[ "${argument}" == "--pulse" ]]; then
+    pulse_mode="enabled"
   elif [[ "${argument}" == "-s" || "${argument}" == "--scripts" ]]; then
     scripts_mode="enabled"
   elif [[ "${argument}" == "--term" ]]; then
     term_mode="enabled"
   elif [[ "${argument}" == "-t" || "${argument}" == "--tmux" ]]; then
     tmux_mode="enabled"
+  elif [[ "${argument}" == "--udev" ]]; then
+    udev_mode="enabled"
   elif [[ "${argument}" == "-v" || "${argument}" == "--vim" ]]; then
     vim_mode="enabled"
   elif [[ "${argument}" == "-z" || "${argument}" == "--zsh" ]]; then
@@ -123,6 +131,12 @@ if [[ "${argument_flag}" == "false" || "${projects_mode}" == "enabled" ]]; then
   set_permissions "644" "${HOME}/.dotfiles/projects"
 fi
 
+# Pulse
+if [[ "${argument_flag}" == "false" || "${pulse_mode}" == "enabled" ]]; then
+  # Set permissions of all files in directory
+  set_permissions "644" "${HOME}/.dotfiles/pulse"
+fi
+
 # Scripts
 if [[ "${argument_flag}" == "false" || "${scripts_mode}" == "enabled" ]]; then
   # Set permissions of all files in directory
@@ -139,6 +153,12 @@ fi
 if [[ "${argument_flag}" == "false" || "${tmux_mode}" == "enabled" ]]; then
   # Set permissions of all files in directory
   set_permissions "644" "${HOME}/.dotfiles/tmux"
+fi
+
+# Udev
+if [[ "${argument_flag}" == "false" || "${udev_mode}" == "enabled" ]]; then
+  # Set permissions of all files in directory
+  set_permissions "644" "${HOME}/.dotfiles/udev"
 fi
 
 # Vim

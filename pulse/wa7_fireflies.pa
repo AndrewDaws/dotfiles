@@ -1,0 +1,9 @@
+########## BEGIN WA7 FIREFLIES ##########
+.nofail
+set-card-profile alsa_output.WA7_Fireflies iec958-stereo
+set-sink-formats alsa_output.WA7_Fireflies.iec958-stereo pcm; ac3-iec61937; dts-iec61937; eac3-iec61937; mpeg-iec61937; mpeg2-aac-iec61937
+update-sink-proplist alsa_output.WA7_Fireflies.iec958-stereo alsa.card_name="WA7 Fireflies"
+update-sink-proplist alsa_output.WA7_Fireflies.iec958-stereo device.vendor.name="Woo Audio"
+update-sink-proplist alsa_output.WA7_Fireflies.iec958-stereo device.product.name="WA7 Fireflies"
+update-sink-proplist alsa_output.WA7_Fireflies.iec958-stereo device.description="WA7 Fireflies"
+########## END WA7 FIREFLIES   ##########
