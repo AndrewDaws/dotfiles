@@ -868,20 +868,28 @@ add_sudoers() {
 
   # Initialize local variables
   application_list=(
-    cp
-    mv
-    rm
-    mkdir
-    chmod
-    usermod
-    tee
+    adduser
     apt
     apt-get
+    chmod
+    chown
+    cp
     desktop-file-install
-    update-desktop-database
-    systemd-hwdb
+    dpkg
+    dpkg-reconfigure
+    fc-cache
+    gem
     infocmp
+    mkdir
+    mv
+    nmap
+    rm
+    systemd-hwdb
+    tee
     tic
+    udevadm
+    update-desktop-database
+    usermod
   )
   found_application=""
   path_list=""
