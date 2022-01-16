@@ -1,18 +1,6 @@
 #!usr/bin/env zsh
 
 # - - - - - - - - - - - - - - - - - - - -
-# Terminal
-# - - - - - - - - - - - - - - - - - - - -
-
-# Set default terminal
-if [[ -f "${HOME}/.terminfo/x/xterm-256color-italic" ]]; then
-  export TERM="xterm-256color-italic"
-else
-  export TERM="xterm-256color"
-fi
-
-
-# - - - - - - - - - - - - - - - - - - - -
 # Tmux
 # - - - - - - - - - - - - - - - - - - - -
 
@@ -20,6 +8,9 @@ fi
 # @body Optimize the algorithm so the session starts as fast as possible, and improve reliablity for edge cases like resuming session with multiple clients still connected.
 # Check if current shell session is in a tmux process
 if [[ -z "${TMUX}" ]]; then
+  # Set default xterm terminal environment to enable truecolor mode and italics
+  export TERM="xterm-256color-italic"
+
   # Check if interactive or stdin is a socket
   if [[ -t 0 || -p /dev/stdin ]]; then
     # Tmux banned applications list
@@ -67,6 +58,9 @@ if [[ -z "${TMUX}" ]]; then
       fi
     fi
   fi
+else
+  # Set default tmux terminal environment to enable truecolor mode and italics
+  export TERM="tmux-256color-italic"
 fi
 
 

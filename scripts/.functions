@@ -880,6 +880,8 @@ add_sudoers() {
     desktop-file-install
     update-desktop-database
     systemd-hwdb
+    infocmp
+    tic
   )
   found_application=""
   path_list=""

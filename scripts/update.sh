@@ -319,19 +319,19 @@ desktop_setup() {
   fi
 
   # Install term environment
-  if file_dne "/usr/share/terminfo/x/xterm-256color-italic" && file_dne "${HOME}/.terminfo/x/xterm-256color-italic"; then
-    print_step "Skipped: ${HOME}/.dotfiles/term/xterm-256color-italic.terminfo"
+  abort_not_installed "infocmp"
+  abort_not_installed "tic"
+  if sudo infocmp "xterm-256color-italic" &>/dev/null; then
+    print_step "Skipped: Installing terminfo xterm-256color-italic"
   else
-    if file_dne "/usr/share/terminfo/x/xterm-256color-italic"; then
-      sudo cp "${HOME}/.dotfiles/term/xterm-256color-italic.terminfo" "/usr/share/terminfo/x/xterm-256color-italic"
-      sudo tic "${HOME}/.dotfiles/term/xterm-256color-italic.terminfo"
-    fi
-
-    if file_dne "${HOME}/.terminfo/x/xterm-256color-italic"; then
-      tic "${HOME}/.dotfiles/term/xterm-256color-italic.terminfo"
-    fi
-
-    print_step "Installed ${HOME}/.dotfiles/term/xterm-256color-italic.terminfo"
+    print_step "Installing terminfo xterm-256color-italic"
+    sudo tic "${HOME}/.dotfiles/terminfo/xterm-256color-italic.terminfo"
+  fi
+  if sudo infocmp "tmux-256color-italic" &>/dev/null; then
+    print_step "Skipped: Installing terminfo tmux-256color-italic"
+  else
+    print_step "Installing terminfo tmux-256color-italic"
+    sudo tic "${HOME}/.dotfiles/terminfo/tmux-256color-italic.terminfo"
   fi
 
   # Configure SSH config

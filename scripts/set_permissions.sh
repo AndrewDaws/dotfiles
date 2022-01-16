@@ -23,7 +23,7 @@ htop_mode="disabled"
 projects_mode="disabled"
 pulse_mode="disabled"
 scripts_mode="disabled"
-term_mode="disabled"
+terminfo_mode="disabled"
 tmux_mode="disabled"
 udev_mode="disabled"
 vim_mode="disabled"
@@ -47,7 +47,7 @@ for argument in "${@}"; do
     echo "  -p, --projects     force enable projects mode"
     echo "      --pulse        force enable pulse mode"
     echo "  -s, --scripts      force enable scripts mode"
-    echo "      --term         force enable term mode"
+    echo "      --terminfo     force enable terminfo mode"
     echo "  -t, --tmux         force enable tmux mode"
     echo "      --udev         force enable udev mode"
     echo "  -v, --vim          force enable vim mode"
@@ -71,8 +71,8 @@ for argument in "${@}"; do
     pulse_mode="enabled"
   elif [[ "${argument}" == "-s" || "${argument}" == "--scripts" ]]; then
     scripts_mode="enabled"
-  elif [[ "${argument}" == "--term" ]]; then
-    term_mode="enabled"
+  elif [[ "${argument}" == "--terminfo" ]]; then
+    terminfo_mode="enabled"
   elif [[ "${argument}" == "-t" || "${argument}" == "--tmux" ]]; then
     tmux_mode="enabled"
   elif [[ "${argument}" == "--udev" ]]; then
@@ -143,10 +143,10 @@ if [[ "${argument_flag}" == "false" || "${scripts_mode}" == "enabled" ]]; then
   set_permissions "755" "${HOME}/.dotfiles/scripts"
 fi
 
-# Term
-if [[ "${argument_flag}" == "false" || "${term_mode}" == "enabled" ]]; then
+# Terminfo
+if [[ "${argument_flag}" == "false" || "${terminfo_mode}" == "enabled" ]]; then
   # Set permissions of all files in directory
-  set_permissions "664" "${HOME}/.dotfiles/term"
+  set_permissions "664" "${HOME}/.dotfiles/terminfo"
 fi
 
 # Tmux
