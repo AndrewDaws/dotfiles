@@ -5,18 +5,26 @@
 	status = auto
 	ui = auto
 [core]
-	pager = delta --highlight-removed --dark --plus-color="#1F2E1F" --plus-emph-color="#507350" --minus-color="#2E0F0F" --minus-emph-color="#732222"
+	pager = delta
 	whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
 [delta]
-	features = side-by-side line-numbers decorations
-	line-numbers = true
+	features = decorations line-numbers side-by-side
+	minus-emph-style = bold syntax "#8c4141"
+	minus-style = syntax "#4d2626"
+	plus-emph-style = bold syntax "#526652"
+	plus-style = syntax "#334033"
 	syntax-theme = zenburn
-	whitespace-error-style = 22 reverse
-	zero-style = dim syntax
 [delta "decorations"]
 	commit-decoration-style = bold yellow box ul
 	file-decoration-style = none
 	file-style = bold yellow ul
+	hunk-header-decoration-style = cyan box ul
+[delta "line-numbers"]
+	line-numbers-left-style = cyan
+	line-numbers-minus-style = red
+	line-numbers-plus-style = green
+	line-numbers-right-style = cyan
+	line-numbers-zero-style = gray
 [diff]
 	tool = meld
 [difftool]
