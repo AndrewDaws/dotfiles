@@ -279,8 +279,13 @@ desktop_setup() {
     sudo update-desktop-database
 
     # Set as default terminal (Ctrl + Alt + T)
+    if is_installed "update-alternatives"; then
+      sudo update-alternatives --quiet --install "/usr/bin/x-terminal-emulator" x-terminal-emulator "$(command -v -- alacritty)" 50
+      sudo update-alternatives --quiet --skip-auto --config x-terminal-emulator
+    fi
     if is_installed "gsettings"; then
       gsettings set org.gnome.desktop.default-applications.terminal exec 'alacritty'
+      gsettings set org.gnome.desktop.default-applications.terminal exec-arg ''
     fi
   else
     print_step "Skipped: Installing alacritty"
