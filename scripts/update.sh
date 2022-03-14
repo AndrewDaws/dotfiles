@@ -202,6 +202,7 @@ desktop_setup() {
     libfontconfig1-dev
     libxcb-xfixes0-dev
     python3
+    gtkhash
   )
 
   print_stage "Desktop applications setup"
