@@ -12,13 +12,61 @@ else
   exit "1"
 fi
 
-# Test Italics
-print_stage "Testing Italics"
-print_step "The following text should be italicized:" "$(tput sitm)italics$(tput ritm)"
+# Bold
+print_stage "Testing Bold"
+print_step "The following text should be bolded:" "$(echo -e "\e[1mbold\e[0m")"
 
-# Test True Color
+# Italic
+print_stage "Testing Italic"
+print_step "The following text should be italicized:" "$(echo -e "\e[3mitalic\e[0m")"
+
+# Bold Italic
+print_stage "Testing Bold Italic"
+print_step "The following text should be bold and italicized:" "$(echo -e "\e[3m\e[1mbold italic\e[0m")"
+
+# Underline
+print_stage "Testing Underline"
+print_step "The following text should be underlined:" "$(echo -e "\e[4munderline\e[0m")"
+
+# Double Underline
+print_stage "Testing Double Underline"
+print_step "The following text should be double underlined:" "$(echo -e "\e[21mdouble underline\e[0m")"
+
+# Undercurl
+print_stage "Testing Undercurl"
+print_step "The following text should be curly underlined:" "$(echo -e "\e[60mcurly underline\e[0m")"
+
+# Dot Underline
+print_stage "Testing Dot Underline"
+print_step "The following text should be dot underlined:" "$(echo -e "\e[61mdot underline\e[0m")"
+
+# Dash Underline
+print_stage "Testing Dash Underline"
+print_step "The following text should be dash underlined:" "$(echo -e "\e[62mdash underline\e[0m")"
+
+# Strikethrough
+print_stage "Testing Strikethrough"
+print_step "The following text should be struckthrough:" "$(echo -e "\e[9mstrikethrough\e[0m")"
+
+# Dim
+print_stage "Testing Dim"
+print_step "The following text should be dimmed:" "$(echo -e "\e[2mdim\e[0m")"
+
+# Invert
+print_stage "Testing Invert"
+print_step "The following text should be inverted:" "$(echo -e "\e[7minvert\e[0m")"
+
+# Hidden
+print_stage "Testing Hidden"
+print_step "The following text should be blank:" "$(echo -e "\e[8mhidden\e[0m")"
+
+# Blink
+print_stage "Testing Blink"
+print_step "The following text should be blinking:" "$(echo -e "\e[5mblink\e[0m")"
+
+# True Color
 print_stage "Testing True Color"
-print_step "The following bar should show a smooth color gradient:" "$(
+print_step "The following bar should be a smooth color gradient:" "$(
   awk 'BEGIN{
     s="/\\/\\/\\/\\/\\"; s=s s s s s s s s s s s s s s s s s s s s s s s;
     for (column_number = 0; column_number < 256; column_number++) {
