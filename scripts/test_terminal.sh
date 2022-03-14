@@ -81,3 +81,19 @@ print_step "The following bar should be a smooth color gradient:" "$(
     printf "\n";
   }'
 )"
+
+# # Extended
+# print_stage "Testing Extended"
+# print_step "The following should show different forground, background, and effect text combinations:$(
+#   counter="0"
+#   printf "\n"
+#   for attribute in $(seq 0 12); do
+#     for color in $(seq 30 37) $(seq 40 47) $(seq 90 97); do
+#       printf %b " ${attribute}/${color}:\033[${attribute};${color}mTesting\033[m"
+#       counter="$((counter + 1))"
+#       if ((counter % 12 == 0)); then
+#         printf "\n"
+#       fi
+#     done
+#   done
+# )"
