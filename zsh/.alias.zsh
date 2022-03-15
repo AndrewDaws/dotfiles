@@ -81,6 +81,7 @@ alias grep="\grep \
   --color=always \
   --ignore-case \
   "
+export LESS='--mouse --wheel-lines=3'
 
 unalias -m 'l'
 l() {
