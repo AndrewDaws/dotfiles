@@ -9,7 +9,7 @@ alias czsh=""${EDITOR}" "${HOME}/.zshrc""
 alias szsh="source "${HOME}/.zshrc""
 
 # zinit
-alias uzsh="zinit self-update && zinit update --no-pager --parallel --all && zinit delete --clean --yes"
+alias uzsh="zinit self-update && zinit delete --clean --yes && zinit update --all --no-pager --parallel --urge"
 
 # alias
 alias cali=""${EDITOR}" "${HOME}/.dotfiles/zsh/.alias.zsh""
