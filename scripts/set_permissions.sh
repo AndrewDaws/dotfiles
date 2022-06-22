@@ -170,5 +170,5 @@ fi
 # Zsh
 if [[ "${argument_flag}" == "false" || "${zsh_mode}" == "enabled" ]]; then
   # Set permissions of all files in directory
-  set_permissions "644" "${HOME}/.dotfiles/vim"
+  set_permissions "644" "${HOME}/.dotfiles/zsh"
 fi
