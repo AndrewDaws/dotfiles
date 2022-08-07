@@ -59,6 +59,17 @@ link_headless() {
     ln -s "${HOME}/.dotfiles/htop/htoprc" "${HOME}/.config/htop/htoprc"
   fi
 
+  abort_file_dne "${HOME}/.dotfiles/viddy/viddy.toml"
+  if [[ "$(readlink -f "${HOME}/.config/viddy.toml")" == "${HOME}/.dotfiles/viddy/viddy.toml" ]]; then
+    print_step "Skipped: Linking ${HOME}/.config/viddy.toml"
+  else
+    if file_exists "${HOME}/.config/viddy.toml"; then
+      rm -f "${HOME}/.config/viddy.toml"
+    fi
+    print_step "Linking ${HOME}/.config/viddy.toml -> ${HOME}/.dotfiles/viddy/viddy.toml"
+    ln -s "${HOME}/.dotfiles/viddy/viddy.toml" "${HOME}/.config/viddy.toml"
+  fi
+
   abort_file_dne "${HOME}/.dotfiles/vim/.vimrc"
   if [[ "$(readlink -f "${HOME}/.vimrc")" == "${HOME}/.dotfiles/vim/.vimrc" ]]; then
     print_step "Skipped: Linking ${HOME}/.vimrc"

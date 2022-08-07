@@ -26,6 +26,7 @@ scripts_mode="disabled"
 terminfo_mode="disabled"
 tmux_mode="disabled"
 udev_mode="disabled"
+viddy_mode="disabled"
 vim_mode="disabled"
 zsh_mode="disabled"
 
@@ -50,6 +51,7 @@ for argument in "${@}"; do
     echo "      --terminfo     force enable terminfo mode"
     echo "  -t, --tmux         force enable tmux mode"
     echo "      --udev         force enable udev mode"
+    echo "      --viddy        force enable viddy mode"
     echo "  -v, --vim          force enable vim mode"
     echo "  -z, --zsh          force enable zsh mode"
     exit 0
@@ -77,6 +79,8 @@ for argument in "${@}"; do
     tmux_mode="enabled"
   elif [[ "${argument}" == "--udev" ]]; then
     udev_mode="enabled"
+  elif [[ "${argument}" == "--viddy" ]]; then
+    viddy_mode="enabled"
   elif [[ "${argument}" == "-v" || "${argument}" == "--vim" ]]; then
     vim_mode="enabled"
   elif [[ "${argument}" == "-z" || "${argument}" == "--zsh" ]]; then
@@ -159,6 +163,12 @@ fi
 if [[ "${argument_flag}" == "false" || "${udev_mode}" == "enabled" ]]; then
   # Set permissions of all files in directory
   set_permissions "644" "${HOME}/.dotfiles/udev"
+fi
+
+# Viddy
+if [[ "${argument_flag}" == "false" || "${viddy_mode}" == "enabled" ]]; then
+  # Set permissions of all files in directory
+  set_permissions "664" "${HOME}/.dotfiles/viddy"
 fi
 
 # Vim
