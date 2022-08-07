@@ -275,6 +275,10 @@ zinit light ogham/exa
 zinit ice wait"3" lucid as"program" from"gh-r" mv"viddy* -> viddy" pick"viddy/viddy" atload"source ${ZSH}/.viddy.zsh"
 zinit light sachaos/viddy
 
+# imsnif/bandwhich
+zinit ice wait"3" lucid as"program" from"gh-r" mv"bandwhich* -> bandwhich" pick"bandwhich/bandwhich" atload"source ${ZSH}/.bandwhich.zsh"
+zinit light imsnif/bandwhich
+
 # # github/hub
 # zinit ice wait"3" lucid as"program" from"gh-r" mv"hub* -> hub" pick"hub/bin/hub" atload"source ${ZSH}/.hub.zsh"
 # zinit light github/hub

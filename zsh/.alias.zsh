@@ -450,6 +450,10 @@ command -v -- "gem" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.gem.zsh" ]] && 
 ####################
 # Applications
 ####################
+# bandwhich
+# shellcheck disable=SC1090
+command -v -- "bandwhich" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.bandwhich.zsh" ]] && source "${HOME}/.dotfiles/zsh/.bandwhich.zsh"
+
 # chrome
 # shellcheck disable=SC1090
 command -v -- "google-chrome" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.chrome.zsh" ]] && source "${HOME}/.dotfiles/zsh/.chrome.zsh"
