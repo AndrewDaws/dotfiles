@@ -162,12 +162,12 @@ headless_setup() {
   # Install Zinit Framework
   if file_exists "${HOME}/.local/share/zinit/bin/zinit.zsh"; then
     print_step "Updating zinit"
-    zsh -c "source ${HOME}/.zshrc && zinit self-update"
-    # zsh -c "source ${HOME}/.zshrc && zinit delete --clean --yes"
-    zsh -c "source ${HOME}/.zshrc && zinit update --all --no-pager --parallel --urge"
+    zsh --interactive -c -- "@zinit-scheduler burst zinit self-update"
+    zsh --interactive -c -- "@zinit-scheduler burst zinit update --all --no-pager --parallel"
   else
+    print_step "Installing zinit"
     git_update "https://github.com/zdharma-continuum/zinit.git" "${HOME}/.local/share/zinit/bin" "zinit"
-    zsh -c "source ${HOME}/.zshrc && zinit update --all --no-pager --parallel --urge"
+    zsh --interactive -c -- "@zinit-scheduler burst"
   fi
 
   print_step "Installing headless application configurations"
