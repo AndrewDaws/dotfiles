@@ -491,6 +491,10 @@ command -v -- "rsync" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.rsync.zsh" ]]
 # shellcheck disable=SC1090
 command -v -- "ssh" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.ssh.zsh" ]] && source "${HOME}/.dotfiles/zsh/.ssh.zsh"
 
+# viddy
+# shellcheck disable=SC1090
+command -v -- "viddy" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.viddy.zsh" ]] && source "${HOME}/.dotfiles/zsh/.viddy.zsh"
+
 # vim
 # shellcheck disable=SC1090
 command -v -- "vim" &>/dev/null && [[ -f "${HOME}/.dotfiles/zsh/.vim.zsh" ]] && source "${HOME}/.dotfiles/zsh/.vim.zsh"
