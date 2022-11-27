@@ -1,0 +1,4 @@
+/* Hide sidebar header */
+#sidebar-header {
+    display: none;
+}
