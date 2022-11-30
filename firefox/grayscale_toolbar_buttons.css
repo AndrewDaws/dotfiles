@@ -1,0 +1,9 @@
+/* Grayscale toolbar button normally */
+toolbarbutton {
+    filter: grayscale(100%) !important;
+}
+
+/* Restore toolbar button color on hover */
+toolbarbutton:hover {
+    filter: grayscale(0%) !important;
+}
