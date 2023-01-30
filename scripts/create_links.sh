@@ -168,6 +168,36 @@ link_desktop() {
       ln -s "${HOME}/.dotfiles/alacritty/alacritty-firacode.yml" "${HOME}/.config/alacritty/alacritty.yml"
     fi
   fi
+
+  if [[ -d "${HOME}/.mozilla/firefox" ]]; then
+    if directory_exists "${HOME}/.mozilla/firefox/"*".default-release"; then
+      abort_file_dne "${HOME}/.dotfiles/firefox/preferences/user.js"
+      abort_directory_dne "${HOME}/.dotfiles/firefox/chrome"
+      abort_file_dne "${HOME}/.dotfiles/firefox/chrome/userChrome.css"
+
+      for firefox_profile in $(find "${HOME}/.mozilla/firefox/"*".default-release" -maxdepth 0 -type d); do
+        if [[ "$(readlink -f "${firefox_profile}/user.js")" == "${HOME}/.dotfiles/firefox/preferences/user.js" ]]; then
+          print_step "Skipped: Linking ${firefox_profile}/user.js"
+        else
+          if file_exists "${firefox_profile}/user.js"; then
+            rm -f "${firefox_profile}/user.js"
+          fi
+          print_step "Linking ${firefox_profile}/user.js -> ${HOME}/.dotfiles/firefox/preferences/user.js"
+          ln -s "${HOME}/.dotfiles/firefox/preferences/user.js" "${firefox_profile}/user.js"
+        fi
+
+        if [[ "$(readlink -f "${firefox_profile}/chrome")" == "${HOME}/.dotfiles/firefox/chrome" ]]; then
+          print_step "Skipped: Linking ${firefox_profile}/chrome"
+        else
+          if directory_exists "${firefox_profile}/chrome"; then
+            rm -rf "${firefox_profile}/chrome"
+          fi
+          print_step "Linking ${firefox_profile}/chrome -> ${HOME}/.dotfiles/firefox/chrome"
+          ln -s "${HOME}/.dotfiles/firefox/chrome" "${firefox_profile}/chrome"
+        fi
+      done
+    fi
+  fi
 }
 
 main() {
