@@ -264,7 +264,7 @@ zinit ice wait"1" lucid as"program" from"gh-r" mv"bat* -> bat" pick"bat/bat" atl
 zinit light sharkdp/bat
 
 # dandavision/delta
-zinit ice wait"2" lucid as"program" from"gh-r" mv"delta* -> delta" pick"delta/delta"
+zinit ice wait"2" lucid as"program" from"gh-r" mv"delta* -> delta" bpick"*musl*" pick"delta/delta"
 zinit light dandavison/delta
 
 # ogham/exa
