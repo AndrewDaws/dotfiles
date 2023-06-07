@@ -1,10 +1,9 @@
 @import url("window_control_placeholder_support.css");
 @import url("hide_tabs_toolbar.css");
 @import url("minimal_text_fields.css");
-@import url("autohide_navigation_button.css");
 @import url("urlbar_connection_type_text_colors.css");
-@import url("grayscale_toolbar_buttons.css");
 @import url("privatemode_indicator_as_menu_button.css");
 @import url("autohide_sidebar.css");
 @import url("hide_sidebar_header.css");
 @import url("minimal_in-UI_scrollbars.css");
+@import url("compact_extensions_panel.css");
