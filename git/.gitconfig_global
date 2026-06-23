@@ -1,11 +1,20 @@
+[branch]
+	sort = -committerdate
 [color]
 	branch = auto
 	diff = auto
 	interactive = auto
 	status = auto
 	ui = auto
+[column]
+	ui = auto
+[commit]
+	verbose = true
 [core]
+	excludesfile = ~/.gitignore
+	fsmonitor = true
 	pager = delta
+	untrackedCache = true
 	whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
 [delta]
 	features = decorations line-numbers side-by-side
@@ -26,20 +35,32 @@
 	line-numbers-right-style = cyan
 	line-numbers-zero-style = gray
 [diff]
+	algorithm = histogram
+	colorMoved = plain
+	mnemonicPrefix = true
+	renames = true
 	tool = meld
 [difftool]
 	prompt = false
 [difftool "meld"]
 	cmd = meld "$LOCAL" "$REMOTE"
 [fetch]
+	all = true
 	prune = true
+	pruneTags = true
+[help]
+	autocorrect = prompt
 [hub]
 	protocol = https
+[init]
+	defaultBranch = main
 [interactive]
 	diffFilter = delta --color-only
 [log]
 	date = iso
 [merge]
+	# (just 'diff3' if git version < 2.3)
+	conflictstyle = zdiff3
 	tool = meld
 [mergetool "meld"]
 	cmd = meld "$LOCAL" "$BASE" "$REMOTE" --output "$MERGED"
@@ -50,8 +71,20 @@
 	show = delta
 [pull]
 	prune = true
+	rebase = true
 [push]
+	autoSetupRemote = true
 	default = simple
+	followTags = true
+[rebase]
+	autoSquash = true
+	autoStash = true
+	updateRefs = true
+[rerere]
+	autoupdate = true
+	enabled = true
+[tag]
+	sort = version:refname
 [url "git@bitbucket.org:"]
 	pushInsteadOf = git://bitbucket.org/
 	pushInsteadOf = http://bitbucket.org/
